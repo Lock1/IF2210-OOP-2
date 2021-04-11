@@ -1,0 +1,46 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import java.net.URL?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Frontends.MainController">
+    <top>
+        <BorderPane styleClass="header-section">
+            <center>
+                <Label id="header-text" text="ENGIMON FACTORY" styleClass="app-title"></Label>
+            </center>
+        </BorderPane>
+    </top>
+    <left>
+        <VBox styleClass="sidebar-section">
+            <children>
+                <Label text="MAIN MENU" alignment="CENTER"></Label>
+                <Label text="New Game" alignment="CENTER"></Label>
+                <Label text="Save Game" alignment="CENTER"></Label>
+                <Label text="Load Game" alignment="CENTER"></Label>
+            </children>
+        </VBox>
+    </left>
+    <center>
+        <VBox styleClass="content-section">
+            <children>
+                <Label text="BATTLE" alignment="CENTER" onMouseClicked="#startBattle"></Label>
+            </children>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox id="footer-section">
+            <children>
+                <Label text="ENGIMON" ></Label>
+                <Label text="BREED"></Label>
+                <Label text="INVENTORY" onMouseClicked="#handleOnInventoryClicked"></Label>
+            </children>
+        </HBox>
+    </bottom>
+    <stylesheets>
+        <URL value="@../StyleSheets/stylesheet.css"/>
+    </stylesheets>
+</BorderPane>
