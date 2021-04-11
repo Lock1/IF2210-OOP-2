@@ -18,9 +18,9 @@
         <VBox styleClass="sidebar-section">
             <children>
                 <Label text="MAIN MENU" alignment="CENTER"></Label>
-                <Label text="New Game" alignment="CENTER"></Label>
-                <Label text="Save Game" alignment="CENTER"></Label>
-                <Label text="Load Game" alignment="CENTER"></Label>
+                <Label text="NEW GAME" alignment="CENTER"></Label>
+                <Label text="SAVE GAME" alignment="CENTER"></Label>
+                <Label text="LOAD GAME" alignment="CENTER"></Label>
             </children>
         </VBox>
     </left>
@@ -31,6 +31,14 @@
             </children>
         </VBox>
     </center>
+    <right>
+        <VBox styleClass="sidebar-section">
+            <children>
+                <Label text="HELP" alignment="CENTER"></Label>
+                <Label text="ELEMENTS" alignment="CENTER"></Label>
+            </children>
+        </VBox>
+    </right>
     <bottom>
         <HBox id="footer-section">
             <children>
