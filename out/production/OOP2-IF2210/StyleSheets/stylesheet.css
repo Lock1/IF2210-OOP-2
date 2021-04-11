@@ -22,13 +22,13 @@ packages Stylesheets;
 
 .header-section {
     -fx-background-color: linear-gradient(to right, #8e6e57, #c8a67a, #8e6e57);
-    -fx-padding: 10px;
+    -fx-padding: 15px;
     -fx-font-size: 20px;
 }
 
 .header-section Label {
     -fx-font-family: 'Acme';
-    -fx-padding: 10px;
+    -fx-padding: 15px;
     -fx-font-weight: 700;
 }
 
