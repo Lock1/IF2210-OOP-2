@@ -1,5 +1,3 @@
-package Frontends;
-
 import Supports.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

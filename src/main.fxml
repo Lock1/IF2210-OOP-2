@@ -6,7 +6,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="Frontends.MainController">
+            fx:controller="MainController">
     <top>
         <BorderPane styleClass="header-section">
             <center>
@@ -49,6 +49,6 @@
         </HBox>
     </bottom>
     <stylesheets>
-        <URL value="@../StyleSheets/stylesheet.css"/>
+        <URL value="@StyleSheets/stylesheet.css"/>
     </stylesheets>
 </BorderPane>

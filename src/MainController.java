@@ -1,4 +1,4 @@
-package Frontends;
+import Frontends.InventoryDialogController;
 import Supports.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
