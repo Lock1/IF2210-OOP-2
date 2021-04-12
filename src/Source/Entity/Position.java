@@ -1,0 +1,5 @@
+package Entity;
+
+class Position {
+
+}
