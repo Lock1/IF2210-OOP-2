@@ -7,7 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 
 public class MainController {
-    @FXML private void handleOnInventoryClicked(MouseEvent event)
+    @FXML
+    private void handleOnInventoryClicked(MouseEvent event)
     {
         try {
             InventoryDialogController inventory = new InventoryDialogController();
@@ -17,7 +18,8 @@ public class MainController {
         }
     }
 
-    @FXML private void startBattle(MouseEvent event) throws Exception{
+    @FXML
+    private void startBattle(MouseEvent event) throws Exception{
         Parent battleWindow = FXMLLoader.load(getClass().getResource("battle_window.fxml"));
         ScreenSettings.pStage.setTitle("Battle Window");
         ScreenSettings.pStage.setScene(new Scene(battleWindow, (int) ScreenSettings.mediaSize.getWidth(), (int) ScreenSettings.mediaSize.getHeight() - 80));
