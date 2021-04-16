@@ -1,5 +1,0 @@
-package Entity;
-
-class Position {
-
-}
