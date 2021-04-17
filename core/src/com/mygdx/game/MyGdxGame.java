@@ -39,25 +39,50 @@ public class MyGdxGame extends ApplicationAdapter {
 		titleLabel.setAlignment(Align.center);
 		stage.addActor(titleLabel);
 
-		Label oneLabel = new Label("New\nGame", titleLabelStyle);
-		oneLabel.setAlignment(Align.center);
-		Label twoLabel = new Label("Load\nGame", titleLabelStyle);
-		twoLabel.setAlignment(Align.center);
-		Label threeLabel = new Label("Help", titleLabelStyle);
-		threeLabel.setAlignment(Align.center);
-		Label fourLabel = new Label("Exit", titleLabelStyle);
-		fourLabel.setAlignment(Align.center);
+		Label newLabel = new Label("New\nGame", titleLabelStyle);
+		newLabel.setAlignment(Align.center);
+		Label loadLabel = new Label("Load\nGame", titleLabelStyle);
+		loadLabel.setAlignment(Align.center);
+		Label helpLabel = new Label("Help", titleLabelStyle);
+		helpLabel.setAlignment(Align.center);
+		Label exitLabel = new Label("Exit", titleLabelStyle);
+		exitLabel.setAlignment(Align.center);
+
+		NinePatch patch = new NinePatch(new Texture(Gdx.files.internal("background-tall.png")),
+				1, 1, 3, 3);
+		NinePatchDrawable background = new NinePatchDrawable(patch);
+
+		NinePatch patch2 = new NinePatch(new Texture(Gdx.files.internal("background.png")),
+				1, 1, 1, 1);
+		NinePatchDrawable background2 = new NinePatchDrawable(patch);
 
 		table = new Table();
-		table.add(oneLabel).width(100).height(200);
-		table.add(twoLabel).width(100).height(200);
+
+		Table tableNewGame = new Table();
+		tableNewGame.add(newLabel);
+		tableNewGame.setBackground(background);
+		table.add(tableNewGame).width(100).height(200);
+
+		Table tableLoadGame = new Table();
+		tableLoadGame.add(loadLabel);
+		tableLoadGame.setBackground(background);
+		table.add(tableLoadGame).width(100).height(200);
+
+		Table tableHelp = new Table();
+		tableHelp.add(helpLabel);
+		tableHelp.setBackground(background2);
+
+		Table tableExit = new Table();
+		tableExit.add(exitLabel);
+		tableExit.setBackground(background2);
+
 		Table table2 = new Table();
-		table2.add(threeLabel).height(100).width(100);
+		table2.add(tableHelp).height(100).width(100);
 		table2.row();
-		table2.add(fourLabel).height(100).width(100);
+		table2.add(tableExit).height(100).width(100);
 		table.add(table2);
 		table.setFillParent(true);
-//		table.setBackground(Color.BLACK);
+
 		stage.addActor(table);
 	}
 
