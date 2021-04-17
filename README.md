@@ -1,4 +1,6 @@
 # OOP2-IF2210
+[![Java CI with Gradle](https://github.com/Lock1/OOP2-IF2210/actions/workflows/gradle.yml/badge.svg)](https://github.com/Lock1/OOP2-IF2210/actions/workflows/gradle.yml)
+
 Tugas Besar 2 - IF2210 - Pemrograman Berorientasi Objek
 
 **TBA**
