@@ -21,14 +21,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class PauseScreen implements Screen {
+public class InventoryScreen implements Screen {
     private Stage stage;
     private Game game;
     private SpriteBatch batch;
     private Label titleLabel;
     private Table table;
 
-    public PauseScreen(Game aGame) {
+    public InventoryScreen(Game aGame) {
         // Setup Stage
         game = aGame;
         stage = new Stage(new ScreenViewport());
@@ -43,9 +43,9 @@ public class PauseScreen implements Screen {
         titleLabelStyle.fontColor = Color.BLACK;
 
         // Title Label
-        titleLabel = new Label("Menu", titleLabelStyle);
+        titleLabel = new Label("Inventory", titleLabelStyle);
         titleLabel.setSize(Gdx.graphics.getWidth(),row_height);
-        titleLabel.setPosition(0,Gdx.graphics.getHeight()-row_height*2);
+        titleLabel.setPosition(0,Gdx.graphics.getHeight()-row_height*1);
         titleLabel.setAlignment(Align.center);
         stage.addActor(titleLabel);
 
@@ -55,9 +55,22 @@ public class PauseScreen implements Screen {
         menuButtonStyle.fontColor = Color.BLACK;
 
         // Definisi dan Implementasi TextButtons
-        TextButton newButton = new TextButton("Save\nGame", menuButtonStyle);
-        TextButton homeButton = new TextButton("Home", menuButtonStyle);
-        TextButton exitButton = new TextButton("Exit", menuButtonStyle);
+        TextButton inventoryButton = new TextButton("Your Items", menuButtonStyle);
+        TextButton statButton = new TextButton("Stat", menuButtonStyle);
+        TextButton menuButton = new TextButton("<< Menu", menuButtonStyle);
+        menuButton.addListener(new InputListener(){
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new PauseScreen(game));
+            }
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+        });
+
+        menuButton.setPosition(100, Gdx.graphics.getHeight()-row_height*1);
+        stage.addActor(menuButton);
 
         // NinePatch untuk border Buttons
         NinePatch patch = new NinePatch(new Texture(Gdx.files.internal("background-tall.png")),
@@ -68,27 +81,17 @@ public class PauseScreen implements Screen {
         // Tables untuk menyusun TextButtons
         table = new Table();
 
-        Table tableNewGame = new Table();
-        tableNewGame.add(newButton);
-        tableNewGame.setBackground(background);
-        table.add(tableNewGame).width(100).height(200);
+        table.add(inventoryButton).width(400).spaceRight(60);
+        table.add(statButton).width(200);
+        table.row();
 
-        Table tableLoadGame = new Table();
-        tableLoadGame.add(homeButton);
-        tableLoadGame.setBackground(background);
-        tableLoadGame.setTouchable(Touchable.enabled);
-        tableLoadGame.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MainMenuScreen(game));
-            }
-        });
-        table.add(tableLoadGame).width(100).height(200);
+        Table tableEngimon = new Table();
+        tableEngimon.setBackground(background);
+        table.add(tableEngimon).width(400).height(300).spaceRight(60);
 
-        Table tableExit = new Table();
-        tableExit.add(exitButton);
-        tableExit.setBackground(background);
-        table.add(tableExit).width(100).height(200);
+        Table tableStats = new Table();
+        tableStats.setBackground(background);
+        table.add(tableStats).width(200).height(300);
 
         table.setFillParent(true);
 

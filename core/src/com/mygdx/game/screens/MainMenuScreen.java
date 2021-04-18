@@ -12,9 +12,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -56,20 +58,8 @@ public class MainMenuScreen implements Screen {
 
         // Definisi dan Implementasi TextButtons
         TextButton newButton = new TextButton("New\nGame", menuButtonStyle);
-        newButton.addListener(new InputListener(){
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new PauseScreen(game));
-            }
-            @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
-        });
         TextButton loadButton = new TextButton("Load\nGame", menuButtonStyle);
-
         TextButton helpButton = new TextButton("Help", menuButtonStyle);
-
         TextButton exitButton = new TextButton("Exit", menuButtonStyle);
 
         // NinePatch untuk border Buttons
@@ -87,6 +77,13 @@ public class MainMenuScreen implements Screen {
         Table tableNewGame = new Table();
         tableNewGame.add(newButton);
         tableNewGame.setBackground(background);
+        tableNewGame.setTouchable(Touchable.enabled);
+        tableNewGame.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new PauseScreen(game));
+            }
+        });
         table.add(tableNewGame).width(100).height(200);
 
         Table tableLoadGame = new Table();
