@@ -57,7 +57,7 @@ public class PauseScreen implements Screen {
         // Definisi dan Implementasi TextButtons
         TextButton newButton = new TextButton("Save\nGame", menuButtonStyle);
         TextButton homeButton = new TextButton("Home", menuButtonStyle);
-        TextButton exitButton = new TextButton("Exit", menuButtonStyle);
+        TextButton continueButton = new TextButton("Continue", menuButtonStyle);
 
         // NinePatch untuk border Buttons
         NinePatch patch = new NinePatch(new Texture(Gdx.files.internal("background-tall.png")),
@@ -85,10 +85,17 @@ public class PauseScreen implements Screen {
         });
         table.add(tableLoadGame).width(100).height(200);
 
-        Table tableExit = new Table();
-        tableExit.add(exitButton);
-        tableExit.setBackground(background);
-        table.add(tableExit).width(100).height(200);
+        Table tableContinue = new Table();
+        tableContinue.add(continueButton);
+        tableContinue.setBackground(background);
+        tableContinue.setTouchable(Touchable.enabled);
+        tableContinue.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new MainGameScreen(game));
+            }
+        });
+        table.add(tableContinue).width(100).height(200);
 
         table.setFillParent(true);
 

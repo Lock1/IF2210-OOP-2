@@ -1,15 +1,12 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
-import com.mygdx.game.screens.BreedScreen;
-import com.mygdx.game.screens.EngimonScreen;
-import com.mygdx.game.screens.InventoryScreen;
-import com.mygdx.game.screens.MainMenuScreen;
+import com.mygdx.game.screens.*;
 
 public class MyGdxGame extends Game {
 
 	public void create () {
-		this.setScreen(new BreedScreen(this));
+		this.setScreen(new MainMenuScreen(this));
 	}
 
 	public void render () {

@@ -21,15 +21,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class MainMenuScreen implements Screen {
+public class MainGameScreen implements Screen {
     private Stage stage;
     private Game game;
     private SpriteBatch batch;
-    private Texture img;
     private Label titleLabel;
     private Table table;
 
-    public MainMenuScreen(Game aGame) {
+    public MainGameScreen(Game aGame) {
         // Setup Stage
         game = aGame;
         stage = new Stage(new ScreenViewport());
@@ -37,7 +36,6 @@ public class MainMenuScreen implements Screen {
         int row_height = Gdx.graphics.getWidth() / 12;
         stage = new Stage(new ScreenViewport());
         batch = new SpriteBatch();
-        img = new Texture("badlogic.jpg");
 
         // Style untuk Label
         Label.LabelStyle titleLabelStyle = new Label.LabelStyle();
@@ -47,7 +45,7 @@ public class MainMenuScreen implements Screen {
         // Title Label
         titleLabel = new Label("Engimon Factory", titleLabelStyle);
         titleLabel.setSize(Gdx.graphics.getWidth(),row_height);
-        titleLabel.setPosition(0,Gdx.graphics.getHeight()-row_height*2);
+        titleLabel.setPosition(0,Gdx.graphics.getHeight()-row_height*1);
         titleLabel.setAlignment(Align.center);
         stage.addActor(titleLabel);
 
@@ -57,10 +55,23 @@ public class MainMenuScreen implements Screen {
         menuButtonStyle.fontColor = Color.BLACK;
 
         // Definisi dan Implementasi TextButtons
-        TextButton newButton = new TextButton("New\nGame", menuButtonStyle);
-        TextButton loadButton = new TextButton("Load\nGame", menuButtonStyle);
-        TextButton helpButton = new TextButton("Help", menuButtonStyle);
-        TextButton exitButton = new TextButton("Exit", menuButtonStyle);
+        TextButton engimonButton = new TextButton("Engimon", menuButtonStyle);
+        TextButton breedButton = new TextButton("Breed", menuButtonStyle);
+        TextButton inventoryButton = new TextButton("Inventory", menuButtonStyle);
+        TextButton menuButton = new TextButton("<< Menu", menuButtonStyle);
+        menuButton.addListener(new InputListener(){
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new PauseScreen(game));
+            }
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+        });
+
+        menuButton.setPosition(100, Gdx.graphics.getHeight()-row_height*1);
+        stage.addActor(menuButton);
 
         // NinePatch untuk border Buttons
         NinePatch patch = new NinePatch(new Texture(Gdx.files.internal("background-tall.png")),
@@ -71,39 +82,70 @@ public class MainMenuScreen implements Screen {
                 1, 1, 1, 1);
         NinePatchDrawable background2 = new NinePatchDrawable(patch2);
 
+
         // Tables untuk menyusun TextButtons
         table = new Table();
 
-        Table tableNewGame = new Table();
-        tableNewGame.add(newButton);
-        tableNewGame.setBackground(background);
-        tableNewGame.setTouchable(Touchable.enabled);
-        tableNewGame.addListener(new ClickListener(){
+        Table tableMap = new Table();
+        tableMap.setBackground(background);
+        table.add(tableMap).width(400).height(300).spaceRight(30).top();
+
+        Table tableDescription = new Table();
+        Table tableCurrentEngimon = new Table();
+        tableCurrentEngimon.setBackground(background2);
+        Table tableMessage = new Table();
+        tableMessage.setBackground(background2);
+        Table tableBreedButton = new Table();
+        tableBreedButton.add(breedButton);
+        tableBreedButton.setBackground(background2);
+        tableDescription.add(tableCurrentEngimon).width(200).height(150);
+        tableDescription.row();
+        tableDescription.add(tableMessage).width(200).height(150);
+
+        table.add(tableDescription).width(200).height(300).spaceRight(30).top();
+
+        Table tableButtons = new Table();
+
+        Table tableEngimon = new Table();
+        tableEngimon.add(engimonButton);
+        tableEngimon.setBackground(background2);
+        tableEngimon.setTouchable(Touchable.enabled);
+        tableEngimon.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MainGameScreen(game));
+                game.setScreen(new EngimonScreen(game));
             }
         });
-        table.add(tableNewGame).width(100).height(200);
+        tableButtons.add(tableEngimon).width(100).height(70).spaceTop(30).spaceBottom(15);
+        tableButtons.row();
 
-        Table tableLoadGame = new Table();
-        tableLoadGame.add(loadButton);
-        tableLoadGame.setBackground(background);
-        table.add(tableLoadGame).width(100).height(200);
+        Table tableBreed = new Table();
+        tableBreed.add(breedButton);
+        tableBreed.setBackground(background2);
+        tableBreed.setTouchable(Touchable.enabled);
+        tableBreed.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new BreedScreen(game));
+            }
+        });
+        tableButtons.add(tableBreed).width(100).height(70).spaceTop(15).spaceBottom(15);
+        tableButtons.row();
 
-        Table tableHelp = new Table();
-        tableHelp.add(helpButton);
-        tableHelp.setBackground(background2);
+        Table tableInventory = new Table();
+        tableInventory.add(inventoryButton);
+        tableInventory.setBackground(background2);
+        tableInventory.setTouchable(Touchable.enabled);
+        tableInventory.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new InventoryScreen(game));
+            }
+        });
+        tableButtons.add(tableInventory).width(100).height(70).spaceTop(15).spaceBottom(15);
 
-        Table tableExit = new Table();
-        tableExit.add(exitButton);
-        tableExit.setBackground(background2);
+        table.add(tableButtons).top();
 
-        Table table2 = new Table();
-        table2.add(tableHelp).height(100).width(100);
-        table2.row();
-        table2.add(tableExit).height(100).width(100);
-        table.add(table2);
         table.setFillParent(true);
 
         // Menambahkan table ke dalam stage
@@ -114,6 +156,7 @@ public class MainMenuScreen implements Screen {
     public void show() {
         Gdx.app.log("MainScreen","show");
         Gdx.input.setInputProcessor(stage);
+
     }
 
     @Override
