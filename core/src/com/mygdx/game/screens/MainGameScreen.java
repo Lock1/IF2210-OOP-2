@@ -5,10 +5,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -20,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.maps.tiled.*;
 
 public class MainGameScreen implements Screen {
     private Stage stage;
@@ -27,6 +31,9 @@ public class MainGameScreen implements Screen {
     private SpriteBatch batch;
     private Label titleLabel;
     private Table table;
+    private TiledMap map;
+    private OrthogonalTiledMapRenderer renderer;
+    private OrthographicCamera camera;
 
     public MainGameScreen(Game aGame) {
         // Setup Stage
@@ -156,7 +163,10 @@ public class MainGameScreen implements Screen {
     public void show() {
         Gdx.app.log("MainScreen","show");
         Gdx.input.setInputProcessor(stage);
-
+        TmxMapLoader loader = new TmxMapLoader();
+        map = loader.load("Map.tmx");
+        renderer = new OrthogonalTiledMapRenderer(map);
+        camera = new OrthographicCamera();
     }
 
     @Override
@@ -164,15 +174,19 @@ public class MainGameScreen implements Screen {
         // Merender Batches dan Stages
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.begin();
-        stage.act();
-        stage.draw();
-        batch.end();
+//        batch.begin();
+//        stage.act();
+//        stage.draw();
+//        batch.end();
+        renderer.setView(camera);
+        renderer.render();
     }
 
     @Override
     public void resize(int width, int height) {
-
+        camera.viewportWidth = width;
+        camera.viewportHeight = height;
+        camera.update();
     }
 
     @Override
@@ -193,5 +207,7 @@ public class MainGameScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        map.dispose();
+        renderer.dispose();
     }
 }
