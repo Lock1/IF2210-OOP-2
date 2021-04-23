@@ -92,66 +92,67 @@ public class MainGameScreen implements Screen {
 
         // Tables untuk menyusun TextButtons
         table = new Table();
+        table.setPosition(300,-30);
 
         Table tableMap = new Table();
         tableMap.setBackground(background);
-        table.add(tableMap).width(400).height(300).spaceRight(30).top();
+        table.add(tableMap).width(300).height(510).right().center();
 
-        Table tableDescription = new Table();
-        Table tableCurrentEngimon = new Table();
-        tableCurrentEngimon.setBackground(background2);
-        Table tableMessage = new Table();
-        tableMessage.setBackground(background2);
-        Table tableBreedButton = new Table();
-        tableBreedButton.add(breedButton);
-        tableBreedButton.setBackground(background2);
-        tableDescription.add(tableCurrentEngimon).width(200).height(150);
-        tableDescription.row();
-        tableDescription.add(tableMessage).width(200).height(150);
-
-        table.add(tableDescription).width(200).height(300).spaceRight(30).top();
-
-        Table tableButtons = new Table();
-
-        Table tableEngimon = new Table();
-        tableEngimon.add(engimonButton);
-        tableEngimon.setBackground(background2);
-        tableEngimon.setTouchable(Touchable.enabled);
-        tableEngimon.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new EngimonScreen(game));
-            }
-        });
-        tableButtons.add(tableEngimon).width(100).height(70).spaceTop(30).spaceBottom(15);
-        tableButtons.row();
-
-        Table tableBreed = new Table();
-        tableBreed.add(breedButton);
-        tableBreed.setBackground(background2);
-        tableBreed.setTouchable(Touchable.enabled);
-        tableBreed.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new BreedScreen(game));
-            }
-        });
-        tableButtons.add(tableBreed).width(100).height(70).spaceTop(15).spaceBottom(15);
-        tableButtons.row();
-
-        Table tableInventory = new Table();
-        tableInventory.add(inventoryButton);
-        tableInventory.setBackground(background2);
-        tableInventory.setTouchable(Touchable.enabled);
-        tableInventory.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new InventoryScreen(game));
-            }
-        });
-        tableButtons.add(tableInventory).width(100).height(70).spaceTop(15).spaceBottom(15);
-
-        table.add(tableButtons).top();
+//        Table tableDescription = new Table();
+//        Table tableCurrentEngimon = new Table();
+//        tableCurrentEngimon.setBackground(background2);
+//        Table tableMessage = new Table();
+//        tableMessage.setBackground(background2);
+//        Table tableBreedButton = new Table();
+//        tableBreedButton.add(breedButton);
+//        tableBreedButton.setBackground(background2);
+//        tableDescription.add(tableCurrentEngimon).width(200).height(150);
+//        tableDescription.row();
+//        tableDescription.add(tableMessage).width(200).height(150);
+//
+//        table.add(tableDescription).width(200).height(300).spaceRight(30).top();
+//
+//        Table tableButtons = new Table();
+//
+//        Table tableEngimon = new Table();
+//        tableEngimon.add(engimonButton);
+//        tableEngimon.setBackground(background2);
+//        tableEngimon.setTouchable(Touchable.enabled);
+//        tableEngimon.addListener(new ClickListener(){
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                game.setScreen(new EngimonScreen(game));
+//            }
+//        });
+//        tableButtons.add(tableEngimon).width(100).height(70).spaceTop(30).spaceBottom(15);
+//        tableButtons.row();
+//
+//        Table tableBreed = new Table();
+//        tableBreed.add(breedButton);
+//        tableBreed.setBackground(background2);
+//        tableBreed.setTouchable(Touchable.enabled);
+//        tableBreed.addListener(new ClickListener(){
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                game.setScreen(new BreedScreen(game));
+//            }
+//        });
+//        tableButtons.add(tableBreed).width(100).height(70).spaceTop(15).spaceBottom(15);
+//        tableButtons.row();
+//
+//        Table tableInventory = new Table();
+//        tableInventory.add(inventoryButton);
+//        tableInventory.setBackground(background2);
+//        tableInventory.setTouchable(Touchable.enabled);
+//        tableInventory.addListener(new ClickListener(){
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                game.setScreen(new InventoryScreen(game));
+//            }
+//        });
+//        tableButtons.add(tableInventory).width(100).height(70).spaceTop(15).spaceBottom(15);
+//
+//        table.add(tableButtons).top();
 
         table.setFillParent(true);
 
@@ -174,18 +175,19 @@ public class MainGameScreen implements Screen {
         // Merender Batches dan Stages
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//        batch.begin();
-//        stage.act();
-//        stage.draw();
-//        batch.end();
+        batch.begin();
+        stage.act();
+        stage.draw();
+        batch.end();
         renderer.setView(camera);
         renderer.render();
     }
 
     @Override
     public void resize(int width, int height) {
-        camera.viewportWidth = width;
-        camera.viewportHeight = height;
+        camera.viewportWidth = 1500;
+        camera.viewportHeight = 1150;
+        camera.position.set(600, 450, 0);
         camera.update();
     }
 

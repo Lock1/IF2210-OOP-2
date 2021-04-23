@@ -9,7 +9,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "Engimon Factory";
 		config.width = 1000;
-		config.height = 600;
+		config.height = 700;
 		new LwjglApplication(new MyGdxGame(), config);
 	}
 }
