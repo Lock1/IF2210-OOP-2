@@ -8,5 +8,4 @@ public class Luxio extends Species {
     public Luxio() {
         super("Luxio", new Thunderbolt(), Element.ELECTRIC, Element.NOELEMENT, "The brave cat");
     }
-
 }
