@@ -27,6 +27,14 @@ public class InventoryScreen implements Screen {
     private SpriteBatch batch;
     private Label titleLabel;
     private Table table;
+    private String[] inventoryDummy = {"Powerball", "Health Potion", "Mana Potion", "Grenade"};
+    private String[] descriptionDummy =
+            {"An item that will increase your Engimon Strength",
+            "Increase your health by 20 points",
+            "Increase your mana by 20 points",
+            "Damage your enemy by 25 points"};
+    private String currentDescription = "";
+    private Label descriptionLabel;
 
     public InventoryScreen(Game aGame) {
         // Setup Stage
@@ -56,12 +64,12 @@ public class InventoryScreen implements Screen {
 
         // Definisi dan Implementasi TextButtons
         TextButton inventoryButton = new TextButton("Your Items", menuButtonStyle);
-        TextButton statButton = new TextButton("Stat", menuButtonStyle);
-        TextButton menuButton = new TextButton("<< Menu", menuButtonStyle);
-        menuButton.addListener(new InputListener(){
+        TextButton statButton = new TextButton("Description", menuButtonStyle);
+        TextButton backButton = new TextButton("<< Back", menuButtonStyle);
+        backButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new PauseScreen(game));
+                game.setScreen(new MainGameScreen(game));
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -69,8 +77,8 @@ public class InventoryScreen implements Screen {
             }
         });
 
-        menuButton.setPosition(100, Gdx.graphics.getHeight()-row_height*1);
-        stage.addActor(menuButton);
+        backButton.setPosition(100, Gdx.graphics.getHeight()-row_height*1);
+        stage.addActor(backButton);
 
         // NinePatch untuk border Buttons
         NinePatch patch = new NinePatch(new Texture(Gdx.files.internal("background-tall.png")),
@@ -85,13 +93,36 @@ public class InventoryScreen implements Screen {
         table.add(statButton).width(200);
         table.row();
 
-        Table tableEngimon = new Table();
-        tableEngimon.setBackground(background);
-        table.add(tableEngimon).width(400).height(300).spaceRight(60);
+        Table tableInventory = new Table();
+        tableInventory.setBackground(background);
+        tableInventory.top().padTop(20);
+        for(int i=0;i<inventoryDummy.length;i++) {
+            TextButton itemButton = new TextButton(inventoryDummy[i], menuButtonStyle);
+            tableInventory.add(itemButton).padTop(10).padBottom(10);
+            final int j = i;
+            itemButton.addListener(new InputListener(){
+                @Override
+                public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                    currentDescription = descriptionDummy[j];
+                }
+                @Override
+                public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                    return true;
+                }
+            });
+            tableInventory.row();
+        }
+        table.add(tableInventory).width(400).height(300).spaceRight(60);
 
-        Table tableStats = new Table();
-        tableStats.setBackground(background);
-        table.add(tableStats).width(200).height(300);
+        Table tableDescription = new Table();
+        tableDescription.setBackground(background);
+        descriptionLabel = new Label(currentDescription, titleLabelStyle);
+        descriptionLabel.setWrap(true);
+        descriptionLabel.setWidth(160);
+        descriptionLabel.setSize(Gdx.graphics.getWidth(),row_height);
+        descriptionLabel.setAlignment(Align.center);
+        tableDescription.add(descriptionLabel).width(160);
+        table.add(tableDescription).width(200).height(300);
 
         table.setFillParent(true);
 
@@ -113,6 +144,7 @@ public class InventoryScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         stage.act();
+        descriptionLabel.setText(currentDescription);
         stage.draw();
         batch.end();
     }

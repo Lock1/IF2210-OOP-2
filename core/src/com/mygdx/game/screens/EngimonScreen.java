@@ -27,6 +27,14 @@ public class EngimonScreen implements Screen {
     private SpriteBatch batch;
     private Label titleLabel;
     private Table table;
+    private String[] engimonDummy = {"Pikachu", "IceLord", "Ragnarok", "Boulder"};
+    private String[] statsDummy =
+            {"Lightning",
+            "Ice",
+            "Fire",
+            "Earth"};
+    private String currentStats = "";
+    private Label statsLabel;
 
     public EngimonScreen(Game aGame) {
         // Setup Stage
@@ -57,11 +65,11 @@ public class EngimonScreen implements Screen {
         // Definisi dan Implementasi TextButtons
         TextButton engimonButton = new TextButton("Your Engimon", menuButtonStyle);
         TextButton statButton = new TextButton("Stat", menuButtonStyle);
-        TextButton menuButton = new TextButton("<< Menu", menuButtonStyle);
-        menuButton.addListener(new InputListener(){
+        TextButton backButton = new TextButton("<< Back", menuButtonStyle);
+        backButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new PauseScreen(game));
+                game.setScreen(new MainGameScreen(game));
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -69,8 +77,8 @@ public class EngimonScreen implements Screen {
             }
         });
 
-        menuButton.setPosition(100, Gdx.graphics.getHeight()-row_height*1);
-        stage.addActor(menuButton);
+        backButton.setPosition(100, Gdx.graphics.getHeight()-row_height*1);
+        stage.addActor(backButton);
 
         // NinePatch untuk border Buttons
         NinePatch patch = new NinePatch(new Texture(Gdx.files.internal("background-tall.png")),
@@ -87,11 +95,34 @@ public class EngimonScreen implements Screen {
 
         Table tableEngimon = new Table();
         tableEngimon.setBackground(background);
+        tableEngimon.top().padTop(20);
+        for(int i=0;i<engimonDummy.length;i++) {
+            TextButton itemButton = new TextButton(engimonDummy[i], menuButtonStyle);
+            tableEngimon.add(itemButton).padTop(10).padBottom(10);
+            final int j = i;
+            itemButton.addListener(new InputListener(){
+                @Override
+                public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                    currentStats = statsDummy[j];
+                }
+                @Override
+                public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                    return true;
+                }
+            });
+            tableEngimon.row();
+        }
         table.add(tableEngimon).width(400).height(300).spaceRight(60);
 
-        Table tableStat = new Table();
-        tableStat.setBackground(background);
-        table.add(tableStat).width(200).height(300);
+        Table tableStats = new Table();
+        tableStats.setBackground(background);
+        statsLabel = new Label(currentStats, titleLabelStyle);
+        statsLabel.setWrap(true);
+        statsLabel.setWidth(160);
+        statsLabel.setSize(Gdx.graphics.getWidth(),row_height);
+        statsLabel.setAlignment(Align.center);
+        tableStats.add(statsLabel).width(160);
+        table.add(tableStats).width(200).height(300);
 
         table.setFillParent(true);
 
@@ -113,6 +144,7 @@ public class EngimonScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         stage.act();
+        statsLabel.setText(currentStats);
         stage.draw();
         batch.end();
     }
