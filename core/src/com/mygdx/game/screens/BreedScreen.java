@@ -93,6 +93,10 @@ public class BreedScreen implements Screen {
                 1, 1, 1, 1);
         NinePatchDrawable background2 = new NinePatchDrawable(patch2);
 
+        NinePatch patch3 = new NinePatch(new Texture(Gdx.files.internal("background-button.png")),
+                1, 1, 1, 1);
+        NinePatchDrawable background3 = new NinePatchDrawable(patch3);
+
 
         // Tables untuk menyusun TextButtons
         table = new Table();
@@ -125,7 +129,7 @@ public class BreedScreen implements Screen {
             });
             tableEngimon.row();
         }
-        table.add(tableEngimon).width(400).height(300).spaceRight(60);
+        table.add(tableEngimon).width(400).height(400).spaceRight(60);
 
         Table tableBreed = new Table();
 
@@ -169,16 +173,16 @@ public class BreedScreen implements Screen {
 
         Table tableBreedButton = new Table();
         tableBreedButton.add(breedButton);
-        tableBreedButton.setBackground(background2);
+        tableBreedButton.setBackground(background3);
         tableBreed.add(engimonOneButton);
         tableBreed.row();
-        tableBreed.add(tableEngimonOne).width(200).height(120);
+        tableBreed.add(tableEngimonOne).width(200).height(150);
         tableBreed.row();
         tableBreed.add(engimonTwoButton);
         tableBreed.row();
-        tableBreed.add(tableEngimonTwo).width(200).height(120);
+        tableBreed.add(tableEngimonTwo).width(200).height(150);
         tableBreed.row();
-        tableBreed.add(tableBreedButton).width(70).height(50);
+        tableBreed.add(tableBreedButton).width(100).height(70);
 
         table.add(tableBreed).width(200).height(300);
 
