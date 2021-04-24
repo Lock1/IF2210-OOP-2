@@ -25,6 +25,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.maps.tiled.*;
 
+import com.mygdx.game.KeyboardInput;
+
 public class MainGameScreen implements Screen {
     private Stage stage;
     private Game game;
@@ -35,6 +37,7 @@ public class MainGameScreen implements Screen {
     private OrthogonalTiledMapRenderer renderer;
     private IsometricTiledMapRenderer isometricRenderer;
     private OrthographicCamera camera;
+    private KeyboardInput playerKeyboardInput;
 
     public MainGameScreen(Game aGame) {
         // Setup Stage
@@ -158,6 +161,10 @@ public class MainGameScreen implements Screen {
 
         // Menambahkan table ke dalam stage
         stage.addActor(table);
+
+        // Keyboard input setup
+        playerKeyboardInput = new KeyboardInput();
+        playerKeyboardInput.start();
     }
 
     @Override
@@ -184,8 +191,11 @@ public class MainGameScreen implements Screen {
         batch.end();
         renderer.setView(camera);
         renderer.render();
-//        isometricRenderer.setView(camera);
-//        isometricRenderer.render();
+        String keydata = playerKeyboardInput.getKeypress();
+        if (keydata != null)
+            System.out.println(keydata);
+       // isometricRenderer.setView(camera);
+       // isometricRenderer.render();
     }
 
     @Override
