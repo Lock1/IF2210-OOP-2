@@ -6,7 +6,7 @@ import com.mygdx.game.entity.attributes.*;
 import java.util.ArrayList;
 
 public class Engimon extends Entity {
-    private Species type;
+    private Species speciesType;
     private String engimonName;
     private ArrayList<Skill> learnedSkill;
 
@@ -20,14 +20,26 @@ public class Engimon extends Entity {
     private int experience;
     private int cumulativeExperience;
     private boolean isWild;
-
+    
     public Engimon(Species e, boolean wild) { // TODO : Pos
-        type = e;
+        speciesType = e;
+    }
+
+    public Species getSpecies() {
+        return speciesType;
     }
 
     public int xpGain(int gainedXP) {
         int totalLevelUp = 0;
         return totalLevelUp;
+    }
+
+    public int level() {
+        return level;
+    }
+
+    public ArrayList<Skill> getSkillArray() {
+        return learnedSkill;
     }
 
     // @over valid move
