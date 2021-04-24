@@ -5,15 +5,15 @@ import com.mygdx.game.screens.*;
 
 public class MyGdxGame extends Game {
 
-	public void create () {
-		this.setScreen(new InventoryScreen(this));
+	public void create() {
+		this.setScreen(new MainGameScreen(this));
 	}
 
-	public void render () {
+	public void render() {
 		super.render();
 	}
 
-	public void dispose () {
+	public void dispose() {
 
 	}
 }
