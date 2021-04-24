@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.game.styles.BackgroundColor;
 
 public class InventoryScreen implements Screen {
     private Stage stage;
@@ -122,6 +123,9 @@ public class InventoryScreen implements Screen {
         descriptionLabel.setSize(Gdx.graphics.getWidth(),row_height);
         descriptionLabel.setAlignment(Align.center);
         tableDescription.add(descriptionLabel).width(160);
+//        BackgroundColor backgroundColor = new BackgroundColor("white_color_texture.png");
+//        backgroundColor.setColor(2, 179, 228, 255); // r, g, b, a
+//        tableDescription.setBackground(backgroundColor);
         table.add(tableDescription).width(200).height(300);
 
         table.setFillParent(true);

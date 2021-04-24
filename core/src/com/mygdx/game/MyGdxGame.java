@@ -6,7 +6,7 @@ import com.mygdx.game.screens.*;
 public class MyGdxGame extends Game {
 
 	public void create () {
-		this.setScreen(new BreedScreen(this));
+		this.setScreen(new InventoryScreen(this));
 	}
 
 	public void render () {
