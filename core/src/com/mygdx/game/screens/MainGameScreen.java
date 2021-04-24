@@ -10,8 +10,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -113,47 +111,46 @@ public class MainGameScreen implements Screen {
 //
 //        table.add(tableDescription).width(200).height(300).spaceRight(30).top();
 //
-//        Table tableButtons = new Table();
-//
-//        Table tableEngimon = new Table();
-//        tableEngimon.add(engimonButton);
-//        tableEngimon.setBackground(background2);
-//        tableEngimon.setTouchable(Touchable.enabled);
-//        tableEngimon.addListener(new ClickListener(){
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                game.setScreen(new EngimonScreen(game));
-//            }
-//        });
-//        tableButtons.add(tableEngimon).width(100).height(70).spaceTop(30).spaceBottom(15);
-//        tableButtons.row();
-//
-//        Table tableBreed = new Table();
-//        tableBreed.add(breedButton);
-//        tableBreed.setBackground(background2);
-//        tableBreed.setTouchable(Touchable.enabled);
-//        tableBreed.addListener(new ClickListener(){
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                game.setScreen(new BreedScreen(game));
-//            }
-//        });
-//        tableButtons.add(tableBreed).width(100).height(70).spaceTop(15).spaceBottom(15);
-//        tableButtons.row();
-//
-//        Table tableInventory = new Table();
-//        tableInventory.add(inventoryButton);
-//        tableInventory.setBackground(background2);
-//        tableInventory.setTouchable(Touchable.enabled);
-//        tableInventory.addListener(new ClickListener(){
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                game.setScreen(new InventoryScreen(game));
-//            }
-//        });
-//        tableButtons.add(tableInventory).width(100).height(70).spaceTop(15).spaceBottom(15);
-//
-//        table.add(tableButtons).top();
+        Table tableButtons = new Table();
+
+        Table tableEngimon = new Table();
+        tableEngimon.add(engimonButton);
+        tableEngimon.setBackground(background2);
+        tableEngimon.setTouchable(Touchable.enabled);
+        tableEngimon.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new EngimonScreen(game));
+            }
+        });
+        tableButtons.add(tableEngimon).width(100).height(70).spaceTop(30).spaceBottom(15);
+
+        Table tableBreed = new Table();
+        tableBreed.add(breedButton);
+        tableBreed.setBackground(background2);
+        tableBreed.setTouchable(Touchable.enabled);
+        tableBreed.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new BreedScreen(game));
+            }
+        });
+        tableButtons.add(tableBreed).width(100).height(70).spaceTop(15).spaceBottom(15);
+
+        Table tableInventory = new Table();
+        tableInventory.add(inventoryButton);
+        tableInventory.setBackground(background2);
+        tableInventory.setTouchable(Touchable.enabled);
+        tableInventory.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new InventoryScreen(game));
+            }
+        });
+        tableButtons.add(tableInventory).width(100).height(70).spaceTop(15).spaceBottom(15);
+
+        table.row();
+        table.add(tableButtons);
 
         table.setFillParent(true);
 
