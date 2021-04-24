@@ -6,7 +6,7 @@ import com.mygdx.game.screens.*;
 public class MyGdxGame extends Game {
 
 	public void create () {
-		this.setScreen(new EngimonScreen(this));
+		this.setScreen(new BreedScreen(this));
 	}
 
 	public void render () {
