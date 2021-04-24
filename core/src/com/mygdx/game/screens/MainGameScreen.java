@@ -33,6 +33,7 @@ public class MainGameScreen implements Screen {
     private Table table;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
+    private IsometricTiledMapRenderer isometricRenderer;
     private OrthographicCamera camera;
 
     public MainGameScreen(Game aGame) {
@@ -92,11 +93,11 @@ public class MainGameScreen implements Screen {
 
         // Tables untuk menyusun TextButtons
         table = new Table();
-        table.setPosition(300,-30);
+        table.setPosition(310,-30);
 
         Table tableMap = new Table();
         tableMap.setBackground(background);
-        table.add(tableMap).width(300).height(510).right().center();
+        table.add(tableMap).width(300).height(400).right().center();
 
 //        Table tableDescription = new Table();
 //        Table tableCurrentEngimon = new Table();
@@ -168,6 +169,9 @@ public class MainGameScreen implements Screen {
         map = loader.load("Map.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
         camera = new OrthographicCamera();
+//        map = loader.load("MapIsometric.tmx");
+//        isometricRenderer = new IsometricTiledMapRenderer(map);
+//        camera = new OrthographicCamera();
     }
 
     @Override
@@ -181,6 +185,8 @@ public class MainGameScreen implements Screen {
         batch.end();
         renderer.setView(camera);
         renderer.render();
+//        isometricRenderer.setView(camera);
+//        isometricRenderer.render();
     }
 
     @Override
