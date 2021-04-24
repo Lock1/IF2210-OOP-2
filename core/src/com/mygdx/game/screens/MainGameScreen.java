@@ -5,10 +5,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -20,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.maps.tiled.*;
 
 public class MainGameScreen implements Screen {
     private Stage stage;
@@ -27,6 +31,10 @@ public class MainGameScreen implements Screen {
     private SpriteBatch batch;
     private Label titleLabel;
     private Table table;
+    private TiledMap map;
+    private OrthogonalTiledMapRenderer renderer;
+    private IsometricTiledMapRenderer isometricRenderer;
+    private OrthographicCamera camera;
 
     public MainGameScreen(Game aGame) {
         // Setup Stage
@@ -85,25 +93,26 @@ public class MainGameScreen implements Screen {
 
         // Tables untuk menyusun TextButtons
         table = new Table();
+        table.setPosition(310,-30);
 
         Table tableMap = new Table();
         tableMap.setBackground(background);
-        table.add(tableMap).width(400).height(300).spaceRight(30).top();
+        table.add(tableMap).width(300).height(400).right().center();
 
-        Table tableDescription = new Table();
-        Table tableCurrentEngimon = new Table();
-        tableCurrentEngimon.setBackground(background2);
-        Table tableMessage = new Table();
-        tableMessage.setBackground(background2);
-        Table tableBreedButton = new Table();
-        tableBreedButton.add(breedButton);
-        tableBreedButton.setBackground(background2);
-        tableDescription.add(tableCurrentEngimon).width(200).height(150);
-        tableDescription.row();
-        tableDescription.add(tableMessage).width(200).height(150);
-
-        table.add(tableDescription).width(200).height(300).spaceRight(30).top();
-
+//        Table tableDescription = new Table();
+//        Table tableCurrentEngimon = new Table();
+//        tableCurrentEngimon.setBackground(background2);
+//        Table tableMessage = new Table();
+//        tableMessage.setBackground(background2);
+//        Table tableBreedButton = new Table();
+//        tableBreedButton.add(breedButton);
+//        tableBreedButton.setBackground(background2);
+//        tableDescription.add(tableCurrentEngimon).width(200).height(150);
+//        tableDescription.row();
+//        tableDescription.add(tableMessage).width(200).height(150);
+//
+//        table.add(tableDescription).width(200).height(300).spaceRight(30).top();
+//
         Table tableButtons = new Table();
 
         Table tableEngimon = new Table();
@@ -117,7 +126,6 @@ public class MainGameScreen implements Screen {
             }
         });
         tableButtons.add(tableEngimon).width(100).height(70).spaceTop(30).spaceBottom(15);
-        tableButtons.row();
 
         Table tableBreed = new Table();
         tableBreed.add(breedButton);
@@ -130,7 +138,6 @@ public class MainGameScreen implements Screen {
             }
         });
         tableButtons.add(tableBreed).width(100).height(70).spaceTop(15).spaceBottom(15);
-        tableButtons.row();
 
         Table tableInventory = new Table();
         tableInventory.add(inventoryButton);
@@ -144,7 +151,8 @@ public class MainGameScreen implements Screen {
         });
         tableButtons.add(tableInventory).width(100).height(70).spaceTop(15).spaceBottom(15);
 
-        table.add(tableButtons).top();
+        table.row();
+        table.add(tableButtons);
 
         table.setFillParent(true);
 
@@ -156,7 +164,13 @@ public class MainGameScreen implements Screen {
     public void show() {
         Gdx.app.log("MainScreen","show");
         Gdx.input.setInputProcessor(stage);
-
+        TmxMapLoader loader = new TmxMapLoader();
+        map = loader.load("Map.tmx");
+        renderer = new OrthogonalTiledMapRenderer(map);
+        camera = new OrthographicCamera();
+//        map = loader.load("MapIsometric.tmx");
+//        isometricRenderer = new IsometricTiledMapRenderer(map);
+//        camera = new OrthographicCamera();
     }
 
     @Override
@@ -168,11 +182,18 @@ public class MainGameScreen implements Screen {
         stage.act();
         stage.draw();
         batch.end();
+        renderer.setView(camera);
+        renderer.render();
+//        isometricRenderer.setView(camera);
+//        isometricRenderer.render();
     }
 
     @Override
     public void resize(int width, int height) {
-
+        camera.viewportWidth = 1500;
+        camera.viewportHeight = 1150;
+        camera.position.set(600, 450, 0);
+        camera.update();
     }
 
     @Override
@@ -193,5 +214,7 @@ public class MainGameScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        map.dispose();
+        renderer.dispose();
     }
 }
