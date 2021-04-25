@@ -26,7 +26,14 @@ import com.badlogic.gdx.maps.tiled.*;
 
 import com.mygdx.game.KeyboardInput;
 import com.mygdx.game.GameLogic;
+import com.mygdx.game.entity.Engimon;
+import com.mygdx.game.entity.EngimonInventory;
+import com.mygdx.game.entity.Player;
+import com.mygdx.game.entity.SkillInventory;
+import com.mygdx.game.entity.attributes.Skill;
 import com.mygdx.game.maps.OrthogonalTiledMapRendererWithSprites;
+
+import java.util.ArrayList;
 
 public class MainGameScreen extends ApplicationAdapter implements Screen, InputProcessor {
     private Stage stage;
@@ -38,7 +45,6 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
     private Table table;
     private TiledMap map;
     private OrthogonalTiledMapRendererWithSprites renderer;
-    private IsometricTiledMapRenderer isometricRenderer;
     private OrthographicCamera camera;
     private KeyboardInput playerKeyboardInput;
     private GameLogic mainGameLogic;
@@ -47,10 +53,30 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
     private int minTile = 0;
     private int maxTile = 48;
 
-    public MainGameScreen(Game aGame) {
+    // Inventories
+    private EngimonInventory engimonInventory;
+    private SkillInventory skillInventory;
+    private ArrayList<Engimon> engimonList;
+    private ArrayList<Skill> skillList;
+
+    // Player
+    private Player currentPlayer;
+
+    public void getDatabaseData() {
+        engimonInventory = new EngimonInventory(50);
+        engimonList = engimonInventory.getItemList();
+
+        skillInventory = new SkillInventory(50);
+        skillList = skillInventory.getItemList();
+    }
+
+    public MainGameScreen(Game aGame, final Player currentPlayer) {
         // Setup Stage
         game = aGame;
         stage = new Stage(new ScreenViewport());
+
+//        getDatabaseData();
+        this.currentPlayer = currentPlayer;
 
         int row_height = Gdx.graphics.getWidth() / 12;
         stage = new Stage(new ScreenViewport());
@@ -81,7 +107,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         menuButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new PauseScreen(game));
+                game.setScreen(new PauseScreen(game, currentPlayer));
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -137,7 +163,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         tableEngimon.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new EngimonScreen(game));
+                game.setScreen(new EngimonScreen(game, currentPlayer));
             }
         });
         tableButtons.add(tableEngimon).width(100).height(70).spaceTop(30).spaceBottom(15);
@@ -149,7 +175,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         tableBreed.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new BreedScreen(game));
+                game.setScreen(new BreedScreen(game, currentPlayer));
             }
         });
         tableButtons.add(tableBreed).width(100).height(70).spaceTop(15).spaceBottom(15);
@@ -161,7 +187,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         tableInventory.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new InventoryScreen(game));
+                game.setScreen(new InventoryScreen(game, currentPlayer));
             }
         });
         tableButtons.add(tableInventory).width(100).height(70).spaceTop(15).spaceBottom(15);

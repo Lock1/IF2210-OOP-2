@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.game.entity.Player;
 
 public class BreedScreen implements Screen {
     private Stage stage;
@@ -37,11 +38,13 @@ public class BreedScreen implements Screen {
     private String currentBreedTwo = "";
     private Label breedOneLabel;
     private Label breedTwoLabel;
+    private Player currentPlayer;
 
-    public BreedScreen(Game aGame) {
+    public BreedScreen(Game aGame, final Player currentPlayer) {
         // Setup Stage
         game = aGame;
         stage = new Stage(new ScreenViewport());
+        this.currentPlayer = currentPlayer;
 
         int row_height = Gdx.graphics.getWidth() / 12;
         stage = new Stage(new ScreenViewport());
@@ -73,7 +76,7 @@ public class BreedScreen implements Screen {
         backButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new MainGameScreen(game));
+                game.setScreen(new MainGameScreen(game, currentPlayer));
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {

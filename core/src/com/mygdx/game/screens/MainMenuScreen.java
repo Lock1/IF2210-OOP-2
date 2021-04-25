@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.game.entity.Player;
 
 public class MainMenuScreen implements Screen {
     private Stage stage;
@@ -28,6 +29,11 @@ public class MainMenuScreen implements Screen {
     private Texture img;
     private Label titleLabel;
     private Table table;
+
+    public Player createNewPlayer() {
+        Player newPlayer = new Player(10);
+        return newPlayer;
+    }
 
     public MainMenuScreen(Game aGame) {
         // Setup Stage
@@ -81,7 +87,8 @@ public class MainMenuScreen implements Screen {
         tableNewGame.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MainGameScreen(game));
+                Player newPlayer = createNewPlayer();
+                game.setScreen(new MainGameScreen(game, newPlayer));
             }
         });
         table.add(tableNewGame).width(100).height(200);
