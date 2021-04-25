@@ -1,4 +1,4 @@
-package com.mygdx.game.entity.species;
+package com.mygdx.game.entity.engimon;
 
 import com.mygdx.game.entity.Species;
 import com.mygdx.game.entity.attributes.Element;
