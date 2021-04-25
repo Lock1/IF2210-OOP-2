@@ -264,14 +264,20 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
     }
 
     @Override public boolean keyDown(int keycode) {
-        if(keycode == Input.Keys.LEFT)
-            if(sprite.getX() != minTile*tileWidth) {
+        if(keycode == Input.Keys.LEFT) {
+            Texture righttexture = new Texture(Gdx.files.internal("./sprites/electric/left/move/1.png"));
+            sprite.setTexture(righttexture);
+            if (sprite.getX() != minTile * tileWidth) {
                 sprite.translate(-tileWidth, 0);
             }
-        if(keycode == Input.Keys.RIGHT)
-            if(sprite.getX() != maxTile*tileWidth) {
-                sprite.translate(tileWidth,0);
+        }
+        if(keycode == Input.Keys.RIGHT) {
+            Texture righttexture = new Texture(Gdx.files.internal("./sprites/electric/right/move/1.png"));
+            sprite.setTexture(righttexture);
+            if (sprite.getX() != maxTile * tileWidth) {
+                sprite.translate(tileWidth, 0);
             }
+        }
         if(keycode == Input.Keys.UP)
             if(sprite.getY() != maxTile*tileHeight) {
                 sprite.translate(0,tileHeight);
