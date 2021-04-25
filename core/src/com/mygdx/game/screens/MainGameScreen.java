@@ -42,6 +42,10 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
     private OrthographicCamera camera;
     private KeyboardInput playerKeyboardInput;
     private GameLogic mainGameLogic;
+    private int tileWidth;
+    private int tileHeight;
+    private int minTile = 0;
+    private int maxTile = 48;
 
     public MainGameScreen(Game aGame) {
         // Setup Stage
@@ -184,6 +188,8 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         TmxMapLoader loader = new TmxMapLoader();
         map = loader.load("Map.tmx");
 //        renderer = new OrthogonalTiledMapRenderer(map);
+        tileWidth = map.getProperties().get("tilewidth", Integer.class);
+        tileHeight = map.getProperties().get("tileheight", Integer.class);
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false,1500,1150);
@@ -192,6 +198,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         batch = new SpriteBatch();
         texture = new Texture(Gdx.files.internal("./sprites/electric/left/move/1.png"));
         sprite = new Sprite(texture);
+        sprite.setPosition(tileWidth*30,tileHeight*30);
 
         renderer = new OrthogonalTiledMapRendererWithSprites(map, batch);
         renderer.addSprite(sprite);
@@ -258,17 +265,25 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
 
     @Override public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.LEFT)
-            sprite.translate(-32,0);
+            if(sprite.getX() != minTile*tileWidth) {
+                sprite.translate(-tileWidth, 0);
+            }
         if(keycode == Input.Keys.RIGHT)
-            sprite.translate(32,0);
+            if(sprite.getX() != maxTile*tileWidth) {
+                sprite.translate(tileWidth,0);
+            }
         if(keycode == Input.Keys.UP)
-            sprite.translate(0,32);
+            if(sprite.getY() != maxTile*tileHeight) {
+                sprite.translate(0,tileHeight);
+            }
         if(keycode == Input.Keys.DOWN)
-            sprite.translate(0,-32);
-        if(keycode == Input.Keys.NUM_1)
-            map.getLayers().get(0).setVisible(!map.getLayers().get(0).isVisible());
-        if(keycode == Input.Keys.NUM_2)
-            map.getLayers().get(1).setVisible(!map.getLayers().get(1).isVisible());
+            if(sprite.getY() != minTile*tileHeight) {
+                sprite.translate(0,-tileHeight);
+            }
+//        if(keycode == Input.Keys.NUM_1)
+//            map.getLayers().get(0).setVisible(!map.getLayers().get(0).isVisible());
+//        if(keycode == Input.Keys.NUM_2)
+//            map.getLayers().get(1).setVisible(!map.getLayers().get(1).isVisible());
         return false;
     }
     @Override public boolean keyUp(int keycode) {
