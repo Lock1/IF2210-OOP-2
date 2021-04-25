@@ -26,6 +26,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.maps.tiled.*;
 
 import com.mygdx.game.KeyboardInput;
+import com.mygdx.game.GameLogic;
 
 public class MainGameScreen implements Screen {
     private Stage stage;
@@ -38,6 +39,7 @@ public class MainGameScreen implements Screen {
     private IsometricTiledMapRenderer isometricRenderer;
     private OrthographicCamera camera;
     private KeyboardInput playerKeyboardInput;
+    private GameLogic mainGameLogic;
 
     public MainGameScreen(Game aGame) {
         // Setup Stage
@@ -169,6 +171,8 @@ public class MainGameScreen implements Screen {
         // Keyboard input setup
         playerKeyboardInput = new KeyboardInput();
         playerKeyboardInput.start();
+
+        mainGameLogic = new GameLogic();
     }
 
     @Override
@@ -230,5 +234,6 @@ public class MainGameScreen implements Screen {
         stage.dispose();
         map.dispose();
         renderer.dispose();
+        playerKeyboardInput.stopThread();
     }
 }
