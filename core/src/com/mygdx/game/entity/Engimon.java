@@ -30,7 +30,7 @@ public class Engimon extends Entity {
         this.experience = 0;
         this.level = 1;
         learnedSkill = new ArrayList<Skill>();
-        learnedSkill.add(e.baseSkill());
+        learnedSkill.add(new Skill(e.baseSkill()));
         parent1Species = null;
         parent2Species = null;
 
@@ -46,7 +46,7 @@ public class Engimon extends Entity {
         this.experience = 0;
         this.level = baselevel;
         learnedSkill = new ArrayList<Skill>();
-        learnedSkill.add(e.baseSkill());
+        learnedSkill.add(new Skill(e.baseSkill()));
         parent1Species = null;
         parent2Species = null;
 
@@ -145,7 +145,7 @@ public class Engimon extends Entity {
     public boolean deleteSkill(String skillName) {
         int skillIndex = -1;
         for (int i = 0; i < learnedSkill.size(); i++)
-            if (learnedSkill.get(i).skillName() == skillName)
+            if (learnedSkill.get(i).skillName().equals(skillName))
                 skillIndex = i;
 
         if (skillIndex != -1) {
@@ -159,7 +159,7 @@ public class Engimon extends Entity {
     public boolean addSkill(Skill newSkill) {
         int skillIndex = -1;
         for (int i = 0; i < learnedSkill.size(); i++)
-            if (learnedSkill.get(i).skillName() == newSkill.skillName())
+            if (learnedSkill.get(i).skillName().equals(newSkill.skillName()))
                 skillIndex = i;
 
         if (skillIndex != -1)
