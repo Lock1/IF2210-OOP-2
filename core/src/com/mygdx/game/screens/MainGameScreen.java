@@ -1,14 +1,13 @@
 package com.mygdx.game.screens;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -27,15 +26,18 @@ import com.badlogic.gdx.maps.tiled.*;
 
 import com.mygdx.game.KeyboardInput;
 import com.mygdx.game.GameLogic;
+import com.mygdx.game.maps.OrthogonalTiledMapRendererWithSprites;
 
-public class MainGameScreen implements Screen {
+public class MainGameScreen extends ApplicationAdapter implements Screen, InputProcessor {
     private Stage stage;
     private Game game;
     private SpriteBatch batch;
+    private Texture texture;
+    private Sprite sprite;
     private Label titleLabel;
     private Table table;
     private TiledMap map;
-    private OrthogonalTiledMapRenderer renderer;
+    private OrthogonalTiledMapRendererWithSprites renderer;
     private IsometricTiledMapRenderer isometricRenderer;
     private OrthographicCamera camera;
     private KeyboardInput playerKeyboardInput;
@@ -178,14 +180,24 @@ public class MainGameScreen implements Screen {
     @Override
     public void show() {
         Gdx.app.log("MainScreen","show");
-        Gdx.input.setInputProcessor(stage);
+//        Gdx.input.setInputProcessor(stage);
         TmxMapLoader loader = new TmxMapLoader();
         map = loader.load("Map.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map);
+//        renderer = new OrthogonalTiledMapRenderer(map);
+
         camera = new OrthographicCamera();
-//        map = loader.load("MapIsometric.tmx");
-//        isometricRenderer = new IsometricTiledMapRenderer(map);
-//        camera = new OrthographicCamera();
+        camera.setToOrtho(false,1500,1150);
+        camera.update();
+
+        batch = new SpriteBatch();
+        texture = new Texture(Gdx.files.internal("./sprites/electric/left/move/1.png"));
+        sprite = new Sprite(texture);
+
+        renderer = new OrthogonalTiledMapRendererWithSprites(map, batch);
+        renderer.addSprite(sprite);
+
+        Gdx.input.setInputProcessor(this);
+//        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -193,12 +205,19 @@ public class MainGameScreen implements Screen {
         // Merender Batches dan Stages
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.begin();
+
+        camera.update();
+
         stage.act();
         stage.draw();
-        batch.end();
+
         renderer.setView(camera);
         renderer.render();
+
+        batch.begin();
+//        sprite.draw(batch);
+        batch.end();
+
         String keydata = playerKeyboardInput.getKeypress();
         if (keydata != null)
             System.out.println(keydata);
@@ -235,5 +254,42 @@ public class MainGameScreen implements Screen {
         map.dispose();
         renderer.dispose();
         playerKeyboardInput.stopThread();
+    }
+
+    @Override public boolean keyDown(int keycode) {
+        if(keycode == Input.Keys.LEFT)
+            sprite.translate(-32,0);
+        if(keycode == Input.Keys.RIGHT)
+            sprite.translate(32,0);
+        if(keycode == Input.Keys.UP)
+            sprite.translate(0,32);
+        if(keycode == Input.Keys.DOWN)
+            sprite.translate(0,-32);
+        if(keycode == Input.Keys.NUM_1)
+            map.getLayers().get(0).setVisible(!map.getLayers().get(0).isVisible());
+        if(keycode == Input.Keys.NUM_2)
+            map.getLayers().get(1).setVisible(!map.getLayers().get(1).isVisible());
+        return false;
+    }
+    @Override public boolean keyUp(int keycode) {
+        return false;
+    }
+    @Override public boolean keyTyped(char character) {
+        return false;
+    }
+    @Override public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+    @Override public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+    @Override public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+    @Override public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+    public boolean scrolled(float x, float y) {
+        return false;
     }
 }
