@@ -24,7 +24,7 @@ public class SkillDatabase implements Database<Skill> {
 
     public Skill getItem(String name) throws ItemNotFound {
         for (Skill sp : skillDB)
-            if (sp.skillName() == name)
+            if (sp.skillName().equals(name))
                 return new Skill(sp);
 
         throw new ItemNotFound();

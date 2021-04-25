@@ -24,7 +24,7 @@ public class SpeciesDatabase implements Database<Species> {
 
     public Species getItem(String name) throws ItemNotFound {
         for (Species sp : speciesDB)
-            if (sp.speciesName() == name)
+            if (sp.speciesName().equals(name))
                 return new Species(sp);
 
         throw new ItemNotFound();
