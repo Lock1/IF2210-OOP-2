@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.game.entity.Engimon;
 import com.mygdx.game.entity.Player;
 import com.mygdx.game.entity.SkillInventory;
 import com.mygdx.game.entity.attributes.Skill;
@@ -41,7 +42,20 @@ public class InventoryScreen implements Screen {
             "Damage your enemy by 25 points"};
     private String currentDescription = "";
     private Label descriptionLabel;
+    private ArrayList<Skill> skillList;
     private Player currentPlayer;
+
+    public void getSkillList() {
+        skillList = currentPlayer.getSkillItem();
+    }
+
+    public void addSkill(Skill e) {
+        currentPlayer.addItem(e);
+    }
+
+    public void deleteSkill(Skill e) {
+        currentPlayer.deleteItem(e);
+    }
 
     public InventoryScreen(Game aGame, final Player currentPlayer) {
         // Setup Stage

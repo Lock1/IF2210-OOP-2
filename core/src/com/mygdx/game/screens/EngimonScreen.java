@@ -41,13 +41,19 @@ public class EngimonScreen implements Screen {
             "Earth"};
     private String currentStats = "";
     private Label statsLabel;
-    private EngimonInventory engimonInventory;
     private ArrayList<Engimon> engimonList;
     private Player currentPlayer;
 
     public void getEngimonList() {
-        engimonInventory = new EngimonInventory(50);
-        engimonList = engimonInventory.getItemList();
+        engimonList = currentPlayer.getEngimonItem();
+    }
+
+    public void addEngimon(Engimon e) {
+        currentPlayer.addItem(e);
+    }
+
+    public void deleteEngimon(Engimon e) {
+        currentPlayer.deleteItem(e);
     }
 
     public EngimonScreen(Game aGame, final Player currentPlayer) {
@@ -55,6 +61,7 @@ public class EngimonScreen implements Screen {
         game = aGame;
         stage = new Stage(new ScreenViewport());
         this.currentPlayer = currentPlayer;
+        getEngimonList();
 
         int row_height = Gdx.graphics.getWidth() / 12;
         stage = new Stage(new ScreenViewport());
