@@ -12,17 +12,27 @@ public class SkillInventory extends Inventory<Skill> {
 
     public boolean addItem(Skill newItem) {
         if (itemList.size() < maxCapacity) {
-            itemList.add(newItem);
-            return true;
+            for (int i = 0; i < itemList.size(); i++) {
+                if (itemList.get(i).skillName() == newItem.skillName()) {
+                    if (itemList.get(i).itemCount() >= 1)
+                        itemList.get(i).addItemCount();
+                    else
+                        itemList.add(newItem);
+                    return true;
+                }
+            }
         }
-        else
-            return false;
+
+        return false;
     }
 
     public boolean deleteItem(Skill e) {
         for (int i = 0; i < itemList.size(); i++) {
-            if (itemList.get(i) == e) {
-                itemList.remove(i);
+            if (itemList.get(i).skillName() == e.skillName()) {
+                if (itemList.get(i).itemCount() > 1)
+                    itemList.get(i).reduceItemCount();
+                else
+                    itemList.remove(i);
                 return true;
             }
         }

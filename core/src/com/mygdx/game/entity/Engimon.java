@@ -20,14 +20,22 @@ public class Engimon extends Entity {
     private int experience;
     private int cumulativeExperience;
     private boolean isWild;
+    private int lifeCount;
 
     public Engimon(Species e, boolean wild) { // TODO : Pos
         speciesType = e;
         this.cumulativeExperience = 0;
         this.experience = 0;
         this.level = 1;
+        learnedSkill = new ArrayList<Skill>();
+        learnedSkill.add(e.baseSkill());
         parent1Species = null;
         parent2Species = null;
+
+        if (wild)
+            lifeCount = 1;
+        else
+            lifeCount = 3;
     }
 
     public Engimon(Species e, boolean wild, int baselevel) { // TODO : Pos
@@ -35,8 +43,15 @@ public class Engimon extends Entity {
         this.cumulativeExperience = 0;
         this.experience = 0;
         this.level = baselevel;
+        learnedSkill = new ArrayList<Skill>();
+        learnedSkill.add(e.baseSkill());
         parent1Species = null;
         parent2Species = null;
+
+        if (wild)
+            lifeCount = 1;
+        else
+            lifeCount = 3;
     }
 
 
@@ -89,6 +104,9 @@ public class Engimon extends Entity {
             return null;
     }
 
+    public int lifeCount() {
+        return lifeCount;
+    }
 
 
 
@@ -117,6 +135,7 @@ public class Engimon extends Entity {
     }
 
     public void tameEngimon() {
+        lifeCount = 3;
         isWild = false;
     }
 
