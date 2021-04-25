@@ -15,6 +15,17 @@ public class Skill {
         masteryLevel = level;
     }
 
+    public Skill(Skill skillref) {
+        skillName    = skillref.skillName;
+        basePower    = skillref.basePower;
+        skillElement = skillref.skillElement;
+        masteryLevel = skillref.masteryLevel;
+    }
+
+
+
+
+
     public String skillName() {
         return skillName;
     }

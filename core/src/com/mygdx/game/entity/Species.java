@@ -10,6 +10,10 @@ public class Species {
     private Set<Element> speciesType;
     private String interactionDescription;
 
+
+
+
+
     public Species(String name, Skill skill, Element e1, Element e2, String interact) {
         speciesName = name;
         baseSkill = skill;
@@ -19,6 +23,19 @@ public class Species {
         if (e2 != Element.NOELEMENT)
             speciesType.add(e2);
         interactionDescription = interact;
+    }
+
+    public Species(Species sp) {
+        speciesName = sp.speciesName;
+        baseSkill = new Skill(sp.baseSkill);
+        speciesType = EnumSet.of(Element.FIRE, Element.WATER, Element.GROUND,
+                        Element.ICE, Element.ELECTRIC, Element.NOELEMENT);
+
+        Iterator iter = speciesType.iterator();
+        speciesType.add((Element) iter.next());
+        if (iter.hasNext())
+            speciesType.add((Element) iter.next());
+        interactionDescription = sp.interactionDescription;
     }
 
     public String speciesName() {
