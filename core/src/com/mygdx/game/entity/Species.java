@@ -13,7 +13,8 @@ public class Species {
     public Species(String name, Skill skill, Element e1, Element e2, String interact) {
         speciesName = name;
         baseSkill = skill;
-        speciesType = new HashSet<Element>();
+        speciesType = EnumSet.of(Element.FIRE, Element.WATER, Element.GROUND,
+                        Element.ICE, Element.ELECTRIC, Element.NOELEMENT);
         speciesType.add(e1);
         if (e2 != Element.NOELEMENT)
             speciesType.add(e2);
@@ -35,6 +36,8 @@ public class Species {
     public boolean isElementCompatible(Element e) {
         return speciesType.contains(e);
     }
+
+    // TODO : Tile
 
     public String interact() {
         return interactionDescription;
