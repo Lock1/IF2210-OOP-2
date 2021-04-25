@@ -112,17 +112,17 @@ public class EngimonScreen implements Screen {
             });
             tableEngimon.row();
         }
-        table.add(tableEngimon).width(400).height(300).spaceRight(60);
+        table.add(tableEngimon).width(400).height(400).spaceRight(40);
 
         Table tableStats = new Table();
         tableStats.setBackground(background);
         statsLabel = new Label(currentStats, titleLabelStyle);
         statsLabel.setWrap(true);
-        statsLabel.setWidth(160);
+        statsLabel.setWidth(240);
         statsLabel.setSize(Gdx.graphics.getWidth(),row_height);
         statsLabel.setAlignment(Align.center);
-        tableStats.add(statsLabel).width(160);
-        table.add(tableStats).width(200).height(300);
+        tableStats.add(statsLabel).width(240);
+        table.add(tableStats).width(300).height(400);
 
         table.setFillParent(true);
 

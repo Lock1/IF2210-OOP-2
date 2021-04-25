@@ -93,6 +93,10 @@ public class MainGameScreen implements Screen {
                 1, 1, 1, 1);
         NinePatchDrawable background2 = new NinePatchDrawable(patch2);
 
+        NinePatch patch3 = new NinePatch(new Texture(Gdx.files.internal("background-button.png")),
+                1, 1, 1, 1);
+        NinePatchDrawable background3 = new NinePatchDrawable(patch3);
+
 
         // Tables untuk menyusun TextButtons
         table = new Table();
@@ -120,7 +124,7 @@ public class MainGameScreen implements Screen {
 
         Table tableEngimon = new Table();
         tableEngimon.add(engimonButton);
-        tableEngimon.setBackground(background2);
+        tableEngimon.setBackground(background3);
         tableEngimon.setTouchable(Touchable.enabled);
         tableEngimon.addListener(new ClickListener(){
             @Override
@@ -132,7 +136,7 @@ public class MainGameScreen implements Screen {
 
         Table tableBreed = new Table();
         tableBreed.add(breedButton);
-        tableBreed.setBackground(background2);
+        tableBreed.setBackground(background3);
         tableBreed.setTouchable(Touchable.enabled);
         tableBreed.addListener(new ClickListener(){
             @Override
@@ -144,7 +148,7 @@ public class MainGameScreen implements Screen {
 
         Table tableInventory = new Table();
         tableInventory.add(inventoryButton);
-        tableInventory.setBackground(background2);
+        tableInventory.setBackground(background3);
         tableInventory.setTouchable(Touchable.enabled);
         tableInventory.addListener(new ClickListener(){
             @Override

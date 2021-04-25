@@ -90,7 +90,7 @@ public class InventoryScreen implements Screen {
         // Tables untuk menyusun TextButtons
         table = new Table();
 
-        table.add(inventoryButton).width(400).spaceRight(60);
+        table.add(inventoryButton).width(400).spaceRight(40);
         table.add(statButton).width(200);
         table.row();
 
@@ -113,20 +113,20 @@ public class InventoryScreen implements Screen {
             });
             tableInventory.row();
         }
-        table.add(tableInventory).width(400).height(300).spaceRight(60);
+        table.add(tableInventory).width(400).height(400).spaceRight(40);
 
         Table tableDescription = new Table();
         tableDescription.setBackground(background);
         descriptionLabel = new Label(currentDescription, titleLabelStyle);
         descriptionLabel.setWrap(true);
-        descriptionLabel.setWidth(160);
+        descriptionLabel.setWidth(240);
         descriptionLabel.setSize(Gdx.graphics.getWidth(),row_height);
         descriptionLabel.setAlignment(Align.center);
-        tableDescription.add(descriptionLabel).width(160);
+        tableDescription.add(descriptionLabel).width(240);
 //        BackgroundColor backgroundColor = new BackgroundColor("white_color_texture.png");
 //        backgroundColor.setColor(2, 179, 228, 255); // r, g, b, a
 //        tableDescription.setBackground(backgroundColor);
-        table.add(tableDescription).width(200).height(300);
+        table.add(tableDescription).width(300).height(400);
 
         table.setFillParent(true);
 
