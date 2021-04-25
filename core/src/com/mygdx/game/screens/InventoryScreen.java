@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.entity.Engimon;
 import com.mygdx.game.entity.Player;
 import com.mygdx.game.entity.SkillInventory;
+import com.mygdx.game.entity.attributes.Element;
 import com.mygdx.game.entity.attributes.Skill;
 import com.mygdx.game.styles.BackgroundColor;
 
@@ -40,13 +41,24 @@ public class InventoryScreen implements Screen {
             "Increase your health by 20 points",
             "Increase your mana by 20 points",
             "Damage your enemy by 25 points"};
-    private String currentDescription = "";
+    private Skill selectedSkill = null;
     private Label descriptionLabel;
     private ArrayList<Skill> skillList;
     private Player currentPlayer;
 
+    private Label nameLabel;
+    private Label elementLabel;
+    private Label powerLabel;
+    private Label masteryLabel;
+    private Label countLabel;
+
     public void getSkillList() {
-        skillList = currentPlayer.getSkillItem();
+        skillList = new ArrayList<Skill>();
+        skillList.addAll(currentPlayer.getCurrentEngimon().getSkillArray());
+        for(Element element : currentPlayer.getCurrentEngimon().getSpecies().getElementSet()) {
+            System.out.println(element);
+            skillList.addAll(currentPlayer.getSkillByElement(element));
+        }
     }
 
     public void addSkill(Skill e) {
@@ -62,6 +74,7 @@ public class InventoryScreen implements Screen {
         game = aGame;
         stage = new Stage(new ScreenViewport());
         this.currentPlayer = currentPlayer;
+        getSkillList();
 
         int row_height = Gdx.graphics.getWidth() / 12;
         stage = new Stage(new ScreenViewport());
@@ -73,7 +86,7 @@ public class InventoryScreen implements Screen {
         titleLabelStyle.fontColor = Color.BLACK;
 
         // Title Label
-        titleLabel = new Label("Inventory", titleLabelStyle);
+        titleLabel = new Label("Skill", titleLabelStyle);
         titleLabel.setSize(Gdx.graphics.getWidth(),row_height);
         titleLabel.setPosition(0,Gdx.graphics.getHeight()-row_height*1);
         titleLabel.setAlignment(Align.center);
@@ -84,9 +97,14 @@ public class InventoryScreen implements Screen {
         menuButtonStyle.font = new BitmapFont();
         menuButtonStyle.fontColor = Color.BLACK;
 
+        TextButton.TextButtonStyle selectedButtonStyle = new TextButton.TextButtonStyle();
+        selectedButtonStyle.font = new BitmapFont();
+        selectedButtonStyle.fontColor = Color.RED;
+
         // Definisi dan Implementasi TextButtons
-        TextButton inventoryButton = new TextButton("Your Items", menuButtonStyle);
+        TextButton inventoryButton = new TextButton("Your Skills", menuButtonStyle);
         TextButton statButton = new TextButton("Description", menuButtonStyle);
+        TextButton selectButton = new TextButton("Learn", menuButtonStyle);
         TextButton backButton = new TextButton("<< Back", menuButtonStyle);
         backButton.addListener(new InputListener(){
             @Override
@@ -107,25 +125,34 @@ public class InventoryScreen implements Screen {
                 1, 1, 3, 3);
         NinePatchDrawable background = new NinePatchDrawable(patch);
 
+        NinePatch patch3 = new NinePatch(new Texture(Gdx.files.internal("background-button.png")),
+                1, 1, 1, 1);
+        NinePatchDrawable background3 = new NinePatchDrawable(patch3);
+
 
         // Tables untuk menyusun TextButtons
         table = new Table();
 
-        table.add(inventoryButton).width(400).spaceRight(40);
-        table.add(statButton).width(200);
+        table.add(inventoryButton).width(400).spaceRight(40).padTop(80);
+        table.add(statButton).width(200).padTop(80);
         table.row();
 
         Table tableInventory = new Table();
         tableInventory.setBackground(background);
         tableInventory.top().padTop(20);
-        for(int i=0;i<inventoryDummy.length;i++) {
-            TextButton itemButton = new TextButton(inventoryDummy[i], menuButtonStyle);
+        for(final Skill skill : skillList) {
+            TextButton itemButton;
+            if(currentPlayer.getCurrentEngimon().getSkillArray().contains(skill)) {
+                itemButton = new TextButton(skill.skillName(), selectedButtonStyle);
+            }
+            else {
+                itemButton = new TextButton(skill.skillName(), menuButtonStyle);
+            }
             tableInventory.add(itemButton).padTop(10).padBottom(10);
-            final int j = i;
             itemButton.addListener(new InputListener(){
                 @Override
                 public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                    currentDescription = descriptionDummy[j];
+                    selectedSkill = skill;
                 }
                 @Override
                 public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -134,20 +161,71 @@ public class InventoryScreen implements Screen {
             });
             tableInventory.row();
         }
-        table.add(tableInventory).width(400).height(400).spaceRight(40);
+        table.add(tableInventory).width(400).height(500).spaceRight(40);
 
-        Table tableDescription = new Table();
-        tableDescription.setBackground(background);
-        descriptionLabel = new Label(currentDescription, titleLabelStyle);
-        descriptionLabel.setWrap(true);
-        descriptionLabel.setWidth(240);
-        descriptionLabel.setSize(Gdx.graphics.getWidth(),row_height);
-        descriptionLabel.setAlignment(Align.center);
-        tableDescription.add(descriptionLabel).width(240);
-//        BackgroundColor backgroundColor = new BackgroundColor("white_color_texture.png");
-//        backgroundColor.setColor(2, 179, 228, 255); // r, g, b, a
-//        tableDescription.setBackground(backgroundColor);
-        table.add(tableDescription).width(300).height(400);
+        Table tableRight = new Table();
+
+        Table tableStats = new Table();
+        tableStats.top().padTop(20).setBackground(background);
+
+        nameLabel = new Label("", titleLabelStyle);
+        nameLabel.setWrap(true);
+        nameLabel.setWidth(240);
+        nameLabel.setSize(Gdx.graphics.getWidth(),row_height);
+        nameLabel.setAlignment(Align.center);
+        tableStats.add(nameLabel).width(240).padTop(10).padBottom(10);
+        tableStats.row();
+
+        elementLabel = new Label("", titleLabelStyle);
+        elementLabel.setWrap(true);
+        elementLabel.setWidth(240);
+        elementLabel.setSize(Gdx.graphics.getWidth(),row_height);
+        elementLabel.setAlignment(Align.center);
+        tableStats.add(elementLabel).width(240).padTop(10).padBottom(10);
+        tableStats.row();
+
+        powerLabel = new Label("", titleLabelStyle);
+        powerLabel.setWrap(true);
+        powerLabel.setWidth(240);
+        powerLabel.setSize(Gdx.graphics.getWidth(),row_height);
+        powerLabel.setAlignment(Align.center);
+        tableStats.add(powerLabel).width(240).padTop(10).padBottom(10);
+        tableStats.row();
+
+        masteryLabel = new Label("", titleLabelStyle);
+        masteryLabel.setWrap(true);
+        masteryLabel.setWidth(240);
+        masteryLabel.setSize(Gdx.graphics.getWidth(),row_height);
+        masteryLabel.setAlignment(Align.center);
+        tableStats.add(masteryLabel).width(240).padTop(10).padBottom(10);
+        tableStats.row();
+
+        countLabel = new Label("", titleLabelStyle);
+        countLabel.setWrap(true);
+        countLabel.setWidth(240);
+        countLabel.setSize(Gdx.graphics.getWidth(),row_height);
+        countLabel.setAlignment(Align.center);
+        tableStats.add(countLabel).width(240).padTop(10).padBottom(10);
+        tableStats.row();
+
+        tableRight.add(tableStats);
+        tableRight.row();
+
+        Table tableSelect = new Table();
+        tableSelect.add(selectButton);
+        tableSelect.setBackground(background3);
+        tableSelect.setTouchable(Touchable.enabled);
+        tableSelect.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(selectedSkill != null) {
+                    currentPlayer.getCurrentEngimon().addSkill(selectedSkill);
+                }
+            }
+        });
+        tableRight.add(tableSelect).width(100).height(70).spaceTop(10).spaceBottom(10);
+
+        table.add(tableRight).width(300).height(500);
 
         table.setFillParent(true);
 
@@ -169,7 +247,16 @@ public class InventoryScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         stage.act();
-        descriptionLabel.setText(currentDescription);
+
+        // Rerender Labels
+        if(selectedSkill != null) {
+            nameLabel.setText("Name\n" + selectedSkill.skillName());
+            elementLabel.setText("Element\n" + selectedSkill.skillElement().toString());
+            powerLabel.setText("Base Power\n" + String.valueOf(selectedSkill.basePower()));
+            masteryLabel.setText("Mastery\n" + String.valueOf(selectedSkill.masteryLevel()));
+            countLabel.setText("Available\n" + String.valueOf(selectedSkill.itemCount()));
+        }
+
         stage.draw();
         batch.end();
     }

@@ -22,6 +22,11 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.entity.Engimon;
 import com.mygdx.game.entity.Player;
+import com.mygdx.game.entity.attributes.Skill;
+import com.mygdx.game.entity.attributes.skill.Blizzard;
+import com.mygdx.game.entity.attributes.skill.Ember;
+import com.mygdx.game.entity.attributes.skill.HydroPump;
+import com.mygdx.game.entity.attributes.skill.IceBeam;
 import com.mygdx.game.entity.engimon.*;
 import com.mygdx.game.entity.engimon.Beartic;
 import com.mygdx.game.entity.engimon.Eevee;
@@ -40,11 +45,20 @@ public class MainMenuScreen implements Screen {
 
     public Player createNewPlayer() {
         Player newPlayer = new Player(10);
+
+        // Defaults
         newPlayer.addItem(new Engimon(new Beartic(), false));
         newPlayer.addItem(new Engimon(new Eevee(), false));
         newPlayer.addItem(new Engimon(new Jolteon(), false));
         newPlayer.addItem(new Engimon(new Pinsir(), false));
         newPlayer.addItem(new Engimon(new Spheal(), false));
+        newPlayer.addItem(new Skill(new Blizzard()));
+        newPlayer.addItem(new Skill(new Ember()));
+        newPlayer.addItem(new Skill(new IceBeam()));
+        newPlayer.addItem(new Skill(new HydroPump()));
+        System.out.println(newPlayer.getSkillItem().size());
+        newPlayer.changeEngimon(newPlayer.getEngimonItem().get(0));
+
         return newPlayer;
     }
 

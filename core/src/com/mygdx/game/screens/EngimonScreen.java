@@ -45,9 +45,13 @@ public class EngimonScreen implements Screen {
     private Label levelLabel;
     private Label expLabel;
     private Label lifeLabel;
-    private Label skillLabel;
+//    private Label skillLabel;
     private ArrayList<Engimon> engimonList;
     private Player currentPlayer;
+    private TextButton focusButton;
+    private TextButton previousButton;
+    private TextButton.TextButtonStyle menuButtonStyle;
+    private TextButton.TextButtonStyle selectedButtonStyle;
 
     public void getEngimonList() {
         engimonList = currentPlayer.getEngimonItem();
@@ -89,9 +93,13 @@ public class EngimonScreen implements Screen {
         stage.addActor(titleLabel);
 
         // Style untuk TextButtons
-        TextButton.TextButtonStyle menuButtonStyle = new TextButton.TextButtonStyle();
+        menuButtonStyle = new TextButton.TextButtonStyle();
         menuButtonStyle.font = new BitmapFont();
         menuButtonStyle.fontColor = Color.BLACK;
+
+        selectedButtonStyle = new TextButton.TextButtonStyle();
+        selectedButtonStyle.font = new BitmapFont();
+        selectedButtonStyle.fontColor = Color.RED;
 
         // Definisi dan Implementasi TextButtons
         TextButton engimonButton = new TextButton("Your Engimon", menuButtonStyle);
@@ -125,19 +133,27 @@ public class EngimonScreen implements Screen {
         // Tables untuk menyusun TextButtons
         table = new Table();
 
-        table.add(engimonButton).width(400).spaceRight(40).padTop(100);
-        table.add(statButton).width(200).padTop(100);
+        table.add(engimonButton).width(400).spaceRight(40).padTop(80);
+        table.add(statButton).width(200).padTop(80);
         table.row();
 
         Table tableEngimon = new Table();
         tableEngimon.setBackground(background);
         tableEngimon.top().padTop(20);
         for(final Engimon engimon : engimonList) {
-            TextButton itemButton = new TextButton(engimon.engimonName(), menuButtonStyle);
+            final TextButton itemButton;
+            if(currentPlayer.getCurrentEngimon().equals(engimon)) {
+                itemButton = new TextButton(engimon.engimonName(), selectedButtonStyle);
+                previousButton = itemButton;
+            }
+            else {
+                itemButton = new TextButton(engimon.engimonName(), menuButtonStyle);
+            }
             tableEngimon.add(itemButton).padTop(10).padBottom(10);
             itemButton.addListener(new InputListener(){
                 @Override
                 public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                    focusButton = itemButton;
                     selectedEngimon = engimon;
                 }
                 @Override
@@ -194,13 +210,13 @@ public class EngimonScreen implements Screen {
         tableStats.add(lifeLabel).width(240).padTop(10).padBottom(10);
         tableStats.row();
 
-        skillLabel = new Label("", titleLabelStyle);
-        skillLabel.setWrap(true);
-        skillLabel.setWidth(240);
-        skillLabel.setSize(Gdx.graphics.getWidth(),row_height);
-        skillLabel.setAlignment(Align.center);
-        tableStats.add(skillLabel).width(240).padTop(10).padBottom(10);
-        tableStats.row();
+//        skillLabel = new Label("", titleLabelStyle);
+//        skillLabel.setWrap(true);
+//        skillLabel.setWidth(240);
+//        skillLabel.setSize(Gdx.graphics.getWidth(),row_height);
+//        skillLabel.setAlignment(Align.center);
+//        tableStats.add(skillLabel).width(240).padTop(10).padBottom(10);
+//        tableStats.row();
 
         tableRight.add(tableStats);
         tableRight.row();
@@ -213,8 +229,10 @@ public class EngimonScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(selectedEngimon != null) {
+                    previousButton.setStyle(menuButtonStyle);
+                    previousButton = focusButton;
                     setCurrentEngimon(selectedEngimon);
-                    System.out.println(currentPlayer.getCurrentEngimon().engimonName());
+                    focusButton.setStyle(selectedButtonStyle);
                 }
             }
         });
@@ -249,7 +267,7 @@ public class EngimonScreen implements Screen {
             levelLabel.setText("Level\n" + String.valueOf(selectedEngimon.level()));
             expLabel.setText("Experience\n" + String.valueOf(selectedEngimon.getExperience()));
             lifeLabel.setText("Life Count\n" + String.valueOf(selectedEngimon.lifeCount()));
-            skillLabel.setText("Skills\n" + selectedEngimon.getSkillArray().get(0).skillName());
+//            skillLabel.setText("Skills\n" + selectedEngimon.getSkillArray().get(0).skillName());
         }
 
         stage.draw();
