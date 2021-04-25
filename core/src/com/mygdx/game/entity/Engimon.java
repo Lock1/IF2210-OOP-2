@@ -22,6 +22,8 @@ public class Engimon extends Entity {
     private boolean isWild;
     private int lifeCount;
 
+    public static final int maximumCumulativeXP = 10000;
+
     public Engimon(Species e, boolean wild) { // TODO : Pos
         speciesType = e;
         this.cumulativeExperience = 0;
@@ -116,6 +118,7 @@ public class Engimon extends Entity {
         int totalLevelUp = (experience + gainedXP) / 100;
         this.level += totalLevelUp;
         this.cumulativeExperience += gainedXP;
+        this.experience = (experience + gainedXP) % 100;
         return totalLevelUp;
     }
 
@@ -165,6 +168,22 @@ public class Engimon extends Entity {
             learnedSkill.add(newSkill);
             return true;
         }
+    }
+
+    public void renameEngimon(String newname) {
+        engimonName = newname;
+    }
+
+    public boolean isWildEngimon() {
+        return isWild;
+    }
+
+    public void reduceLife() {
+        lifeCount--;
+    }
+
+    public boolean isOverLeveled() {
+        return Engimon.maximumCumulativeXP < cumulativeExperience;
     }
 
     // @over valid move Tile Check TODO
