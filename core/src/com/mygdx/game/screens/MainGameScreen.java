@@ -229,8 +229,8 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         renderer = new OrthogonalTiledMapRendererWithSprites(map, batch);
         renderer.addSprite(sprite);
 
-        Gdx.input.setInputProcessor(this);
-//        Gdx.input.setInputProcessor(stage);
+//        Gdx.input.setInputProcessor(this);
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override

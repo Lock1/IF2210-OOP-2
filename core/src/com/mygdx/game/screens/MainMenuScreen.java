@@ -20,7 +20,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.game.entity.Engimon;
 import com.mygdx.game.entity.Player;
+import com.mygdx.game.entity.engimon.*;
+import com.mygdx.game.entity.engimon.Beartic;
+import com.mygdx.game.entity.engimon.Eevee;
+import com.mygdx.game.entity.engimon.Jolteon;
+import com.mygdx.game.entity.engimon.Luxio;
+import com.mygdx.game.entity.engimon.Pinsir;
+import com.mygdx.game.entity.engimon.Spheal;
 
 public class MainMenuScreen implements Screen {
     private Stage stage;
@@ -32,6 +40,11 @@ public class MainMenuScreen implements Screen {
 
     public Player createNewPlayer() {
         Player newPlayer = new Player(10);
+        newPlayer.addItem(new Engimon(new Beartic(), false));
+        newPlayer.addItem(new Engimon(new Eevee(), false));
+        newPlayer.addItem(new Engimon(new Jolteon(), false));
+        newPlayer.addItem(new Engimon(new Pinsir(), false));
+        newPlayer.addItem(new Engimon(new Spheal(), false));
         return newPlayer;
     }
 
