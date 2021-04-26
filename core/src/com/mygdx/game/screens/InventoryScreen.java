@@ -57,10 +57,16 @@ public class InventoryScreen implements Screen {
     private Label countLabel;
 
     private TextButton selectButton;
+    private TextButton dumpButton;
     private TextButton focusButton;
 
     private Table tableInventory;
     private Table tableLearnedInventory;
+    private Table tableButtons;
+    private NinePatchDrawable background3;
+
+    private Table tableSelect;
+    private Table tableDump;
 
     public void getSkillList() {
         skillList = new ArrayList<Skill>();
@@ -136,6 +142,7 @@ public class InventoryScreen implements Screen {
         TextButton learnedInventoryButton = new TextButton("Learnt Skills", menuButtonStyle);
         TextButton statButton = new TextButton("Description", menuButtonStyle);
         selectButton = new TextButton("Learn", menuButtonStyle);
+        dumpButton = new TextButton("Dump", menuButtonStyle);
         TextButton backButton = new TextButton("<< Back", menuButtonStyle);
         backButton.addListener(new InputListener(){
             @Override
@@ -158,7 +165,7 @@ public class InventoryScreen implements Screen {
 
         NinePatch patch3 = new NinePatch(new Texture(Gdx.files.internal("background-button.png")),
                 1, 1, 1, 1);
-        NinePatchDrawable background3 = new NinePatchDrawable(patch3);
+        background3 = new NinePatchDrawable(patch3);
 
 
         // Tables untuk menyusun TextButtons
@@ -238,10 +245,8 @@ public class InventoryScreen implements Screen {
         tableRight.add(tableStats);
         tableRight.row();
 
-        Table tableSelect = new Table();
-        tableSelect.add(selectButton);
-        tableSelect.setBackground(background3);
-        tableSelect.setTouchable(Touchable.enabled);
+        tableButtons = new Table();
+
         tableSelect.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -266,7 +271,14 @@ public class InventoryScreen implements Screen {
                 }
             }
         });
-        tableRight.add(tableSelect).width(100).height(70).spaceTop(10).spaceBottom(10);
+
+        tableDump.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                currentPlayer.deleteItem(selectedSkill);
+            }
+        });
+        tableRight.add(tableButtons);
 
         table.add(tableRight).width(300).height(500).top();
 
@@ -359,6 +371,23 @@ public class InventoryScreen implements Screen {
         }
         else {
             selectButton.setText("Learn");
+        }
+
+        tableButtons.clear();
+        tableButtons.clearChildren();
+
+        tableSelect = new Table();
+        tableSelect.add(selectButton);
+        tableSelect.setBackground(background3);
+        tableSelect.setTouchable(Touchable.enabled);
+        tableButtons.add(tableSelect).width(100).height(70).spaceTop(10).spaceBottom(10);
+
+        if(!isSkillLearnt(selectedSkill)) {
+            tableDump = new Table();
+            tableDump.add(dumpButton);
+            tableDump.setBackground(background3);
+            tableDump.setTouchable(Touchable.enabled);
+            tableButtons.add(tableDump).width(100).height(70).spaceTop(10).spaceBottom(10);
         }
 
         stage.draw();
