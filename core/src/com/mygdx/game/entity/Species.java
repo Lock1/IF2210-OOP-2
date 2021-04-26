@@ -17,8 +17,7 @@ public class Species {
     public Species(String name, Skill skill, Element e1, Element e2, String interact) {
         speciesName = name;
         baseSkill = skill;
-        speciesType = EnumSet.of(Element.FIRE, Element.WATER, Element.GROUND,
-                        Element.ICE, Element.ELECTRIC, Element.NOELEMENT);
+        speciesType =  new HashSet<Element>();
         speciesType.add(e1);
         if (e2 != Element.NOELEMENT)
             speciesType.add(e2);
@@ -28,10 +27,9 @@ public class Species {
     public Species(Species sp) {
         speciesName = sp.speciesName;
         baseSkill = new Skill(sp.baseSkill);
-        speciesType = EnumSet.of(Element.FIRE, Element.WATER, Element.GROUND,
-                        Element.ICE, Element.ELECTRIC, Element.NOELEMENT);
+        speciesType = new HashSet<Element>();
 
-        Iterator iter = speciesType.iterator();
+        Iterator iter = sp.speciesType.iterator();
         speciesType.add((Element) iter.next());
         if (iter.hasNext())
             speciesType.add((Element) iter.next());
