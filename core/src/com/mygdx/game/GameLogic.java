@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.Random;
+import java.util.Iterator;
 import java.lang.Math;
 
 public class GameLogic {
@@ -56,6 +57,15 @@ public class GameLogic {
     public Entity playerInput(String inputString) {
         Entity collidedEntity = entityMove(currentPlayer, inputString);
         tickUpdate();
+        TiledMapTileLayer.Cell targetData = tiledMapLayer.getCell(currentPlayer.getPosition().x, currentPlayer.getPosition().y);
+        if (targetData != null) {
+            // TODO : Grouping by ID
+            int targetCell = targetData.getTile().getId();
+            System.out.println(targetCell);
+        }
+        else {
+            System.out.println("in");
+        }
         return collidedEntity;
     }
 
@@ -64,8 +74,6 @@ public class GameLogic {
     }
 
     private Entity entityMove(Entity target, String moveString) {
-        TiledMapTileLayer.Cell targetCell = tiledMapLayer.getCell(1, 1);
-        System.out.println(targetCell);
         for (int i = 0; i < 48; i++) {
             for (int j = 0; j < 48; j++) {
                 if (entityMap[i][j] == target) {
