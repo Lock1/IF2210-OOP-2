@@ -33,7 +33,6 @@ public class GameLogic {
     }
 
     public void playerInput(String inputString) {
-        System.out.println(inputString);
         switch (inputString) {
             case "Up":
                 currentPlayer.setPosition(new Position(currentPlayer.getPosition().x, currentPlayer.getPosition().y + 1));

@@ -81,7 +81,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
 //        getDatabaseData();
         this.currentPlayer = currentPlayer;
         currentPlayer.setEntityTileSize(tileWidth, tileHeight);
-        currentPlayer.setTexture(new Texture(Gdx.files.internal("./sprites/electric/left/move/1.png")));
+        currentPlayer.setTexture(new Texture(Gdx.files.internal("./sprites/player/idle.png")));
         currentPlayer.setSprite(new Sprite(currentPlayer.getTexture()));
 
         int row_height = Gdx.graphics.getWidth() / 12;
