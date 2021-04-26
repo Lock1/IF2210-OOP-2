@@ -29,7 +29,6 @@ public class Entity {
         entitySprite.translate(tileWidth * (pos.x-tpos.x), tileHeight * (pos.y-tpos.y));
         pos = tpos;
         entitySprite.setPosition(tpos.x*tileWidth, tpos.y*tileHeight);
-        // FIXME : fix movement
     }
 
     public void setTexture(Texture text) {
@@ -46,5 +45,9 @@ public class Entity {
 
     public Sprite getSprite() {
         return entitySprite;
+    }
+
+    public boolean isTileMoveable() { // TODO : Add
+        return true;
     }
 }

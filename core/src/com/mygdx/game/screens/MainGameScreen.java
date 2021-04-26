@@ -26,6 +26,7 @@ import com.badlogic.gdx.maps.tiled.*;
 
 import com.mygdx.game.KeyboardInput;
 import com.mygdx.game.GameLogic;
+import com.mygdx.game.entity.Entity;
 import com.mygdx.game.entity.Engimon;
 import com.mygdx.game.entity.EngimonInventory;
 import com.mygdx.game.entity.Player;
@@ -54,6 +55,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
     private int maxTile = 48;
     private SpriteBatch spBatch = new SpriteBatch();
     private MainGameScreen mainScreenReference;
+    private long lastPoll;
 
     // Inventories
     private EngimonInventory engimonInventory;
@@ -76,6 +78,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         // Setup Stage
         game = aGame;
         stage = new Stage(new ScreenViewport());
+        lastPoll = System.currentTimeMillis();
 
         mainScreenReference = this;
 //        getDatabaseData();
@@ -210,7 +213,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         playerKeyboardInput = new KeyboardInput();
         playerKeyboardInput.start();
 
-        mainGameLogic = new GameLogic(currentPlayer, renderer);
+
     }
 
     @Override
@@ -235,7 +238,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
 
         renderer = new OrthogonalTiledMapRendererWithSprites(map, spBatch);
         renderer.addSprite(currentPlayer.getSprite());
-
+        mainGameLogic = new GameLogic(currentPlayer, renderer);
 //        Gdx.input.setInputProcessor(this);
         Gdx.input.setInputProcessor(stage);
     }
@@ -251,11 +254,9 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         stage.act();
         stage.draw();
 
-        if(currentPlayer.getTexture() != null) {
-//            currentPlayer.setSprite(new Sprite(currentPlayer.getTexture()));
-            currentPlayer.getSprite().setPosition(tileWidth*currentPlayer.getPosition().x,tileHeight*currentPlayer.getPosition().y);
-        }
-        currentPlayer.getSprite().setTexture(currentPlayer.getTexture());
+        ArrayList<Entity> currentState = mainGameLogic.getEntities();
+        for (Entity ent : currentState)
+            ent.getSprite().setPosition(tileWidth*ent.getPosition().x, tileHeight*ent.getPosition().y);
 
         renderer.setView(camera);
         renderer.render();
@@ -269,7 +270,12 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
             mainGameLogic.playerInput(keydata);
             System.out.println(currentPlayer.getPosition().x);
             System.out.println(currentPlayer.getPosition().y);
+            lastPoll = System.currentTimeMillis();
             // testsprite.setPosition(tileWidth*testposx,tileHeight*testposy);
+        }
+        else if (System.currentTimeMillis() - lastPoll > 250) {
+            mainGameLogic.tickUpdate();
+            lastPoll = System.currentTimeMillis();
         }
        // isometricRenderer.setView(camera);
        // isometricRenderer.render();
