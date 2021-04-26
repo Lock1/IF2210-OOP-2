@@ -81,7 +81,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
 //        getDatabaseData();
         this.currentPlayer = currentPlayer;
         currentPlayer.setEntityTileSize(tileWidth, tileHeight);
-        currentPlayer.setTexture(new Texture(Gdx.files.internal("./sprites/player/idle.png")));
+        currentPlayer.setTexture(new Texture(Gdx.files.internal("./sprites/player/idle_right.png")));
         currentPlayer.setSprite(new Sprite(currentPlayer.getTexture()));
 
         int row_height = Gdx.graphics.getWidth() / 12;
@@ -251,7 +251,11 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         stage.act();
         stage.draw();
 
-        currentPlayer.getSprite().setPosition(tileWidth*currentPlayer.getPosition().x,tileHeight*currentPlayer.getPosition().y);
+        if(currentPlayer.getTexture() != null) {
+//            currentPlayer.setSprite(new Sprite(currentPlayer.getTexture()));
+            currentPlayer.getSprite().setPosition(tileWidth*currentPlayer.getPosition().x,tileHeight*currentPlayer.getPosition().y);
+        }
+        currentPlayer.getSprite().setTexture(currentPlayer.getTexture());
 
         renderer.setView(camera);
         renderer.render();

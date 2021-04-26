@@ -1,6 +1,8 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.mygdx.game.entity.*;
 
 import com.mygdx.game.entity.engimon.*;
@@ -41,9 +43,11 @@ public class GameLogic {
                 currentPlayer.setPosition(new Position(currentPlayer.getPosition().x, currentPlayer.getPosition().y - 1));
                 break;
             case "Left":
+                currentPlayer.setTexture(new Texture(Gdx.files.internal("./sprites/player/idle_left.png")));
                 currentPlayer.setPosition(new Position(currentPlayer.getPosition().x - 1, currentPlayer.getPosition().y));
                 break;
             case "Right":
+                currentPlayer.setTexture(new Texture(Gdx.files.internal("./sprites/player/idle_right.png")));
                 currentPlayer.setPosition(new Position(currentPlayer.getPosition().x + 1, currentPlayer.getPosition().y));
                 break;
         }
