@@ -69,4 +69,6 @@ public class Player extends Entity {
         return playerEngimons.getItemList();
     }
 
+    public ArrayList<Engimon> getEngimonByMinLevel(int minLevel) { return playerEngimons.getEngimonByMinLevelConstraint(minLevel); }
+
 }

@@ -2,6 +2,8 @@ package com.mygdx.game.entity;
 
 import com.mygdx.game.entity.Inventory;
 import com.mygdx.game.entity.Engimon;
+import com.mygdx.game.entity.attributes.Skill;
+
 import java.util.ArrayList;
 
 public class EngimonInventory extends Inventory<Engimon> {
@@ -30,5 +32,15 @@ public class EngimonInventory extends Inventory<Engimon> {
 
     public int getSize() {
         return itemList.size();
+    }
+
+    public ArrayList<Engimon> getEngimonByMinLevelConstraint(int minLevel) {
+        ArrayList<Engimon> temp = new ArrayList<Engimon>();
+        for(Engimon engimon : itemList) {
+            if(engimon.level() >= minLevel) {
+                temp.add(engimon);
+            }
+        }
+        return temp;
     }
 }

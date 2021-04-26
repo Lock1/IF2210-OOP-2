@@ -48,7 +48,6 @@ public class SkillInventory extends Inventory<Skill> {
 
     public ArrayList<Skill> getListByElement(Element e) {
         ArrayList<Skill> temp = new ArrayList<Skill>();
-        ArrayList<Skill> allSkills = new ArrayList<Skill>(itemList);
         for(Skill skill : itemList) {
             if(skill.skillElement().equals(e)) {
                 temp.add(skill);

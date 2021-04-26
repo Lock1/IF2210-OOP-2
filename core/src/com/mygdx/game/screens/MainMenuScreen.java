@@ -57,6 +57,8 @@ public class MainMenuScreen implements Screen {
         newPlayer.addItem(new Skill(new Ember()));
         newPlayer.addItem(new Skill(new IceBeam()));
         newPlayer.addItem(new Skill(new HydroPump()));
+        newPlayer.getEngimonItem().get(0).xpGain(300);
+        newPlayer.getEngimonItem().get(1).xpGain(400);
         System.out.println(newPlayer.getSkillItem().size());
         newPlayer.changeEngimon(newPlayer.getEngimonItem().get(0));
 
