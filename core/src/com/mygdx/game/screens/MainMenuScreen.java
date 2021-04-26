@@ -47,14 +47,14 @@ public class MainMenuScreen implements Screen {
 
         // Defaults
         newPlayer.addItem(new Engimon(new Beartic(), false));
-        newPlayer.addItem(new Engimon(new Eevee(), false));
-        newPlayer.addItem(new Engimon(new Spheal(), false));
+//        newPlayer.addItem(new Engimon(new Eevee(), false));
+//        newPlayer.addItem(new Engimon(new Spheal(), false));
         newPlayer.addItem(new Skill(new Blizzard()));
         newPlayer.addItem(new Skill(new IceBeam()));
 
         newPlayer.addItem(new Skill(new HydroPump()));
         newPlayer.getEngimonItem().get(0).xpGain(300);
-        newPlayer.getEngimonItem().get(1).xpGain(400);
+//        newPlayer.getEngimonItem().get(1).xpGain(400);
         System.out.println(newPlayer.getSkillItem().size());
         newPlayer.changeEngimon(newPlayer.getEngimonItem().get(0));
 
@@ -127,6 +127,12 @@ public class MainMenuScreen implements Screen {
         Table tableHelp = new Table();
         tableHelp.add(helpButton);
         tableHelp.setBackground(background2);
+        tableHelp.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new HelpScreen(game));
+            }
+        });
 
         Table tableExit = new Table();
         tableExit.add(exitButton);

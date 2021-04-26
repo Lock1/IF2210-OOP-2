@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -27,12 +28,12 @@ import com.badlogic.gdx.maps.tiled.*;
 import com.mygdx.game.Savegame;
 import com.mygdx.game.KeyboardInput;
 import com.mygdx.game.GameLogic;
-import com.mygdx.game.entity.Entity;
-import com.mygdx.game.entity.Engimon;
-import com.mygdx.game.entity.EngimonInventory;
-import com.mygdx.game.entity.Player;
-import com.mygdx.game.entity.SkillInventory;
+import com.mygdx.game.action.Battle;
+import com.mygdx.game.entity.*;
 import com.mygdx.game.entity.attributes.Skill;
+import com.mygdx.game.entity.engimon.Charmander;
+import com.mygdx.game.entity.engimon.Eevee;
+import com.mygdx.game.entity.engimon.Spheal;
 import com.mygdx.game.maps.OrthogonalTiledMapRendererWithSprites;
 
 import java.util.ArrayList;
@@ -59,6 +60,12 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
     private long lastPoll;
     private boolean isBattlePrompt;
 
+    // Fonts
+    private Label.LabelStyle titleLabelStyle;
+    private Label.LabelStyle warningLabelStyle;
+    private TextButton.TextButtonStyle menuButtonStyle;
+    private NinePatchDrawable background3;
+
     // Inventories
     private EngimonInventory engimonInventory;
     private SkillInventory skillInventory;
@@ -68,12 +75,169 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
     // Player
     private Player currentPlayer;
 
-    public void getDatabaseData() {
-        engimonInventory = new EngimonInventory(50);
-        engimonList = engimonInventory.getItemList();
 
-        skillInventory = new SkillInventory(50);
-        skillList = skillInventory.getItemList();
+    public void getLegend() {}
+
+    // Battle
+    private Table tableMap;
+    private Label battleTitle;
+    private Label EnemyDescription;
+    private Label EngimonStatus;
+    private TextButton yesButton;
+    private TextButton noButton;
+    private Engimon enemy;
+
+    private Label nameLabel;
+    private Label elementLabel;
+    private Label parentNameLabel;
+    private Label parentSpeciesLabel;
+    private Label levelLabel;
+    private Label expLabel;
+    private Label lifeLabel;
+    private Label playerPowerLabel;
+    private Label enemyPowerLabel;
+
+    public void battleDialog() {
+        final Battle battle = new Battle(currentPlayer.getCurrentEngimon(), enemy);
+        battle.calculatePower();
+        // Battle Labels and Buttons
+        tableMap.clear();
+        tableMap.clearChildren();
+        battleTitle = new Label("Do Battle?", warningLabelStyle);
+        tableMap.add(battleTitle).padBottom(15);
+        tableMap.row();
+
+        nameLabel = new Label("Name: " + enemy.engimonName(), titleLabelStyle);
+        nameLabel.setWrap(true);
+        nameLabel.setWidth(240);
+
+        nameLabel.setAlignment(Align.center);
+        tableMap.add(nameLabel).width(240).padTop(10).padBottom(10);
+        tableMap.row();
+
+        String elementString = "Element: " + enemy.getSpecies().getElementSet().toArray()[0].toString();
+        if (enemy.getSpecies().getElementSet().size() == 2)
+            elementString = elementString + ", " + enemy.getSpecies().getElementSet().toArray()[1].toString();
+
+        elementLabel = new Label(elementString, titleLabelStyle);
+        elementLabel.setWrap(true);
+        elementLabel.setWidth(240);
+
+        elementLabel.setAlignment(Align.center);
+        tableMap.add(elementLabel).width(240).padTop(10).padBottom(10);
+        tableMap.row();
+
+        levelLabel = new Label("Level: " + String.valueOf(enemy.level()), titleLabelStyle);
+        levelLabel.setWrap(true);
+        levelLabel.setWidth(240);
+
+        levelLabel.setAlignment(Align.center);
+        tableMap.add(levelLabel).width(240).padTop(10).padBottom(10);
+        tableMap.row();
+
+        expLabel = new Label("Experience: " + String.valueOf(enemy.getExperience()), titleLabelStyle);
+        expLabel.setWrap(true);
+        expLabel.setWidth(240);
+
+        expLabel.setAlignment(Align.center);
+        tableMap.add(expLabel).width(240).padTop(10).padBottom(10);
+        tableMap.row();
+
+        lifeLabel = new Label("Life Count: " + String.valueOf(enemy.lifeCount()), titleLabelStyle);
+        lifeLabel.setWrap(true);
+        lifeLabel.setWidth(240);
+
+        lifeLabel.setAlignment(Align.center);
+        tableMap.add(lifeLabel).width(240).padTop(10).padBottom(10);
+        tableMap.row();
+
+        playerPowerLabel = new Label("Your Power: " + String.valueOf(battle.getCalculatedPower1()), titleLabelStyle);
+        playerPowerLabel.setWrap(true);
+        playerPowerLabel.setWidth(240);
+
+        playerPowerLabel.setAlignment(Align.center);
+        tableMap.add(playerPowerLabel).width(240).padTop(10).padBottom(10);
+        tableMap.row();
+
+        enemyPowerLabel = new Label("Enemy Power: " + String.valueOf(battle.getCalculatedPower2()), titleLabelStyle);
+        enemyPowerLabel.setWrap(true);
+        enemyPowerLabel.setWidth(240);
+
+        enemyPowerLabel.setAlignment(Align.center);
+        tableMap.add(enemyPowerLabel).width(240).padTop(10).padBottom(10);
+        tableMap.row();
+
+        Table optionTable = new Table();
+        Table yesTable = new Table();
+        Table noTable = new Table();
+        yesTable.setBackground(background3);
+        noTable.setBackground(background3);
+        yesButton = new TextButton("Yes", menuButtonStyle);
+        noButton = new TextButton("No", menuButtonStyle);
+        yesTable.add(yesButton).width(60);
+        yesTable.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                nameLabel = new Label("", titleLabelStyle);
+                nameLabel.setWrap(true);
+                nameLabel.setWidth(240);
+                nameLabel.setAlignment(Align.center);
+
+                tableMap.clear();
+                tableMap.clearChildren();
+
+                Engimon currentEngimon = currentPlayer.getCurrentEngimon();
+                if(battle.getWinner() == 1) {
+                    // Add Exp
+                    int exp = 1/currentPlayer.getCurrentEngimon().level() * 200;
+                    currentPlayer.getCurrentEngimon().xpGain(exp);
+
+                    if (currentPlayer.getEngimonItem().size() >= 2 && currentEngimon.isOverLeveled()) {
+                        currentPlayer.changeEngimon(currentPlayer.getEngimonItem().get(1));
+                        currentPlayer.deleteItem(currentEngimon);
+                    }
+                    else {
+                        game.setScreen(new GameOverScreen(game));
+                    }
+                    // Drop Skill
+                    currentPlayer.addItem(enemy.getSkillArray().get(0));
+                    nameLabel.setText("Battle Won");
+                    tableMap.add(nameLabel).width(240).padTop(10).padBottom(10);
+                }
+                else {
+
+                    currentEngimon.reduceLife();
+                    nameLabel.setText("Battle Lost");
+                    tableMap.add(nameLabel).width(240).padTop(10).padBottom(10);
+
+                    // Deal With 0 Life Count
+                    if(currentEngimon.lifeCount() == 0) {
+                        if(currentPlayer.getEngimonItem().size() >= 2) {
+                            currentPlayer.changeEngimon(currentPlayer.getEngimonItem().get(1));
+                            currentPlayer.deleteItem(currentEngimon);
+                        }
+                        else {
+                            // Game Over
+                            game.setScreen(new GameOverScreen(game));
+                        }
+                    }
+                }
+                isBattlePrompt = false;
+
+            }
+        });
+        noTable.add(noButton).width(60);
+        noTable.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                isBattlePrompt = false;
+                tableMap.clear();
+                tableMap.clearChildren();
+            }
+        });
+        optionTable.add(yesTable);
+        optionTable.add(noTable);
+        tableMap.add(optionTable).width(240).padTop(10).padBottom(10);
     }
 
     public MainGameScreen(Game aGame, final Player currentPlayer) {
@@ -82,9 +246,10 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         stage = new Stage(new ScreenViewport());
         lastPoll = System.currentTimeMillis();
         isBattlePrompt = false;
+        enemy = new Engimon(new Species(new Charmander()), false);
 
         mainScreenReference = this;
-//        getDatabaseData();
+
         this.currentPlayer = currentPlayer;
         currentPlayer.setEntityTileSize(tileWidth, tileHeight);
         currentPlayer.setTexture(new Texture(Gdx.files.internal("./sprites/player/idle_right.png")));
@@ -95,9 +260,13 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         batch = new SpriteBatch();
 
         // Style untuk Label
-        Label.LabelStyle titleLabelStyle = new Label.LabelStyle();
+        titleLabelStyle = new Label.LabelStyle();
         titleLabelStyle.font = new BitmapFont();
         titleLabelStyle.fontColor = Color.BLACK;
+
+        warningLabelStyle = new Label.LabelStyle();
+        warningLabelStyle.font = new BitmapFont();
+        warningLabelStyle.fontColor = Color.RED;
 
         // Title Label
         titleLabel = new Label("Engimon Factory", titleLabelStyle);
@@ -107,7 +276,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         stage.addActor(titleLabel);
 
         // Style untuk TextButtons
-        TextButton.TextButtonStyle menuButtonStyle = new TextButton.TextButtonStyle();
+        menuButtonStyle = new TextButton.TextButtonStyle();
         menuButtonStyle.font = new BitmapFont();
         menuButtonStyle.fontColor = Color.BLACK;
 
@@ -141,31 +310,97 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
 
         NinePatch patch3 = new NinePatch(new Texture(Gdx.files.internal("background-button.png")),
                 1, 1, 1, 1);
-        NinePatchDrawable background3 = new NinePatchDrawable(patch3);
+        background3 = new NinePatchDrawable(patch3);
 
 
         // Tables untuk menyusun TextButtons
         table = new Table();
         table.setPosition(310,-30);
 
-        Table tableMap = new Table();
+        tableMap = new Table();
         tableMap.setBackground(background);
-        table.add(tableMap).width(300).height(400).right().center();
 
-//        Table tableDescription = new Table();
-//        Table tableCurrentEngimon = new Table();
-//        tableCurrentEngimon.setBackground(background2);
-//        Table tableMessage = new Table();
-//        tableMessage.setBackground(background2);
-//        Table tableBreedButton = new Table();
-//        tableBreedButton.add(breedButton);
-//        tableBreedButton.setBackground(background2);
-//        tableDescription.add(tableCurrentEngimon).width(200).height(150);
-//        tableDescription.row();
-//        tableDescription.add(tableMessage).width(200).height(150);
-//
-//        table.add(tableDescription).width(200).height(300).spaceRight(30).top();
-//
+        Label legendTitle = new Label("Legend", titleLabelStyle);
+        legendTitle.setSize(Gdx.graphics.getWidth(),row_height);
+        legendTitle.setPosition(0,Gdx.graphics.getHeight()-row_height*1);
+        legendTitle.setAlignment(Align.center);
+        tableMap.add(legendTitle).spaceBottom(20);
+        tableMap.row();
+
+        Texture electricTexture = new Texture(Gdx.files.internal("sprites/electric/left/move/1.png"));
+        Table electricTable = new Table();
+        Image electricImage = new Image(electricTexture);
+        electricTable.add(electricImage).width(45).height(45).padRight(2);
+        Label electricLabel = new Label("Electric", titleLabelStyle);
+        electricTable.add(electricLabel).width(40).height(40);
+        tableMap.add(electricTable);
+        tableMap.row();
+
+        Texture fireTexture = new Texture(Gdx.files.internal("sprites/fire/left/move/1.png"));
+        Table fireTable = new Table();
+        Image fireImage = new Image(fireTexture);
+        fireTable.add(fireImage).width(45).height(45).padRight(2);
+        Label fireLabel = new Label("Fire", titleLabelStyle);
+        fireTable.add(fireLabel).width(40).height(40);
+        tableMap.add(fireTable);
+        tableMap.row();
+
+        Texture groundTexture = new Texture(Gdx.files.internal("sprites/ground/left/move/1.png"));
+        Table groundTable = new Table();
+        Image groundImage = new Image(groundTexture);
+        groundTable.add(groundImage).width(55).height(55).padRight(-3);
+        Label groundLabel = new Label("Ground", titleLabelStyle);
+        groundTable.add(groundLabel).width(40).height(40);
+        tableMap.add(groundTable);
+        tableMap.row();
+
+        Texture iceTexture = new Texture(Gdx.files.internal("sprites/ice/32bit-cuttlefish1.png"));
+        Table iceTable = new Table();
+        Image iceImage = new Image(iceTexture);
+        iceTable.add(iceImage).width(30).height(30).padRight(20);
+        Label iceLabel = new Label("Ice", titleLabelStyle);
+        iceTable.add(iceLabel).width(40).height(40);
+        tableMap.add(iceTable);
+        tableMap.row();
+
+        Texture waterTexture = new Texture(Gdx.files.internal("sprites/water/left/move/1.png"));
+        Table waterTable = new Table();
+        Image waterImage = new Image(waterTexture);
+        waterTable.add(waterImage).width(65).height(65).padRight(-5);
+        Label waterLabel = new Label("Water", titleLabelStyle);
+        waterTable.add(waterLabel).width(40).height(40);
+        tableMap.add(waterTable);
+        tableMap.row();
+
+        Texture fireElectricTexture = new Texture(Gdx.files.internal("sprites/fire electric/left/move/1.png"));
+        Table fireElectricTable = new Table();
+        Image fireElectricImage = new Image(fireElectricTexture);
+        fireElectricTable.add(fireElectricImage).width(20).height(30).padRight(10);
+        Label fireElectricLabel = new Label("Fire Electric", titleLabelStyle);
+        fireElectricTable.add(fireElectricLabel).width(40).height(40);
+        tableMap.add(fireElectricTable);
+        tableMap.row();
+
+        Texture groundWaterTexture = new Texture(Gdx.files.internal("sprites/ground water/left/move/1.png"));
+        Table groundWaterTable = new Table();
+        Image groundWaterImage = new Image(groundWaterTexture);
+        groundWaterTable.add(groundWaterImage).width(30).height(30).padRight(20);
+        Label groundWaterLabel = new Label("Ground Water", titleLabelStyle);
+        groundWaterTable.add(groundWaterLabel).width(40).height(40);
+        tableMap.add(groundWaterTable);
+        tableMap.row();
+
+        Texture iceWaterTexture = new Texture(Gdx.files.internal("sprites/ice water/32bit-cuttlefish1.png"));
+        Table iceWaterTable = new Table();
+        Image iceWaterImage = new Image(iceWaterTexture);
+        iceWaterTable.add(iceWaterImage).width(30).height(30).padRight(20);
+        Label iceWaterLabel = new Label("Ice Water", titleLabelStyle);
+        iceWaterTable.add(iceWaterLabel).width(40).height(40);
+        tableMap.add(iceWaterTable);
+        tableMap.row();
+
+        table.add(tableMap).width(300).height(450).right().center();
+
         Table tableButtons = new Table();
 
         Table tableEngimon = new Table();
@@ -216,6 +451,13 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         playerKeyboardInput = new KeyboardInput();
         playerKeyboardInput.start();
 
+    }
+
+    @Override
+    public void show() {
+        Gdx.app.log("MainScreen","show");
+//        Gdx.input.setInputProcessor(stage);
+
         TmxMapLoader loader = new TmxMapLoader();
         map = loader.load("Map.tmx");
         //        renderer = new OrthogonalTiledMapRenderer(map);
@@ -264,9 +506,18 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         stage.draw();
 
         ArrayList<Entity> currentState = mainGameLogic.getEntities();
-        for (Entity ent : currentState)
+        for (Entity ent : currentState) {
+            if (ent instanceof Engimon) {
+                float targetSize = 10*((Engimon) ent).level();
+                if (targetSize > 40)
+                    ent.getSprite().setSize(targetSize, targetSize);
+                else
+                    ent.getSprite().setSize(40, 40);
+            }
             ent.getSprite().setPosition(tileWidth*ent.getPosition().x, tileHeight*ent.getPosition().y);
+        }
 
+        renderer.addSprite(currentPlayer.getSprite());
         renderer.setView(camera);
         renderer.render();
 
@@ -279,15 +530,16 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
             if (keydata != null) {
                 Entity collidedEntity = mainGameLogic.playerInput(keydata);
                 if (collidedEntity != null) {
-                    // TODO : Do battle
                     isBattlePrompt = true;
+                    battleDialog();
                 }
                 lastPoll = System.currentTimeMillis();
             }
-            else if (System.currentTimeMillis() - lastPoll > 250) {
-                mainGameLogic.tickUpdate();
-                lastPoll = System.currentTimeMillis();
-            }
+        }
+
+        if (System.currentTimeMillis() - lastPoll > 250) {
+            mainGameLogic.tickUpdate();
+            lastPoll = System.currentTimeMillis();
         }
        // isometricRenderer.setView(camera);
        // isometricRenderer.render();

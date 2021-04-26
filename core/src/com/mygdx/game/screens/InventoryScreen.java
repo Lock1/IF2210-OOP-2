@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -38,9 +39,9 @@ public class InventoryScreen implements Screen {
     private String[] inventoryDummy = {"Powerball", "Health Potion", "Mana Potion", "Grenade"};
     private String[] descriptionDummy =
             {"An item that will increase your Engimon Strength",
-            "Increase your health by 20 points",
-            "Increase your mana by 20 points",
-            "Damage your enemy by 25 points"};
+                    "Increase your health by 20 points",
+                    "Increase your mana by 20 points",
+                    "Damage your enemy by 25 points"};
     private Skill selectedSkill = null;
     private Label descriptionLabel;
     private ArrayList<Skill> skillList;
@@ -291,12 +292,61 @@ public class InventoryScreen implements Screen {
         batch.begin();
         stage.act();
 
+        // Style untuk Label
+        Label.LabelStyle titleLabelStyle = new Label.LabelStyle();
+        titleLabelStyle.font = new BitmapFont();
+        titleLabelStyle.fontColor = Color.BLACK;
+
+
         tableInventory.clear();
         tableInventory.clearChildren();
         tableInventory.top().padTop(20);
         for(final Skill skill : skillList) {
             final TextButton itemButton;
             if(skill.itemCount() > 0) {
+                Table skillTable = new Table();
+                Texture skillTexture = new Texture(Gdx.files.internal("icon-skill/water/9.png"));
+                if(skill.masteryLevel() == 1){
+                    if(skill.skillElement().equals(Element.ELECTRIC)){
+                        skillTexture = new Texture(Gdx.files.internal("icon-skill/electric/1.png"));
+                    }else if(skill.skillElement().equals(Element.FIRE)){
+                        skillTexture = new Texture(Gdx.files.internal("icon-skill/fire/1.png"));
+                    }else if(skill.skillElement().equals(Element.WATER)){
+                        skillTexture = new Texture(Gdx.files.internal("icon-skill/water/1.png"));
+                    }else if(skill.skillElement().equals(Element.ICE)){
+                        skillTexture = new Texture(Gdx.files.internal("icon-skill/ice/1.png"));
+                    }else if(skill.skillElement().equals((Element.GROUND))){
+                        skillTexture = new Texture(Gdx.files.internal("icon-skill/ground/1.png"));
+                    }
+                }else  if(skill.masteryLevel()==2){
+                    if(skill.skillElement().equals(Element.ELECTRIC)){
+                        skillTexture = new Texture(Gdx.files.internal("icon-skill/electric/2.png"));
+                    }else if(skill.skillElement().equals(Element.FIRE)){
+                        skillTexture = new Texture(Gdx.files.internal("icon-skill/fire/2.png"));
+                    }else if(skill.skillElement().equals(Element.WATER)){
+                        skillTexture = new Texture(Gdx.files.internal("icon-skill/water/2.png"));
+                    }else if(skill.skillElement().equals(Element.ICE)){
+                        skillTexture = new Texture(Gdx.files.internal("icon-skill/ice/2.png"));
+                    }else if(skill.skillElement().equals((Element.GROUND))){
+                        skillTexture = new Texture(Gdx.files.internal("icon-skill/ground/2.png"));
+                    }
+                }else{
+                    if(skill.skillElement().equals(Element.ELECTRIC)){
+                        skillTexture = new Texture(Gdx.files.internal("icon-skill/electric/3.png"));
+                    }else if(skill.skillElement().equals(Element.FIRE)){
+                        skillTexture = new Texture(Gdx.files.internal("icon-skill/fire/3.png"));
+                    }else if(skill.skillElement().equals(Element.WATER)){
+                        skillTexture = new Texture(Gdx.files.internal("icon-skill/water/3.png"));
+                    }else if(skill.skillElement().equals(Element.ICE)){
+                        skillTexture = new Texture(Gdx.files.internal("icon-skill/ice/3.png"));
+                    }else if(skill.skillElement().equals((Element.GROUND))){
+                        skillTexture = new Texture(Gdx.files.internal("icon-skill/ground/3.png"));
+                    }
+                }
+                Image skillImage = new Image(skillTexture);
+                skillTable.add(skillImage).width(20).height(20).padRight(7);
+                tableInventory.add(skillTable);
+
                 if(skill.equals(selectedSkill)) {
                     itemButton = new TextButton(skill.skillName(), selectedButtonStyle);
                 }
@@ -324,6 +374,49 @@ public class InventoryScreen implements Screen {
         tableLearnedInventory.clearChildren();
         for(final Skill skill : getLearntSkillList()) {
             final TextButton itemButton;
+            Table skillTable = new Table();
+            Texture skillTexture = new Texture(Gdx.files.internal("icon-skill/water/9.png"));
+            if(skill.masteryLevel() == 1){
+                if(skill.skillElement().equals(Element.ELECTRIC)){
+                    skillTexture = new Texture(Gdx.files.internal("icon-skill/electric/1.png"));
+                }else if(skill.skillElement().equals(Element.FIRE)){
+                    skillTexture = new Texture(Gdx.files.internal("icon-skill/fire/1.png"));
+                }else if(skill.skillElement().equals(Element.WATER)){
+                    skillTexture = new Texture(Gdx.files.internal("icon-skill/water/1.png"));
+                }else if(skill.skillElement().equals(Element.ICE)){
+                    skillTexture = new Texture(Gdx.files.internal("icon-skill/ice/1.png"));
+                }else if(skill.skillElement().equals((Element.GROUND))){
+                    skillTexture = new Texture(Gdx.files.internal("icon-skill/ground/1.png"));
+                }
+            }else  if(skill.masteryLevel()==2){
+                if(skill.skillElement().equals(Element.ELECTRIC)){
+                    skillTexture = new Texture(Gdx.files.internal("icon-skill/electric/2.png"));
+                }else if(skill.skillElement().equals(Element.FIRE)){
+                    skillTexture = new Texture(Gdx.files.internal("icon-skill/fire/2.png"));
+                }else if(skill.skillElement().equals(Element.WATER)){
+                    skillTexture = new Texture(Gdx.files.internal("icon-skill/water/2.png"));
+                }else if(skill.skillElement().equals(Element.ICE)){
+                    skillTexture = new Texture(Gdx.files.internal("icon-skill/ice/2.png"));
+                }else if(skill.skillElement().equals((Element.GROUND))){
+                    skillTexture = new Texture(Gdx.files.internal("icon-skill/ground/2.png"));
+                }
+            }else{
+                if(skill.skillElement().equals(Element.ELECTRIC)){
+                    skillTexture = new Texture(Gdx.files.internal("icon-skill/electric/3.png"));
+                }else if(skill.skillElement().equals(Element.FIRE)){
+                    skillTexture = new Texture(Gdx.files.internal("icon-skill/fire/3.png"));
+                }else if(skill.skillElement().equals(Element.WATER)){
+                    skillTexture = new Texture(Gdx.files.internal("icon-skill/water/3.png"));
+                }else if(skill.skillElement().equals(Element.ICE)){
+                    skillTexture = new Texture(Gdx.files.internal("icon-skill/ice/3.png"));
+                }else if(skill.skillElement().equals((Element.GROUND))){
+                    skillTexture = new Texture(Gdx.files.internal("icon-skill/ground/3.png"));
+                }
+            }
+            Image skillImage = new Image(skillTexture);
+            skillTable.add(skillImage).width(20).height(20).padRight(7);
+            tableLearnedInventory.add(skillTable);
+
             if(skill.equals(selectedSkill)) {
                 itemButton = new TextButton(skill.skillName(), selectedButtonStyle);
             }
