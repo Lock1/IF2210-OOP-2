@@ -21,6 +21,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.entity.Player;
+import com.mygdx.game.entity.Entity;
+import com.mygdx.game.Savegame;
+
+import java.util.ArrayList;
 
 public class PauseScreen implements Screen {
     private Stage stage;
@@ -30,13 +34,15 @@ public class PauseScreen implements Screen {
     private Table table;
     private Player currentPlayer;
     private MainGameScreen parentMain;
+    private ArrayList<Entity> entityContainer;
 
-    public PauseScreen(Game aGame, Player currentPlayer, MainGameScreen mainScreen) {
+    public PauseScreen(Game aGame, Player currentPlayer, MainGameScreen mainScreen, ArrayList<Entity> eCtr) {
         // Setup Stage
         game = aGame;
         stage = new Stage(new ScreenViewport());
         this.currentPlayer = currentPlayer;
         parentMain = mainScreen;
+        entityContainer = eCtr;
 
         int row_height = Gdx.graphics.getWidth() / 12;
         stage = new Stage(new ScreenViewport());
@@ -76,6 +82,13 @@ public class PauseScreen implements Screen {
         Table tableNewGame = new Table();
         tableNewGame.add(newButton);
         tableNewGame.setBackground(background);
+        tableNewGame.setTouchable(Touchable.enabled);
+        tableNewGame.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Savegame.saveGame(entityContainer);
+            }
+        });
         table.add(tableNewGame).width(100).height(200);
 
         Table tableLoadGame = new Table();
@@ -85,7 +98,7 @@ public class PauseScreen implements Screen {
         tableLoadGame.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MainMenuScreen(game));
+                game.setScreen(parentMain);
             }
         });
         table.add(tableLoadGame).width(100).height(200);

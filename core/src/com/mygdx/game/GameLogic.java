@@ -49,6 +49,31 @@ public class GameLogic {
         rendererReference = renderer;
     }
 
+    public GameLogic(Player playerRef, TiledMap map) {
+        speciesDB = new SpeciesDatabase();
+        skillDB = new SkillDatabase();
+
+        entityMap = new Entity[50][50];
+        for (int i = 0; i < 48; i++) {
+            for (int j = 0; j < 48; j++)
+                entityMap[i][j] = null;
+        }
+
+        logicRandom = new Random();
+        currentPlayer = playerRef;
+        tiledMapReference = map;
+        tiledMapLayer = (TiledMapTileLayer) map.getLayers().get(0);
+        entityContainer = new ArrayList<Entity>();
+        entityContainer.add(playerRef);
+        int currentX = currentPlayer.getPosition().x;
+        int currentY = currentPlayer.getPosition().y;
+        entityMap[currentX][currentY] = currentPlayer;
+    }
+
+    public void setRenderer(OrthogonalTiledMapRendererWithSprites renderer) {
+        rendererReference = renderer;
+    }
+
     public ArrayList<Entity> getEntities() {
         return entityContainer;
     }
