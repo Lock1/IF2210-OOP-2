@@ -127,6 +127,12 @@ public class MainMenuScreen implements Screen {
         Table tableHelp = new Table();
         tableHelp.add(helpButton);
         tableHelp.setBackground(background2);
+        tableHelp.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new HelpScreen(game));
+            }
+        });
 
         Table tableExit = new Table();
         tableExit.add(exitButton);
