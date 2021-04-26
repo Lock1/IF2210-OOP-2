@@ -83,7 +83,6 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         currentPlayer.setEntityTileSize(tileWidth, tileHeight);
         currentPlayer.setTexture(new Texture(Gdx.files.internal("./sprites/electric/left/move/1.png")));
         currentPlayer.setSprite(new Sprite(currentPlayer.getTexture()));
-        currentPlayer.getSprite().setPosition(tileWidth*currentPlayer.getPosition().x,tileHeight*currentPlayer.getPosition().y);
 
         int row_height = Gdx.graphics.getWidth() / 12;
         stage = new Stage(new ScreenViewport());
@@ -251,6 +250,8 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
 
         stage.act();
         stage.draw();
+
+        currentPlayer.getSprite().setPosition(tileWidth*currentPlayer.getPosition().x,tileHeight*currentPlayer.getPosition().y);
 
         renderer.setView(camera);
         renderer.render();

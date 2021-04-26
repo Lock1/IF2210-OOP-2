@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
 import com.mygdx.game.entity.*;
 
 import com.mygdx.game.entity.engimon.*;
