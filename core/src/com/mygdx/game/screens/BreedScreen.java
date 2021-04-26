@@ -38,6 +38,7 @@ public class BreedScreen implements Screen {
     private String currentBreedTwo = "";
     private Label breedOneLabel;
     private Label breedTwoLabel;
+    private Label resultLabel;
     private Player currentPlayer;
 
     public BreedScreen(Game aGame, final Player currentPlayer) {
@@ -71,6 +72,7 @@ public class BreedScreen implements Screen {
         TextButton engimonButton = new TextButton("Your Engimon", menuButtonStyle);
         TextButton engimonOneButton = new TextButton("Engimon 1", menuButtonStyle);
         TextButton engimonTwoButton = new TextButton("Engimon 2", menuButtonStyle);
+        TextButton resultButton = new TextButton("Result", menuButtonStyle);
         TextButton breedButton = new TextButton("Breed", menuButtonStyle);
         TextButton backButton = new TextButton("<< Back", menuButtonStyle);
         backButton.addListener(new InputListener(){
@@ -104,7 +106,7 @@ public class BreedScreen implements Screen {
         // Tables untuk menyusun TextButtons
         table = new Table();
 
-        table.add(engimonButton).width(400).spaceRight(60);
+        table.add(engimonButton).width(300).spaceRight(30).padTop(30);
         // table.add(statButton).width(200);
         table.row();
 
@@ -132,9 +134,10 @@ public class BreedScreen implements Screen {
             });
             tableEngimon.row();
         }
-        table.add(tableEngimon).width(400).height(400).spaceRight(60);
+        table.add(tableEngimon).width(300).height(500).spaceRight(30);
 
         Table tableBreed = new Table();
+        tableBreed.padTop(30);
 
         Table tableEngimonOne = new Table();
         tableEngimonOne.setBackground(background2);
@@ -153,7 +156,7 @@ public class BreedScreen implements Screen {
                 return true;
             }
         });
-        tableEngimonOne.add(breedOneLabel).width(160);
+        tableEngimonOne.add(breedOneLabel).width(140);
 
         Table tableEngimonTwo = new Table();
         tableEngimonTwo.setBackground(background2);
@@ -172,22 +175,33 @@ public class BreedScreen implements Screen {
                 return true;
             }
         });
-        tableEngimonTwo.add(breedTwoLabel).width(160);
+        tableEngimonTwo.add(breedTwoLabel).width(140);
 
         Table tableBreedButton = new Table();
         tableBreedButton.add(breedButton);
         tableBreedButton.setBackground(background3);
         tableBreed.add(engimonOneButton);
         tableBreed.row();
-        tableBreed.add(tableEngimonOne).width(200).height(150);
+        tableBreed.add(tableEngimonOne).width(170).height(150);
         tableBreed.row();
         tableBreed.add(engimonTwoButton);
         tableBreed.row();
-        tableBreed.add(tableEngimonTwo).width(200).height(150);
+        tableBreed.add(tableEngimonTwo).width(170).height(150);
         tableBreed.row();
         tableBreed.add(tableBreedButton).width(100).height(70);
 
-        table.add(tableBreed).width(200).height(300);
+        table.add(tableBreed).width(170).height(300).spaceLeft(15).spaceRight(15);
+
+        Table tableRightest = new Table();
+        tableRightest.add(resultButton).spaceBottom(3);
+        tableRightest.row();
+        Table tableResult = new Table();
+        tableResult.setBackground(background2);
+        tableResult.add(resultLabel);
+
+        tableRightest.add(tableResult);
+
+        table.add(tableRightest).width(170).height(150).spaceLeft(30);
 
         table.setFillParent(true);
 
