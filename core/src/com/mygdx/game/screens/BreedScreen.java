@@ -223,8 +223,13 @@ public class BreedScreen implements Screen {
                 else {
                     breed = new Breed(currentParentOne, currentParentTwo);
                     resultChild = breed.startBreeding(new SpeciesDatabase());
-                    resultLabel.setText(resultChild.engimonName());
-                    currentPlayer.addItem(resultChild);
+                    if (resultChild == null) {
+                        resultLabel.setText("Cannot breed");
+                    }
+                    else {
+                        resultLabel.setText(resultChild.engimonName());
+                        currentPlayer.addItem(resultChild);
+                    }
                 }
             }
         });
