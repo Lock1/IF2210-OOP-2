@@ -189,18 +189,26 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
                 tableMap.clear();
                 tableMap.clearChildren();
 
+                Engimon currentEngimon = currentPlayer.getCurrentEngimon();
                 if(battle.getWinner() == 1) {
                     // Add Exp
                     int exp = 1/currentPlayer.getCurrentEngimon().level() * 200;
                     currentPlayer.getCurrentEngimon().xpGain(exp);
 
+                    if (currentPlayer.getEngimonItem().size() >= 2 && currentEngimon.isOverLeveled()) {
+                        currentPlayer.changeEngimon(currentPlayer.getEngimonItem().get(1));
+                        currentPlayer.deleteItem(currentEngimon);
+                    }
+                    else {
+                        game.setScreen(new GameOverScreen(game));
+                    }
                     // Drop Skill
                     currentPlayer.addItem(enemy.getSkillArray().get(0));
                     nameLabel.setText("Battle Won");
                     tableMap.add(nameLabel).width(240).padTop(10).padBottom(10);
                 }
                 else {
-                    Engimon currentEngimon = currentPlayer.getCurrentEngimon();
+
                     currentEngimon.reduceLife();
                     nameLabel.setText("Battle Lost");
                     tableMap.add(nameLabel).width(240).padTop(10).padBottom(10);

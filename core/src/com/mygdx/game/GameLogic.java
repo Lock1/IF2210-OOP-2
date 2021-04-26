@@ -158,6 +158,17 @@ public class GameLogic {
                     }
                     entityMove(ent, moveStr);
                 }
+                else if (20 <= moveRNG && moveRNG < 40) {
+                    ((Engimon) ent).xpGain(10);
+                    if (((Engimon) ent).isOverLeveled()) {
+                        for (int i = 0; i < entityContainer.size(); i++)
+                            if (ent == entityContainer.get(i)) {
+                                entityContainer.remove(i);
+                                break;
+                            }
+                        entityMap[ent.getPosition().x][ent.getPosition().y] = null;
+                    }
+                }
             }
         }
     }
