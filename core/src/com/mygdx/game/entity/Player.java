@@ -63,6 +63,8 @@ public class Player extends Entity {
         return playerItems.getItemList();
     }
 
+    public ArrayList<Skill> getSkillByElement(Element e) { return playerItems.getListByElement(e); }
+
     public ArrayList<Engimon> getEngimonItem() {
         return playerEngimons.getItemList();
     }

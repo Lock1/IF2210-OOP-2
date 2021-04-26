@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.game.entity.Player;
 
 public class PauseScreen implements Screen {
     private Stage stage;
@@ -27,11 +28,13 @@ public class PauseScreen implements Screen {
     private SpriteBatch batch;
     private Label titleLabel;
     private Table table;
+    private Player currentPlayer;
 
-    public PauseScreen(Game aGame) {
+    public PauseScreen(Game aGame, final Player currentPlayer) {
         // Setup Stage
         game = aGame;
         stage = new Stage(new ScreenViewport());
+        this.currentPlayer = currentPlayer;
 
         int row_height = Gdx.graphics.getWidth() / 12;
         stage = new Stage(new ScreenViewport());
@@ -92,7 +95,7 @@ public class PauseScreen implements Screen {
         tableContinue.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MainGameScreen(game));
+                game.setScreen(new MainGameScreen(game, currentPlayer));
             }
         });
         table.add(tableContinue).width(100).height(200);

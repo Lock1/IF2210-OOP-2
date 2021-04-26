@@ -9,6 +9,7 @@ public abstract class Inventory<T> {
 
     public Inventory(int cap) {
         maxCapacity = cap;
+        itemList = new ArrayList<T>();
     }
 
     public ArrayList<T> getItemList() {

@@ -33,6 +33,7 @@ public class Engimon extends Entity {
         learnedSkill.add(new Skill(e.baseSkill()));
         parent1Species = null;
         parent2Species = null;
+        engimonName = e.speciesName();
 
         if (wild)
             lifeCount = 1;
@@ -49,6 +50,7 @@ public class Engimon extends Entity {
         learnedSkill.add(new Skill(e.baseSkill()));
         parent1Species = null;
         parent2Species = null;
+        engimonName = e.speciesName();
 
         if (wild)
             lifeCount = 1;
@@ -72,6 +74,8 @@ public class Engimon extends Entity {
     public String engimonName() {
         return engimonName;
     }
+
+    public int getExperience() { return experience; }
 
     public ArrayList<Skill> getSkillArray() {
         return new ArrayList<Skill>(learnedSkill);
