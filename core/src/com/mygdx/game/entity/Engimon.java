@@ -63,7 +63,7 @@ public class Engimon extends Entity {
     public Engimon(Species e, boolean wild, int baselevel, int x, int y) {
         super(x, y);
         speciesType = e;
-        this.cumulativeExperience = 0;
+        this.cumulativeExperience = baselevel*100;
         this.experience = 0;
         this.level = baselevel;
         learnedSkill = new ArrayList<Skill>();
@@ -89,6 +89,10 @@ public class Engimon extends Entity {
 
     public int level() {
         return level;
+    }
+
+    public int experience() {
+        return experience;
     }
 
     public String engimonName() {

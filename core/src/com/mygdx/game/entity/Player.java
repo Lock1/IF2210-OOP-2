@@ -27,7 +27,6 @@ public class Player extends Entity {
         lastPosition = new Position(x, y);
     }
 
-
     public void changeEngimon(Engimon e) {
         currentEngimon = e;
     }
@@ -78,7 +77,7 @@ public class Player extends Entity {
     //     entitySprite.setPosition(tpos.x*tileWidth, tpos.y*tileHeight);
     //     // FIXME : fix movement
     // }
-    public ArrayList<Engimon> getEngimonByMinLevel(int minLevel) { 
+    public ArrayList<Engimon> getEngimonByMinLevel(int minLevel) {
       return playerEngimons.getEngimonByMinLevelConstraint(minLevel);
     }
 
