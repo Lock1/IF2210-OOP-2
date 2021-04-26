@@ -452,7 +452,6 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
             if (keydata != null) {
                 Entity collidedEntity = mainGameLogic.playerInput(keydata);
                 if (collidedEntity != null) {
-                    // TODO : Do battle
                     isBattlePrompt = true;
                     battleDialog();
                 }

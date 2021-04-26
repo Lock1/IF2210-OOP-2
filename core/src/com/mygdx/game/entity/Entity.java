@@ -54,7 +54,6 @@ public class Entity {
             Engimon engimon = (Engimon) this;
             TiledMapTileLayer.Cell targetData = tiledMapLayer.getCell(x, y);
             if (targetData != null) {
-                // TODO : Grouping by ID
                 int targetCell = targetData.getTile().getId();
                 if(targetCell >= 800 && targetCell <= 1279 && engimon.getSpecies().getElementSet().contains(Element.FIRE)) {
                     return true;

@@ -59,7 +59,6 @@ public class GameLogic {
         tickUpdate();
         TiledMapTileLayer.Cell targetData = tiledMapLayer.getCell(currentPlayer.getPosition().x, currentPlayer.getPosition().y);
         if (targetData != null) {
-            // TODO : Grouping by ID
             int targetCell = targetData.getTile().getId();
             System.out.println(targetCell);
         }
@@ -79,7 +78,7 @@ public class GameLogic {
                 if (entityMap[i][j] == target) {
                     entityMap[i][j] = null;
                     switch (moveString) {
-                        case "Up": // TODO : Add
+                        case "Up":
                             if (target.isTileMoveable(i, j+1, tiledMapLayer) && isWithinMap(i, j+1)) {
                                 if (entityMap[i][j+1] == null)
                                     target.setPosition(new Position(i, j + 1));
@@ -131,7 +130,6 @@ public class GameLogic {
     public void tickUpdate() {
         int generatedNumber = logicRandom.nextInt() % 100;
         if (0 <= generatedNumber && generatedNumber < 40 && entityContainer.size() < 30) {
-            // TODO : Tile checking, collision
             Engimon spawnedEngimon = generateEngimon();
             rendererReference.addSprite(spawnedEngimon.getSprite());
             entityContainer.add(spawnedEngimon);
@@ -174,9 +172,14 @@ public class GameLogic {
     }
 
     public Engimon generateEngimon() {
-        int posX = logicRandom.nextInt() % 40;
-        int posY = logicRandom.nextInt() % 40;
-        Engimon spawnedEngimon = new Engimon(speciesDB.getRandomizedItem(), true, Math.abs(posX), Math.abs(posY));
+        int posX = Math.abs(logicRandom.nextInt() % 40);
+        int posY = Math.abs(logicRandom.nextInt() % 40);
+        Engimon spawnedEngimon = null;
+        int iterDepth = 0;
+        do {
+            spawnedEngimon = new Engimon(speciesDB.getRandomizedItem(), true, posX, posY);
+            iterDepth++;
+        } while (!spawnedEngimon.isTileMoveable(posX, posY, tiledMapLayer) && iterDepth < 5);
         entityMap[spawnedEngimon.getPosition().x][spawnedEngimon.getPosition().y] = spawnedEngimon;
         Texture engimonTexture = null;
         Sprite engimonSprite;
@@ -200,7 +203,6 @@ public class GameLogic {
         }
         engimonSprite = new Sprite(engimonTexture);
         spawnedEngimon.setSprite(engimonSprite);
-        assert engimonSprite != null;
         return spawnedEngimon;
     }
 }
