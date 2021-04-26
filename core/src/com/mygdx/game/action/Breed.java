@@ -19,7 +19,7 @@ public class Breed extends EngimonInteraction {
     }
 
     public Engimon startBreeding(SpeciesDatabase speciesDB) {
-        if (e1.level() >= 30 && e2.level() >= 30) {
+        if (e1.level() >= 4 && e2.level() >= 4) {
 
             ArrayList<Skill> skillP1 = e1.getSkillArray();
             ArrayList<Skill> skillP2 = e2.getSkillArray();

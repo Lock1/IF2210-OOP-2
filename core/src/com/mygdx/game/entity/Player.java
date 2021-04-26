@@ -78,5 +78,9 @@ public class Player extends Entity {
     //     entitySprite.setPosition(tpos.x*tileWidth, tpos.y*tileHeight);
     //     // FIXME : fix movement
     // }
+    public ArrayList<Engimon> getEngimonByMinLevel(int minLevel) { 
+      return playerEngimons.getEngimonByMinLevelConstraint(minLevel);
+    }
+
 
 }
