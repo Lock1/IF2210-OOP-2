@@ -13,7 +13,7 @@ public class Player extends Entity {
     private SkillInventory playerItems;
     private Engimon currentEngimon;
     private int maxTotalInventory;
-    // TODO : Last pos
+    private Position lastPosition;
 
 
 
@@ -24,6 +24,7 @@ public class Player extends Entity {
         playerItems = new SkillInventory(maxInv);
         currentEngimon = null;
         maxTotalInventory = maxInv;
+        lastPosition = new Position(x, y);
     }
 
 
@@ -69,5 +70,13 @@ public class Player extends Entity {
     public ArrayList<Engimon> getEngimonItem() {
         return playerEngimons.getItemList();
     }
+
+
+    // public void setPosition(Position tpos) {
+    //     entitySprite.translate(tileWidth * (pos.x-tpos.x), tileHeight * (pos.y-tpos.y));
+    //     pos = tpos;
+    //     entitySprite.setPosition(tpos.x*tileWidth, tpos.y*tileHeight);
+    //     // FIXME : fix movement
+    // }
 
 }

@@ -51,8 +51,11 @@ public class GameLogic {
     }
 
     public void tickUpdate() {
-        if (logicRandom.nextInt() < 15) {
-            // generateEngimon()
+        if (logicRandom.nextInt() % 100 < 3 && entityContainer.size() < 30) {
+            // TODO : add to renderer
+            Engimon spawnedEngimon = generateEngimon();
+            System.out.println(spawnedEngimon.engimonName());
+            entityContainer.add(spawnedEngimon);
         }
     }
 
