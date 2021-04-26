@@ -7,6 +7,7 @@ import com.mygdx.game.entity.Species;
 import com.mygdx.game.*;
 import com.mygdx.game.maps.OrthogonalTiledMapRendererWithSprites;
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import java.util.ArrayList;
@@ -48,7 +49,6 @@ public class GameLogic {
     }
 
     public void playerInput(String inputString) {
-        System.out.println(inputString);
         this.entityMove(currentPlayer, inputString);
         tickUpdate();
     }

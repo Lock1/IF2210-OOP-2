@@ -76,7 +76,7 @@ public class BreedScreen implements Screen {
         parentMain = mainparent;
 
         // Style untuk Label
-        Label.LabelStyle titleLabelStyle = new Label.LabelStyle();
+        final Label.LabelStyle titleLabelStyle = new Label.LabelStyle();
         titleLabelStyle.font = new BitmapFont();
         titleLabelStyle.fontColor = Color.BLACK;
 
@@ -153,10 +153,10 @@ public class BreedScreen implements Screen {
             itemButton.addListener(new InputListener(){
                 @Override
                 public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                    if(currentParentOne == null) {
+                    if(currentParentOne == null && !parent.equals(currentParentTwo)) {
                         currentParentOne = parent;
                     }
-                    else if (currentParentTwo  == null) {
+                    else if (currentParentTwo  == null && !parent.equals(currentParentOne)) {
                         currentParentTwo = parent;
                     }
                 }
@@ -183,6 +183,7 @@ public class BreedScreen implements Screen {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 currentParentOne = null;
+                breedOneLabel.setText("");
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -202,6 +203,7 @@ public class BreedScreen implements Screen {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 currentParentTwo = null;
+                breedTwoLabel.setText("");
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -223,6 +225,7 @@ public class BreedScreen implements Screen {
                 else {
                     breed = new Breed(currentParentOne, currentParentTwo);
                     resultChild = breed.startBreeding(new SpeciesDatabase());
+                    resultLabel.setStyle(titleLabelStyle);
                     if (resultChild == null) {
                         resultLabel.setText("Cannot breed");
                     }
