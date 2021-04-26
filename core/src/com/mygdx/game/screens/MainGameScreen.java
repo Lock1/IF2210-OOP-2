@@ -52,6 +52,8 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
     private int tileHeight;
     private int minTile = 0;
     private int maxTile = 48;
+    private SpriteBatch spBatch = new SpriteBatch();
+    private MainGameScreen mainScreenReference;
 
     // Inventories
     private EngimonInventory engimonInventory;
@@ -75,8 +77,13 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         game = aGame;
         stage = new Stage(new ScreenViewport());
 
+        mainScreenReference = this;
 //        getDatabaseData();
         this.currentPlayer = currentPlayer;
+        currentPlayer.setEntityTileSize(tileWidth, tileHeight);
+        currentPlayer.setTexture(new Texture(Gdx.files.internal("./sprites/electric/left/move/1.png")));
+        currentPlayer.setSprite(new Sprite(currentPlayer.getTexture()));
+        currentPlayer.getSprite().setPosition(tileWidth*currentPlayer.getPosition().x,tileHeight*currentPlayer.getPosition().y);
 
         int row_height = Gdx.graphics.getWidth() / 12;
         stage = new Stage(new ScreenViewport());
@@ -107,7 +114,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         menuButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new PauseScreen(game, currentPlayer));
+                game.setScreen(new PauseScreen(game, currentPlayer, mainScreenReference));
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -163,7 +170,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         tableEngimon.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new EngimonScreen(game, currentPlayer));
+                game.setScreen(new EngimonScreen(game, currentPlayer, mainScreenReference));
             }
         });
         tableButtons.add(tableEngimon).width(100).height(70).spaceTop(30).spaceBottom(15);
@@ -175,7 +182,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         tableBreed.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new BreedScreen(game, currentPlayer));
+                game.setScreen(new BreedScreen(game, currentPlayer, mainScreenReference));
             }
         });
         tableButtons.add(tableBreed).width(100).height(70).spaceTop(15).spaceBottom(15);
@@ -187,7 +194,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         tableInventory.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new InventoryScreen(game, currentPlayer));
+                game.setScreen(new InventoryScreen(game, currentPlayer, mainScreenReference));
             }
         });
         tableButtons.add(tableInventory).width(100).height(70).spaceTop(15).spaceBottom(15);
@@ -204,7 +211,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         playerKeyboardInput = new KeyboardInput();
         playerKeyboardInput.start();
 
-        mainGameLogic = new GameLogic();
+        mainGameLogic = new GameLogic(currentPlayer, renderer);
     }
 
     @Override
@@ -221,13 +228,14 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         camera.setToOrtho(false,1500,1150);
         camera.update();
 
-        batch = new SpriteBatch();
-        texture = new Texture(Gdx.files.internal("./sprites/electric/left/move/1.png"));
-        sprite = new Sprite(texture);
-        sprite.setPosition(tileWidth*30,tileHeight*30);
+        // testposx = 30;
+        // testposy = 30;
+        // testtexture = new Texture(Gdx.files.internal("./sprites/electric/left/move/1.png"));
+        // testsprite = new Sprite(testtexture);
+        // testsprite.setPosition(tileWidth*testposx,tileHeight*testposy);
 
-        renderer = new OrthogonalTiledMapRendererWithSprites(map, batch);
-        renderer.addSprite(sprite);
+        renderer = new OrthogonalTiledMapRendererWithSprites(map, spBatch);
+        renderer.addSprite(currentPlayer.getSprite());
 
 //        Gdx.input.setInputProcessor(this);
         Gdx.input.setInputProcessor(stage);
@@ -252,8 +260,12 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         batch.end();
 
         String keydata = playerKeyboardInput.getKeypress();
-        if (keydata != null)
-            System.out.println(keydata);
+        if (keydata != null) {
+            mainGameLogic.playerInput(keydata);
+            System.out.println(currentPlayer.getPosition().x);
+            System.out.println(currentPlayer.getPosition().y);
+            // testsprite.setPosition(tileWidth*testposx,tileHeight*testposy);
+        }
        // isometricRenderer.setView(camera);
        // isometricRenderer.render();
     }

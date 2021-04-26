@@ -46,6 +46,10 @@ public class BreedScreen implements Screen {
     private Label breedTwoLabel;
     private Label resultLabel;
     private Player currentPlayer;
+    private MainGameScreen parentMain;
+
+
+    
 
     private TextButton.TextButtonStyle menuButtonStyle;
     private Label.LabelStyle selectedButtonStyle;
@@ -58,7 +62,8 @@ public class BreedScreen implements Screen {
         parentList = currentPlayer.getEngimonByMinLevel(4);
     }
 
-    public BreedScreen(Game aGame, final Player currentPlayer) {
+    public BreedScreen(Game aGame, final Player currentPlayer, MainGameScreen mainparent) {
+
         // Setup Stage
         game = aGame;
         stage = new Stage(new ScreenViewport());
@@ -68,6 +73,7 @@ public class BreedScreen implements Screen {
         int row_height = Gdx.graphics.getWidth() / 12;
         stage = new Stage(new ScreenViewport());
         batch = new SpriteBatch();
+        parentMain = mainparent;
 
         // Style untuk Label
         Label.LabelStyle titleLabelStyle = new Label.LabelStyle();
@@ -106,7 +112,7 @@ public class BreedScreen implements Screen {
         backButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new MainGameScreen(game, currentPlayer));
+                game.setScreen(parentMain);
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {

@@ -36,8 +36,6 @@ public class KeyboardInput extends Thread {
                 return "Down";
             else if (Gdx.input.isKeyPressed(Input.Keys.D))
                 return "Right";
-            else if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
-                return "Back";
         }
 
         return null;

@@ -44,18 +44,15 @@ public class MainMenuScreen implements Screen {
     private Table table;
 
     public Player createNewPlayer() {
-        Player newPlayer = new Player(10);
+        Player newPlayer = new Player(10, 30, 30);
 
         // Defaults
         newPlayer.addItem(new Engimon(new Beartic(), false));
         newPlayer.addItem(new Engimon(new Eevee(), false));
-        newPlayer.addItem(new Engimon(new Jolteon(), false));
-        newPlayer.addItem(new Engimon(new Pinsir(), false));
         newPlayer.addItem(new Engimon(new Spheal(), false));
         newPlayer.addItem(new Skill(new Blizzard()));
-        newPlayer.addItem(new Skill(new Blizzard()));
-        newPlayer.addItem(new Skill(new Ember()));
         newPlayer.addItem(new Skill(new IceBeam()));
+
         newPlayer.addItem(new Skill(new HydroPump()));
         newPlayer.getEngimonItem().get(0).xpGain(300);
         newPlayer.getEngimonItem().get(1).xpGain(400);

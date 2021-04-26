@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.mygdx.game.entity.engimon.*;
 import com.mygdx.game.entity.Species;
 import com.mygdx.game.entity.attributes.Element;
 import com.mygdx.game.ItemNotFound;
@@ -14,6 +15,38 @@ public class SpeciesDatabase implements Database<Species> {
     public SpeciesDatabase() {
         speciesDB = new ArrayList<Species>();
         speciesDBRandomizer = new Random();
+        addItem(new Articuno());
+        addItem(new Beartic());
+        addItem(new Beedrill());
+        addItem(new Blastoise());
+        addItem(new Bloon());
+        addItem(new Charmander());
+        addItem(new Cumlaude());
+        addItem(new Eevee());
+        addItem(new Espeon());
+        addItem(new Flareon());
+        addItem(new HeatRotom());
+        addItem(new HoOh());
+        addItem(new Jolteon());
+        addItem(new Kumon());
+        addItem(new Landorus());
+        addItem(new Lugia());
+        addItem(new Luxio());
+        addItem(new Mewtwo());
+        addItem(new Moltres());
+        addItem(new Pinsir());
+        addItem(new Sableye());
+        addItem(new Sandslash());
+        addItem(new Spheal());
+        addItem(new Squirtle());
+        addItem(new Thundurus());
+        addItem(new Tornadus());
+        addItem(new Tyranitar());
+        addItem(new Umbreon());
+        addItem(new Vaniluxe());
+        addItem(new Vaporeon());
+        addItem(new Wooper());
+        addItem(new Zapdos());
     }
 
 
