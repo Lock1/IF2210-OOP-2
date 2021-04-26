@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.game.action.TextInput;
 import com.mygdx.game.entity.Engimon;
 import com.mygdx.game.entity.EngimonInventory;
 import com.mygdx.game.entity.Player;
@@ -56,20 +57,18 @@ public class EngimonScreen implements Screen {
     private TextButton.TextButtonStyle selectedButtonStyle;
     private MainGameScreen parentMain;
 
+    Table tableEngimon;
+
     public void getEngimonList() {
         engimonList = currentPlayer.getEngimonItem();
     }
 
-    public void addEngimon(Engimon e) {
-        currentPlayer.addItem(e);
-    }
-
-    public void deleteEngimon(Engimon e) {
-        currentPlayer.deleteItem(e);
-    }
-
     public void setCurrentEngimon(Engimon e) {
         currentPlayer.changeEngimon(selectedEngimon);
+    }
+
+    public boolean dumpSelectedEngimon(Engimon e) {
+        return currentPlayer.deleteItem(e);
     }
 
     public EngimonScreen(Game aGame, final Player currentPlayer, MainGameScreen mainparent) {
@@ -78,6 +77,7 @@ public class EngimonScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         this.currentPlayer = currentPlayer;
         getEngimonList();
+        selectedEngimon = currentPlayer.getCurrentEngimon();
 
         parentMain = mainparent;
 
@@ -109,8 +109,10 @@ public class EngimonScreen implements Screen {
         // Definisi dan Implementasi TextButtons
         TextButton engimonButton = new TextButton("Your Engimon", menuButtonStyle);
         TextButton statButton = new TextButton("Stats", menuButtonStyle);
-        TextButton backButton = new TextButton("<< Back", menuButtonStyle);
         TextButton selectButton = new TextButton("Select", menuButtonStyle);
+        TextButton renameButton = new TextButton("Rename", menuButtonStyle);
+        TextButton dumpButton = new TextButton("Dump", menuButtonStyle);
+        TextButton backButton = new TextButton("<< Back", menuButtonStyle);
         backButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
@@ -142,32 +144,9 @@ public class EngimonScreen implements Screen {
         table.add(statButton).width(200).padTop(80);
         table.row();
 
-        Table tableEngimon = new Table();
+        tableEngimon = new Table();
         tableEngimon.setBackground(background);
         tableEngimon.top().padTop(20);
-        for (final Engimon engimon : engimonList) {
-            final TextButton itemButton;
-            if(currentPlayer.getCurrentEngimon().equals(engimon)) {
-                itemButton = new TextButton(engimon.engimonName(), selectedButtonStyle);
-                previousButton = itemButton;
-            }
-            else {
-                itemButton = new TextButton(engimon.engimonName(), menuButtonStyle);
-            }
-            tableEngimon.add(itemButton).padTop(10).padBottom(10);
-            itemButton.addListener(new InputListener(){
-                @Override
-                public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                    focusButton = itemButton;
-                    selectedEngimon = engimon;
-                }
-                @Override
-                public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                    return true;
-                }
-            });
-            tableEngimon.row();
-        }
         table.add(tableEngimon).width(400).height(500).spaceRight(40);
 
         Table tableRight = new Table();
@@ -228,7 +207,7 @@ public class EngimonScreen implements Screen {
         parentSpeciesLabel.setWidth(240);
         parentSpeciesLabel.setSize(Gdx.graphics.getWidth(),row_height);
         parentSpeciesLabel.setAlignment(Align.center);
-        tableStats.add(parentNameLabel).width(240).padTop(10).padBottom(10);
+        tableStats.add(parentSpeciesLabel).width(240).padTop(10).padBottom(10);
         tableStats.row();
 
 //        skillLabel = new Label("", titleLabelStyle);
@@ -241,6 +220,8 @@ public class EngimonScreen implements Screen {
 
         tableRight.add(tableStats);
         tableRight.row();
+
+        Table tableButtons = new Table();
 
         Table tableSelect = new Table();
         tableSelect.add(selectButton);
@@ -257,7 +238,54 @@ public class EngimonScreen implements Screen {
                 }
             }
         });
-        tableRight.add(tableSelect).width(100).height(70).spaceTop(10).spaceBottom(10);
+        tableButtons.add(tableSelect).width(95).height(70).spaceTop(10).spaceBottom(10);
+
+        Table tableRename = new Table();
+        tableRename.add(renameButton);
+        tableRename.setBackground(background3);
+        tableRename.setTouchable(Touchable.enabled);
+        tableRename.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(selectedEngimon != null) {
+                    TextInput listener = new TextInput();
+                    Gdx.app.getInput().getTextInput(listener, "Rename Engimon", selectedEngimon.engimonName(), "");
+                    if(!TextInput.rename.equals("")) {
+                        selectedEngimon.renameEngimon(TextInput.rename);
+                    }
+                }
+            }
+        });
+        tableButtons.add(tableRename).width(95).height(70).spaceTop(10).spaceBottom(10);
+
+        Table tableDump = new Table();
+        tableDump.add(dumpButton);
+        tableDump.setBackground(background3);
+        tableDump.setTouchable(Touchable.enabled);
+        tableDump.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(selectedEngimon != null) {
+                    if(!selectedEngimon.equals(currentPlayer.getCurrentEngimon())) {
+                        dumpSelectedEngimon(selectedEngimon);
+                        getEngimonList();
+                    }
+                    else {
+                        nameLabel.setText("Can't Dump Your Current Engimon!");
+                        elementLabel.setText("");
+                        levelLabel.setText("");
+                        expLabel.setText("");
+                        lifeLabel.setText("");
+                        parentNameLabel.setText("");
+                        parentSpeciesLabel.setText("");
+                        selectedEngimon = null;
+                    }
+                }
+            }
+        });
+        tableButtons.add(tableDump).width(95).height(70).spaceTop(10).spaceBottom(10);
+
+        tableRight.add(tableButtons);
 
         table.add(tableRight).width(300).height(500);
 
@@ -280,6 +308,33 @@ public class EngimonScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         stage.act();
+
+        // Rerender List
+        tableEngimon.clear();
+        tableEngimon.clearChildren();
+        for (final Engimon engimon : engimonList) {
+            final TextButton itemButton;
+            if(currentPlayer.getCurrentEngimon().equals(engimon)) {
+                itemButton = new TextButton(engimon.engimonName(), selectedButtonStyle);
+                previousButton = itemButton;
+            }
+            else {
+                itemButton = new TextButton(engimon.engimonName(), menuButtonStyle);
+            }
+            tableEngimon.add(itemButton).padTop(10).padBottom(10);
+            itemButton.addListener(new InputListener(){
+                @Override
+                public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                    focusButton = itemButton;
+                    selectedEngimon = engimon;
+                }
+                @Override
+                public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                    return true;
+                }
+            });
+            tableEngimon.row();
+        }
 
         // Rerender Labels
         if(selectedEngimon != null) {

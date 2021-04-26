@@ -27,7 +27,6 @@ import com.mygdx.game.entity.attributes.skill.Blizzard;
 import com.mygdx.game.entity.attributes.skill.Ember;
 import com.mygdx.game.entity.attributes.skill.HydroPump;
 import com.mygdx.game.entity.attributes.skill.IceBeam;
-import com.mygdx.game.entity.engimon.*;
 import com.mygdx.game.entity.engimon.Beartic;
 import com.mygdx.game.entity.engimon.Eevee;
 import com.mygdx.game.entity.engimon.Jolteon;

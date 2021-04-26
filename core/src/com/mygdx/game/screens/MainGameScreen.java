@@ -173,7 +173,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
                 game.setScreen(new EngimonScreen(game, currentPlayer, mainScreenReference));
             }
         });
-        tableButtons.add(tableEngimon).width(100).height(70).spaceTop(30).spaceBottom(15);
+        tableButtons.add(tableEngimon).width(95).height(70).spaceTop(30).spaceBottom(15);
 
         Table tableBreed = new Table();
         tableBreed.add(breedButton);
@@ -185,7 +185,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
                 game.setScreen(new BreedScreen(game, currentPlayer, mainScreenReference));
             }
         });
-        tableButtons.add(tableBreed).width(100).height(70).spaceTop(15).spaceBottom(15);
+        tableButtons.add(tableBreed).width(95).height(70).spaceTop(15).spaceBottom(15);
 
         Table tableInventory = new Table();
         tableInventory.add(inventoryButton);
@@ -197,7 +197,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
                 game.setScreen(new InventoryScreen(game, currentPlayer, mainScreenReference));
             }
         });
-        tableButtons.add(tableInventory).width(100).height(70).spaceTop(15).spaceBottom(15);
+        tableButtons.add(tableInventory).width(95).height(70).spaceTop(15).spaceBottom(15);
 
         table.row();
         table.add(tableButtons);

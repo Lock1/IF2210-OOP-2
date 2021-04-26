@@ -251,7 +251,17 @@ public class InventoryScreen implements Screen {
                     getSkillList();
                 }
                 else {
-                    forgetSkill(selectedSkill);
+                    if(getLearntSkillList().size() > 1) {
+                        forgetSkill(selectedSkill);
+                    }
+                    else {
+                        nameLabel.setText("Can't Forget Your Only Skill!");
+                        elementLabel.setText("");
+                        powerLabel.setText("");
+                        masteryLabel.setText("");
+                        countLabel.setText("");
+                        selectedSkill = null;
+                    }
                     // focusButton.setStyle(menuButtonStyle);
                 }
             }

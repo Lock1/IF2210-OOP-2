@@ -21,13 +21,7 @@ public class EngimonInventory extends Inventory<Engimon> {
     }
 
     public boolean deleteItem(Engimon e) {
-        for (int i = 0; i < itemList.size(); i++) {
-            if (itemList.get(i) == e) {
-                itemList.remove(i);
-                return true;
-            }
-        }
-        return false;
+        return itemList.remove(e);
     }
 
     public int getSize() {
