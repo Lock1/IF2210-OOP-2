@@ -10,11 +10,13 @@ public class KeyboardInput extends Thread {
     long lastPoll;
     long delta;
     boolean isThreadRunning;
+    boolean isBlocked;
 
     public KeyboardInput() {
         lastPoll = System.currentTimeMillis();
         isThreadRunning = true;
         delta = 0;
+        isBlocked = false;
     }
 
     @Override
@@ -24,7 +26,7 @@ public class KeyboardInput extends Thread {
     }
 
     public String getKeypress() {
-        if (delta > 150) {
+        if (delta > 150 && !isBlocked) {
             lastPoll = System.currentTimeMillis();
             if (Gdx.input.isKeyPressed(Input.Keys.W))
                 return "Up";
@@ -43,6 +45,14 @@ public class KeyboardInput extends Thread {
 
     public void stopThread() {
         isThreadRunning = false;
+    }
+
+    public void blockInput() {
+        isBlocked = true;
+    }
+
+    public void unblockInput() {
+        isBlocked = false;
     }
 
 }
