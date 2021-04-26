@@ -1,17 +1,23 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Gdx;
 import com.mygdx.game.entity.*;
-
 import com.mygdx.game.entity.engimon.*;
-import java.util.ArrayList;
-import com.mygdx.game.maps.OrthogonalTiledMapRendererWithSprites;
-import java.util.Random;
+import com.mygdx.game.entity.attributes.*;
+import com.mygdx.game.entity.Species;
 import com.mygdx.game.*;
+import com.mygdx.game.maps.OrthogonalTiledMapRendererWithSprites;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.Random;
+import java.lang.Math;
 
 public class GameLogic {
     private Player currentPlayer;
     private ArrayList<Entity> entityContainer;
+    private Entity[][] entityMap;
     private OrthogonalTiledMapRendererWithSprites rendererReference;
     private Random logicRandom;
     private SpeciesDatabase speciesDB;
@@ -21,10 +27,19 @@ public class GameLogic {
         speciesDB = new SpeciesDatabase();
         skillDB = new SkillDatabase();
 
+        entityMap = new Entity[50][50];
+        for (int i = 0; i < 48; i++) {
+            for (int j = 0; j < 48; j++)
+                entityMap[i][j] = null;
+        }
+
         logicRandom = new Random();
         currentPlayer = playerRef;
         entityContainer = new ArrayList<Entity>();
         entityContainer.add(playerRef);
+        int currentX = currentPlayer.getPosition().x;
+        int currentY = currentPlayer.getPosition().y;
+        entityMap[currentX][currentY] = currentPlayer;
         rendererReference = renderer;
     }
 
@@ -34,34 +49,111 @@ public class GameLogic {
 
     public void playerInput(String inputString) {
         System.out.println(inputString);
-        switch (inputString) {
-            case "Up":
-                currentPlayer.setPosition(new Position(currentPlayer.getPosition().x, currentPlayer.getPosition().y + 1));
-                break;
-            case "Down":
-                currentPlayer.setPosition(new Position(currentPlayer.getPosition().x, currentPlayer.getPosition().y - 1));
-                break;
-            case "Left":
-                currentPlayer.setPosition(new Position(currentPlayer.getPosition().x - 1, currentPlayer.getPosition().y));
-                break;
-            case "Right":
-                currentPlayer.setPosition(new Position(currentPlayer.getPosition().x + 1, currentPlayer.getPosition().y));
-                break;
-        }
+        this.entityMove(currentPlayer, inputString);
         tickUpdate();
     }
 
+    private boolean isWithinMap(int x, int y) {
+        return 0 <= x && x < 48 && 0 <= y && y < 48;
+    }
+
+    private void entityMove(Entity target, String moveString) {
+        for (int i = 0; i < 48; i++) {
+            for (int j = 0; j < 48; j++) {
+                if (entityMap[i][j] == target) {
+                    entityMap[i][j] = null;
+                    switch (moveString) {
+                        case "Up": // TODO : Add
+                            if (target.isTileMoveable() && isWithinMap(i, j+1)
+                                && entityMap[i][j+1] == null)
+                                target.setPosition(new Position(i, j + 1));
+                                // Else do battle or smth
+                            break;
+                        case "Down":
+                            if (target.isTileMoveable() && isWithinMap(i, j-1)
+                                && entityMap[i][j-1] == null)
+                                target.setPosition(new Position(i, j - 1));
+                            break;
+                        case "Left":
+                            if (target.isTileMoveable() && isWithinMap(i-1, j)
+                                && entityMap[i-1][j] == null)
+                                target.setPosition(new Position(i - 1, j));
+                            break;
+                        case "Right":
+                            if (target.isTileMoveable() && isWithinMap(i+1, j)
+                                && entityMap[i+1][j] == null)
+                                target.setPosition(new Position(i + 1, j));
+                            break;
+                    }
+                    entityMap[target.getPosition().x][target.getPosition().y] = target;
+                    return;
+                }
+            }
+        }
+    }
+
     public void tickUpdate() {
-        if (logicRandom.nextInt() % 100 < 3 && entityContainer.size() < 30) {
-            // TODO : add to renderer
+        int generatedNumber = logicRandom.nextInt() % 100;
+        if (0 <= generatedNumber && generatedNumber < 40 && entityContainer.size() < 30) {
+            // TODO : Tile checking, collision
             Engimon spawnedEngimon = generateEngimon();
-            System.out.println(spawnedEngimon.engimonName());
+            rendererReference.addSprite(spawnedEngimon.getSprite());
             entityContainer.add(spawnedEngimon);
+        }
+
+        for (Entity ent : entityContainer) {
+            if (ent instanceof Engimon) {
+                int moveRNG = logicRandom.nextInt() % 100;
+                if (0 <= moveRNG && moveRNG < 20) {
+                    String moveStr = "Up";
+                    switch (moveRNG % 4) {
+                        case 0:
+                            moveStr = "Up";
+                            break;
+                        case 1:
+                            moveStr = "Down";
+                            break;
+                        case 2:
+                            moveStr = "Left";
+                            break;
+                        case 3:
+                            moveStr = "Right";
+                            break;
+                    }
+                    entityMove(ent, moveStr);
+                }
+            }
         }
     }
 
     public Engimon generateEngimon() {
-        // TODO : Set sprite
-        return new Engimon(speciesDB.getRandomizedItem(), true, logicRandom.nextInt() % 40, logicRandom.nextInt() % 40);
+        int posX = logicRandom.nextInt() % 40;
+        int posY = logicRandom.nextInt() % 40;
+        Engimon spawnedEngimon = new Engimon(speciesDB.getRandomizedItem(), true, Math.abs(posX), Math.abs(posY));
+        entityMap[spawnedEngimon.getPosition().x][spawnedEngimon.getPosition().y] = spawnedEngimon;
+        Texture engimonTexture = null;
+        Sprite engimonSprite;
+        Element engimonFirstElement = spawnedEngimon.getSpecies().getElementSet().iterator().next();
+        switch (engimonFirstElement) {
+            case ELECTRIC:
+                engimonTexture = new Texture(Gdx.files.internal("./sprites/electric/left/move/1.png"));
+                break;
+            case WATER:
+                engimonTexture = new Texture(Gdx.files.internal("./sprites/water/left/move/1.png"));
+                break;
+            case ICE:
+                engimonTexture = new Texture(Gdx.files.internal("./sprites/ice/32bit-cuttlefish1.png"));
+                break;
+            case FIRE:
+                engimonTexture = new Texture(Gdx.files.internal("./sprites/fire/left/move/1.png"));
+                break;
+            case GROUND:
+                engimonTexture = new Texture(Gdx.files.internal("./sprites/ground/left/move/1.png"));
+                break;
+        }
+        engimonSprite = new Sprite(engimonTexture);
+        spawnedEngimon.setSprite(engimonSprite);
+        assert engimonSprite != null;
+        return spawnedEngimon;
     }
 }
