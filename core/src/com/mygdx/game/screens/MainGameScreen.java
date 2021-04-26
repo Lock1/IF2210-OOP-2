@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -73,6 +74,9 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
     // Player
     private Player currentPlayer;
 
+
+    public void getLegend() {}
+
     // Battle
     private Table tableMap;
     private Label battleTitle;
@@ -91,14 +95,6 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
     private Label lifeLabel;
     private Label playerPowerLabel;
     private Label enemyPowerLabel;
-
-    public void getDatabaseData() {
-        engimonInventory = new EngimonInventory(50);
-        engimonList = engimonInventory.getItemList();
-
-        skillInventory = new SkillInventory(50);
-        skillList = skillInventory.getItemList();
-    }
 
     public void battleDialog() {
         final Battle battle = new Battle(currentPlayer.getCurrentEngimon(), enemy);
@@ -252,7 +248,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         enemy = new Engimon(new Species(new Charmander()), false);
 
         mainScreenReference = this;
-//        getDatabaseData();
+
         this.currentPlayer = currentPlayer;
         currentPlayer.setEntityTileSize(tileWidth, tileHeight);
         currentPlayer.setTexture(new Texture(Gdx.files.internal("./sprites/player/idle_right.png")));
@@ -322,22 +318,88 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
 
         tableMap = new Table();
         tableMap.setBackground(background);
-        table.add(tableMap).width(300).height(440).right().center();
 
-//        Table tableDescription = new Table();
-//        Table tableCurrentEngimon = new Table();
-//        tableCurrentEngimon.setBackground(background2);
-//        Table tableMessage = new Table();
-//        tableMessage.setBackground(background2);
-//        Table tableBreedButton = new Table();
-//        tableBreedButton.add(breedButton);
-//        tableBreedButton.setBackground(background2);
-//        tableDescription.add(tableCurrentEngimon).width(200).height(150);
-//        tableDescription.row();
-//        tableDescription.add(tableMessage).width(200).height(150);
-//
-//        table.add(tableDescription).width(200).height(300).spaceRight(30).top();
-//
+        Label legendTitle = new Label("Legend", titleLabelStyle);
+        legendTitle.setSize(Gdx.graphics.getWidth(),row_height);
+        legendTitle.setPosition(0,Gdx.graphics.getHeight()-row_height*1);
+        legendTitle.setAlignment(Align.center);
+        tableMap.add(legendTitle).spaceBottom(20);
+        tableMap.row();
+
+        Texture electricTexture = new Texture(Gdx.files.internal("sprites/electric/left/move/1.png"));
+        Table electricTable = new Table();
+        Image electricImage = new Image(electricTexture);
+        electricTable.add(electricImage).width(45).height(45).padRight(2);
+        Label electricLabel = new Label("Electric", titleLabelStyle);
+        electricTable.add(electricLabel).width(40).height(40);
+        tableMap.add(electricTable);
+        tableMap.row();
+
+        Texture fireTexture = new Texture(Gdx.files.internal("sprites/fire/left/move/1.png"));
+        Table fireTable = new Table();
+        Image fireImage = new Image(fireTexture);
+        fireTable.add(fireImage).width(45).height(45).padRight(2);
+        Label fireLabel = new Label("Fire", titleLabelStyle);
+        fireTable.add(fireLabel).width(40).height(40);
+        tableMap.add(fireTable);
+        tableMap.row();
+
+        Texture groundTexture = new Texture(Gdx.files.internal("sprites/ground/left/move/1.png"));
+        Table groundTable = new Table();
+        Image groundImage = new Image(groundTexture);
+        groundTable.add(groundImage).width(55).height(55).padRight(-3);
+        Label groundLabel = new Label("Ground", titleLabelStyle);
+        groundTable.add(groundLabel).width(40).height(40);
+        tableMap.add(groundTable);
+        tableMap.row();
+
+        Texture iceTexture = new Texture(Gdx.files.internal("sprites/ice/32bit-cuttlefish1.png"));
+        Table iceTable = new Table();
+        Image iceImage = new Image(iceTexture);
+        iceTable.add(iceImage).width(30).height(30).padRight(20);
+        Label iceLabel = new Label("Ice", titleLabelStyle);
+        iceTable.add(iceLabel).width(40).height(40);
+        tableMap.add(iceTable);
+        tableMap.row();
+
+        Texture waterTexture = new Texture(Gdx.files.internal("sprites/water/left/move/1.png"));
+        Table waterTable = new Table();
+        Image waterImage = new Image(waterTexture);
+        waterTable.add(waterImage).width(65).height(65).padRight(-5);
+        Label waterLabel = new Label("Water", titleLabelStyle);
+        waterTable.add(waterLabel).width(40).height(40);
+        tableMap.add(waterTable);
+        tableMap.row();
+
+        Texture fireElectricTexture = new Texture(Gdx.files.internal("sprites/fire electric/left/move/1.png"));
+        Table fireElectricTable = new Table();
+        Image fireElectricImage = new Image(fireElectricTexture);
+        fireElectricTable.add(fireElectricImage).width(20).height(30).padRight(10);
+        Label fireElectricLabel = new Label("Fire Electric", titleLabelStyle);
+        fireElectricTable.add(fireElectricLabel).width(40).height(40);
+        tableMap.add(fireElectricTable);
+        tableMap.row();
+
+        Texture groundWaterTexture = new Texture(Gdx.files.internal("sprites/ground water/left/move/1.png"));
+        Table groundWaterTable = new Table();
+        Image groundWaterImage = new Image(groundWaterTexture);
+        groundWaterTable.add(groundWaterImage).width(30).height(30).padRight(20);
+        Label groundWaterLabel = new Label("Ground Water", titleLabelStyle);
+        groundWaterTable.add(groundWaterLabel).width(40).height(40);
+        tableMap.add(groundWaterTable);
+        tableMap.row();
+
+        Texture iceWaterTexture = new Texture(Gdx.files.internal("sprites/ice water/32bit-cuttlefish1.png"));
+        Table iceWaterTable = new Table();
+        Image iceWaterImage = new Image(iceWaterTexture);
+        iceWaterTable.add(iceWaterImage).width(30).height(30).padRight(20);
+        Label iceWaterLabel = new Label("Ice Water", titleLabelStyle);
+        iceWaterTable.add(iceWaterLabel).width(40).height(40);
+        tableMap.add(iceWaterTable);
+        tableMap.row();
+
+        table.add(tableMap).width(300).height(450).right().center();
+
         Table tableButtons = new Table();
 
         Table tableEngimon = new Table();
