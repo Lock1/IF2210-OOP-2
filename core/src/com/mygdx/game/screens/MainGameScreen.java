@@ -423,6 +423,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         for (Entity ent : currentState)
             ent.getSprite().setPosition(tileWidth*ent.getPosition().x, tileHeight*ent.getPosition().y);
 
+        renderer.addSprite(currentPlayer.getSprite());
         renderer.setView(camera);
         renderer.render();
 
@@ -441,10 +442,11 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
                 }
                 lastPoll = System.currentTimeMillis();
             }
-//            else if (System.currentTimeMillis() - lastPoll > 250) {
-//                mainGameLogic.tickUpdate();
-//                lastPoll = System.currentTimeMillis();
-//            }
+        }
+
+        if (System.currentTimeMillis() - lastPoll > 250) {
+            mainGameLogic.tickUpdate();
+            lastPoll = System.currentTimeMillis();
         }
        // isometricRenderer.setView(camera);
        // isometricRenderer.render();
