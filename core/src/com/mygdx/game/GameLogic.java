@@ -80,7 +80,7 @@ public class GameLogic {
                     entityMap[i][j] = null;
                     switch (moveString) {
                         case "Up": // TODO : Add
-                            if (target.isTileMoveable() && isWithinMap(i, j+1)) {
+                            if (target.isTileMoveable(i, j+1, tiledMapLayer) && isWithinMap(i, j+1)) {
                                 if (entityMap[i][j+1] == null)
                                     target.setPosition(new Position(i, j + 1));
                                 else {
@@ -90,7 +90,7 @@ public class GameLogic {
                             }
                             break;
                         case "Down":
-                            if (target.isTileMoveable() && isWithinMap(i, j-1)) {
+                            if (target.isTileMoveable(i, j-1, tiledMapLayer) && isWithinMap(i, j-1)) {
                                 if (entityMap[i][j-1] == null)
                                     target.setPosition(new Position(i, j - 1));
                                 else {
@@ -100,7 +100,7 @@ public class GameLogic {
                             }
                             break;
                         case "Left":
-                            if (target.isTileMoveable() && isWithinMap(i-1, j)) {
+                            if (target.isTileMoveable(i-1, j, tiledMapLayer) && isWithinMap(i-1, j)) {
                                 if (entityMap[i-1][j] == null)
                                     target.setPosition(new Position(i - 1, j));
                                 else {
@@ -110,7 +110,7 @@ public class GameLogic {
                             }
                             break;
                         case "Right":
-                            if (target.isTileMoveable() && isWithinMap(i+1, j)) {
+                            if (target.isTileMoveable(i+1, j, tiledMapLayer) && isWithinMap(i+1, j)) {
                                 if (entityMap[i+1][j] == null)
                                     target.setPosition(new Position(i + 1, j));
                                 else {
