@@ -53,6 +53,7 @@ public class EngimonScreen implements Screen {
     private TextButton previousButton;
     private TextButton.TextButtonStyle menuButtonStyle;
     private TextButton.TextButtonStyle selectedButtonStyle;
+    private MainGameScreen parentMain;
 
     public void getEngimonList() {
         engimonList = currentPlayer.getEngimonItem();
@@ -70,12 +71,14 @@ public class EngimonScreen implements Screen {
         currentPlayer.changeEngimon(selectedEngimon);
     }
 
-    public EngimonScreen(Game aGame, final Player currentPlayer) {
+    public EngimonScreen(Game aGame, final Player currentPlayer, MainGameScreen mainparent) {
         // Setup Stage
         game = aGame;
         stage = new Stage(new ScreenViewport());
         this.currentPlayer = currentPlayer;
         getEngimonList();
+
+        parentMain = mainparent;
 
         int row_height = Gdx.graphics.getWidth() / 12;
         stage = new Stage(new ScreenViewport());
@@ -110,7 +113,7 @@ public class EngimonScreen implements Screen {
         backButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new MainGameScreen(game, currentPlayer));
+                game.setScreen(parentMain);
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {

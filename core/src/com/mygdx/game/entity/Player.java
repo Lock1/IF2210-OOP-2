@@ -18,7 +18,8 @@ public class Player extends Entity {
 
 
 
-    public Player(int maxInv) {
+    public Player(int maxInv, int x, int y) {
+        super(x, y);
         playerEngimons = new EngimonInventory(maxInv);
         playerItems = new SkillInventory(maxInv);
         currentEngimon = null;

@@ -29,12 +29,14 @@ public class PauseScreen implements Screen {
     private Label titleLabel;
     private Table table;
     private Player currentPlayer;
+    private MainGameScreen parentMain;
 
-    public PauseScreen(Game aGame, final Player currentPlayer) {
+    public PauseScreen(Game aGame, Player currentPlayer, MainGameScreen mainScreen) {
         // Setup Stage
         game = aGame;
         stage = new Stage(new ScreenViewport());
         this.currentPlayer = currentPlayer;
+        parentMain = mainScreen;
 
         int row_height = Gdx.graphics.getWidth() / 12;
         stage = new Stage(new ScreenViewport());
@@ -95,7 +97,7 @@ public class PauseScreen implements Screen {
         tableContinue.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MainGameScreen(game, currentPlayer));
+                game.setScreen(parentMain);
             }
         });
         table.add(tableContinue).width(100).height(200);

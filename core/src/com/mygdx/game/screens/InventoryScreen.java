@@ -45,6 +45,7 @@ public class InventoryScreen implements Screen {
     private Label descriptionLabel;
     private ArrayList<Skill> skillList;
     private Player currentPlayer;
+    private MainGameScreen parentMain;
 
     TextButton.TextButtonStyle menuButtonStyle;
     TextButton.TextButtonStyle selectedButtonStyle;
@@ -94,12 +95,13 @@ public class InventoryScreen implements Screen {
         return getLearntSkillList().contains(e);
     }
 
-    public InventoryScreen(Game aGame, final Player currentPlayer) {
+    public InventoryScreen(Game aGame, final Player currentPlayer, MainGameScreen mainparent) {
         // Setup Stage
         game = aGame;
         stage = new Stage(new ScreenViewport());
         this.currentPlayer = currentPlayer;
         getSkillList();
+        parentMain = mainparent;
 
         // Default
         selectedSkill = currentPlayer.getCurrentEngimon().getSkillArray().get(0);
@@ -138,7 +140,7 @@ public class InventoryScreen implements Screen {
         backButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new MainGameScreen(game, currentPlayer));
+                game.setScreen(parentMain);
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -250,7 +252,7 @@ public class InventoryScreen implements Screen {
                 }
                 else {
                     forgetSkill(selectedSkill);
-                    focusButton.setStyle(menuButtonStyle);
+                    // focusButton.setStyle(menuButtonStyle);
                 }
             }
         });

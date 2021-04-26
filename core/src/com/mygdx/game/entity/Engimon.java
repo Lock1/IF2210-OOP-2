@@ -24,7 +24,8 @@ public class Engimon extends Entity {
 
     public static final int maximumCumulativeXP = 10000;
 
-    public Engimon(Species e, boolean wild) { // TODO : Pos
+    public Engimon(Species e, boolean wild, int x, int y) {
+        super(x, y);
         speciesType = e;
         this.cumulativeExperience = 0;
         this.experience = 0;
@@ -41,7 +42,26 @@ public class Engimon extends Entity {
             lifeCount = 3;
     }
 
-    public Engimon(Species e, boolean wild, int baselevel) { // TODO : Pos
+    public Engimon(Species e, boolean wild) {
+        super(0, 0);
+        speciesType = e;
+        this.cumulativeExperience = 0;
+        this.experience = 0;
+        this.level = 1;
+        learnedSkill = new ArrayList<Skill>();
+        learnedSkill.add(new Skill(e.baseSkill()));
+        parent1Species = null;
+        parent2Species = null;
+        engimonName = e.speciesName();
+
+        if (wild)
+            lifeCount = 1;
+        else
+            lifeCount = 3;
+    }
+
+    public Engimon(Species e, boolean wild, int baselevel, int x, int y) {
+        super(x, y);
         speciesType = e;
         this.cumulativeExperience = 0;
         this.experience = 0;
