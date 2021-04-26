@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.maps.tiled.*;
 
+import com.mygdx.game.Savegame;
 import com.mygdx.game.KeyboardInput;
 import com.mygdx.game.GameLogic;
 import com.mygdx.game.entity.Entity;
@@ -118,7 +119,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         menuButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new PauseScreen(game, currentPlayer, mainScreenReference));
+                game.setScreen(new PauseScreen(game, currentPlayer, mainScreenReference, mainGameLogic.getEntities()));
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -215,22 +216,24 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         playerKeyboardInput = new KeyboardInput();
         playerKeyboardInput.start();
 
-
-    }
-
-    @Override
-    public void show() {
-        Gdx.app.log("MainScreen","show");
-//        Gdx.input.setInputProcessor(stage);
         TmxMapLoader loader = new TmxMapLoader();
         map = loader.load("Map.tmx");
-//        renderer = new OrthogonalTiledMapRenderer(map);
+        //        renderer = new OrthogonalTiledMapRenderer(map);
         tileWidth = map.getProperties().get("tilewidth", Integer.class);
         tileHeight = map.getProperties().get("tileheight", Integer.class);
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false,1500,1150);
         camera.update();
+
+        mainGameLogic = new GameLogic(currentPlayer, map);
+    }
+
+    @Override
+    public void show() {
+        Gdx.app.log("MainScreen","show");
+//        Gdx.input.setInputProcessor(stage);
+
 
         // testposx = 30;
         // testposy = 30;
@@ -240,7 +243,11 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
 
         renderer = new OrthogonalTiledMapRendererWithSprites(map, spBatch);
         renderer.addSprite(currentPlayer.getSprite());
-        mainGameLogic = new GameLogic(currentPlayer, renderer, map);
+        mainGameLogic.setRenderer(renderer);
+        ArrayList<Entity> targetEntity = mainGameLogic.getEntities();
+        for (Entity e : targetEntity)
+            renderer.addSprite(e.getSprite());
+
 //        Gdx.input.setInputProcessor(this);
         Gdx.input.setInputProcessor(stage);
     }
