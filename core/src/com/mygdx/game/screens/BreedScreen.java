@@ -20,7 +20,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.game.SpeciesDatabase;
+import com.mygdx.game.action.Breed;
+import com.mygdx.game.entity.Engimon;
 import com.mygdx.game.entity.Player;
+
+import java.util.ArrayList;
 
 public class BreedScreen implements Screen {
     private Stage stage;
@@ -34,17 +39,31 @@ public class BreedScreen implements Screen {
                 "Ice",
                 "Fire",
                 "Earth"};
-    private String currentBreedOne = "";
-    private String currentBreedTwo = "";
+    private Engimon currentParentOne;
+    private Engimon currentParentTwo;
+    private Engimon resultChild;
     private Label breedOneLabel;
     private Label breedTwoLabel;
+    private Label resultLabel;
     private Player currentPlayer;
+
+    private TextButton.TextButtonStyle menuButtonStyle;
+    private Label.LabelStyle selectedButtonStyle;
+
+    private Breed breed;
+
+    private ArrayList<Engimon> parentList;
+
+    public void initParents() {
+        parentList = currentPlayer.getEngimonByMinLevel(4);
+    }
 
     public BreedScreen(Game aGame, final Player currentPlayer) {
         // Setup Stage
         game = aGame;
         stage = new Stage(new ScreenViewport());
         this.currentPlayer = currentPlayer;
+        initParents();
 
         int row_height = Gdx.graphics.getWidth() / 12;
         stage = new Stage(new ScreenViewport());
@@ -62,15 +81,26 @@ public class BreedScreen implements Screen {
         titleLabel.setAlignment(Align.center);
         stage.addActor(titleLabel);
 
-        // Style untuk TextButtons
-        TextButton.TextButtonStyle menuButtonStyle = new TextButton.TextButtonStyle();
+        // Result TextButtons
+        resultLabel = new Label("", titleLabelStyle);
+        resultLabel.setWrap(true);
+        resultLabel.setAlignment(Align.center);
+        resultLabel.setWidth(150);
+
+        // Style untuk TextButtons dan Label
+        menuButtonStyle = new TextButton.TextButtonStyle();
         menuButtonStyle.font = new BitmapFont();
         menuButtonStyle.fontColor = Color.BLACK;
+
+        selectedButtonStyle = new Label.LabelStyle();
+        selectedButtonStyle.font = new BitmapFont();
+        selectedButtonStyle.fontColor = Color.RED;
 
         // Definisi dan Implementasi TextButtons
         TextButton engimonButton = new TextButton("Your Engimon", menuButtonStyle);
         TextButton engimonOneButton = new TextButton("Engimon 1", menuButtonStyle);
         TextButton engimonTwoButton = new TextButton("Engimon 2", menuButtonStyle);
+        TextButton resultButton = new TextButton("Result", menuButtonStyle);
         TextButton breedButton = new TextButton("Breed", menuButtonStyle);
         TextButton backButton = new TextButton("<< Back", menuButtonStyle);
         backButton.addListener(new InputListener(){
@@ -104,25 +134,24 @@ public class BreedScreen implements Screen {
         // Tables untuk menyusun TextButtons
         table = new Table();
 
-        table.add(engimonButton).width(400).spaceRight(60);
+        table.add(engimonButton).width(300).spaceRight(30).padTop(30);
         // table.add(statButton).width(200);
         table.row();
 
         Table tableEngimon = new Table();
         tableEngimon.setBackground(background);
         tableEngimon.top().padTop(20);
-        for(int i=0;i<engimonDummy.length;i++) {
-            TextButton itemButton = new TextButton(engimonDummy[i], menuButtonStyle);
+        for(final Engimon parent : parentList) {
+            TextButton itemButton = new TextButton(parent.engimonName(), menuButtonStyle);
             tableEngimon.add(itemButton).padTop(10).padBottom(10);
-            final int j = i;
             itemButton.addListener(new InputListener(){
                 @Override
                 public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                    if(currentBreedOne.equals("")) {
-                        currentBreedOne = engimonDummy[j];
+                    if(currentParentOne == null) {
+                        currentParentOne = parent;
                     }
-                    else if (currentBreedTwo.equals("")) {
-                        currentBreedTwo = engimonDummy[j];
+                    else if (currentParentTwo  == null) {
+                        currentParentTwo = parent;
                     }
                 }
                 @Override
@@ -132,13 +161,14 @@ public class BreedScreen implements Screen {
             });
             tableEngimon.row();
         }
-        table.add(tableEngimon).width(400).height(400).spaceRight(60);
+        table.add(tableEngimon).width(300).height(500).spaceRight(30);
 
         Table tableBreed = new Table();
+        tableBreed.padTop(30);
 
         Table tableEngimonOne = new Table();
         tableEngimonOne.setBackground(background2);
-        breedOneLabel = new Label(currentBreedOne, titleLabelStyle);
+        breedOneLabel = new Label("", titleLabelStyle);
         breedOneLabel.setWrap(true);
         breedOneLabel.setWidth(160);
         breedOneLabel.setSize(Gdx.graphics.getWidth(),row_height);
@@ -146,18 +176,18 @@ public class BreedScreen implements Screen {
         breedOneLabel.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                currentBreedOne = "";
+                currentParentOne = null;
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 return true;
             }
         });
-        tableEngimonOne.add(breedOneLabel).width(160);
+        tableEngimonOne.add(breedOneLabel).width(140);
 
         Table tableEngimonTwo = new Table();
         tableEngimonTwo.setBackground(background2);
-        breedTwoLabel = new Label(currentBreedTwo, titleLabelStyle);
+        breedTwoLabel = new Label("", titleLabelStyle);
         breedTwoLabel.setWrap(true);
         breedTwoLabel.setWidth(160);
         breedTwoLabel.setSize(Gdx.graphics.getWidth(),row_height);
@@ -165,29 +195,55 @@ public class BreedScreen implements Screen {
         breedTwoLabel.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                currentBreedTwo = "";
+                currentParentTwo = null;
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 return true;
             }
         });
-        tableEngimonTwo.add(breedTwoLabel).width(160);
+        tableEngimonTwo.add(breedTwoLabel).width(140);
 
         Table tableBreedButton = new Table();
         tableBreedButton.add(breedButton);
         tableBreedButton.setBackground(background3);
+        tableBreedButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(currentParentOne == null || currentParentTwo == null) {
+                    resultLabel.setText("Please Select Two Parent Engimons");
+                    resultLabel.setStyle(selectedButtonStyle);
+                }
+                else {
+                    breed = new Breed(currentParentOne, currentParentTwo);
+                    resultChild = breed.startBreeding(new SpeciesDatabase());
+                    resultLabel.setText(resultChild.engimonName());
+                }
+            }
+        });
+
         tableBreed.add(engimonOneButton);
         tableBreed.row();
-        tableBreed.add(tableEngimonOne).width(200).height(150);
+        tableBreed.add(tableEngimonOne).width(170).height(150);
         tableBreed.row();
         tableBreed.add(engimonTwoButton);
         tableBreed.row();
-        tableBreed.add(tableEngimonTwo).width(200).height(150);
+        tableBreed.add(tableEngimonTwo).width(170).height(150);
         tableBreed.row();
         tableBreed.add(tableBreedButton).width(100).height(70);
 
-        table.add(tableBreed).width(200).height(300);
+        table.add(tableBreed).width(170).height(300).spaceLeft(15).spaceRight(15);
+
+        Table tableRightest = new Table();
+        tableRightest.add(resultButton).spaceBottom(3);
+        tableRightest.row();
+        Table tableResult = new Table();
+        tableResult.setBackground(background2);
+        tableResult.add(resultLabel).width(150);
+
+        tableRightest.add(tableResult);
+
+        table.add(tableRightest).width(170).height(150).spaceLeft(30);
 
         table.setFillParent(true);
 
@@ -209,8 +265,12 @@ public class BreedScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         stage.act();
-        breedOneLabel.setText(currentBreedOne);
-        breedTwoLabel.setText(currentBreedTwo);
+        if(currentParentOne != null) {
+            breedOneLabel.setText(currentParentOne.engimonName());
+        }
+        if(currentParentTwo != null) {
+            breedTwoLabel.setText(currentParentTwo.engimonName());
+        }
         stage.draw();
         batch.end();
     }

@@ -127,7 +127,7 @@ public class Engimon extends Entity {
     }
 
     public void breedingLevelDown() {
-        level -= 30;
+        level -= 3;
     }
 
     public void addParent(Species e, String name) {
