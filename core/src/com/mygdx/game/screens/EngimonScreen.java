@@ -42,7 +42,8 @@ public class EngimonScreen implements Screen {
     private Engimon selectedEngimon = null;
     private Label nameLabel;
     private Label elementLabel;
-    private Label secondElementLabel;
+    private Label parentNameLabel;
+    private Label parentSpeciesLabel;
     private Label levelLabel;
     private Label expLabel;
     private Label lifeLabel;
@@ -190,14 +191,6 @@ public class EngimonScreen implements Screen {
         tableStats.add(elementLabel).width(240).padTop(10).padBottom(10);
         tableStats.row();
 
-        secondElementLabel = new Label("", titleLabelStyle);
-        secondElementLabel.setWrap(true);
-        secondElementLabel.setWidth(240);
-        secondElementLabel.setSize(Gdx.graphics.getWidth(),row_height);
-        secondElementLabel.setAlignment(Align.center);
-        tableStats.add(secondElementLabel).width(240).padTop(10).padBottom(10);
-        tableStats.row();
-
         levelLabel = new Label("", titleLabelStyle);
         levelLabel.setWrap(true);
         levelLabel.setWidth(240);
@@ -220,6 +213,22 @@ public class EngimonScreen implements Screen {
         lifeLabel.setSize(Gdx.graphics.getWidth(),row_height);
         lifeLabel.setAlignment(Align.center);
         tableStats.add(lifeLabel).width(240).padTop(10).padBottom(10);
+        tableStats.row();
+
+        parentNameLabel = new Label("", titleLabelStyle);
+        parentNameLabel.setWrap(true);
+        parentNameLabel.setWidth(240);
+        parentNameLabel.setSize(Gdx.graphics.getWidth(),row_height);
+        parentNameLabel.setAlignment(Align.center);
+        tableStats.add(parentNameLabel).width(240).padTop(10).padBottom(10);
+        tableStats.row();
+
+        parentSpeciesLabel = new Label("", titleLabelStyle);
+        parentSpeciesLabel.setWrap(true);
+        parentSpeciesLabel.setWidth(240);
+        parentSpeciesLabel.setSize(Gdx.graphics.getWidth(),row_height);
+        parentSpeciesLabel.setAlignment(Align.center);
+        tableStats.add(parentNameLabel).width(240).padTop(10).padBottom(10);
         tableStats.row();
 
 //        skillLabel = new Label("", titleLabelStyle);
@@ -275,15 +284,23 @@ public class EngimonScreen implements Screen {
         // Rerender Labels
         if(selectedEngimon != null) {
             nameLabel.setText("Name\n" + selectedEngimon.engimonName());
-            elementLabel.setText("Element\n" + selectedEngimon.getSpecies().getElementSet().toArray()[0].toString());
+            String elementString = "Element\n" + selectedEngimon.getSpecies().getElementSet().toArray()[0].toString();
             if (selectedEngimon.getSpecies().getElementSet().size() == 2)
-                secondElementLabel.setText(selectedEngimon.getSpecies().getElementSet().toArray()[1].toString());
-            else
-                secondElementLabel.setText("");
+                elementString = elementString + ", " + selectedEngimon.getSpecies().getElementSet().toArray()[1].toString();
+
+            elementLabel.setText(elementString);
             levelLabel.setText("Level\n" + String.valueOf(selectedEngimon.level()));
             expLabel.setText("Experience\n" + String.valueOf(selectedEngimon.getExperience()));
             lifeLabel.setText("Life Count\n" + String.valueOf(selectedEngimon.lifeCount()));
-//            skillLabel.setText("Skills\n" + selectedEngimon.getSkillArray().get(0).skillName());
+
+            if (selectedEngimon.getParentName() != null) {
+                parentNameLabel.setText("Parents\n" + selectedEngimon.getParentName()[0] + ", " + selectedEngimon.getParentName()[1]);
+                parentSpeciesLabel.setText(selectedEngimon.getParentSpecies()[0].speciesName() + ", " + selectedEngimon.getParentSpecies()[1].speciesName());
+            }
+            else {
+                parentNameLabel.setText("");
+                parentSpeciesLabel.setText("");
+            }
         }
 
         stage.draw();
