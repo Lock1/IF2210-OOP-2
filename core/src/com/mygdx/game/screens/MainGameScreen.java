@@ -53,10 +53,6 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
     private int minTile = 0;
     private int maxTile = 48;
     private SpriteBatch spBatch = new SpriteBatch();
-    private Texture testtexture;
-    private Sprite testsprite;
-    private int testposx;
-    private int testposy;
     private MainGameScreen mainScreenReference;
 
     // Inventories
@@ -80,11 +76,14 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         // Setup Stage
         game = aGame;
         stage = new Stage(new ScreenViewport());
-        System.out.println("pong");
 
         mainScreenReference = this;
 //        getDatabaseData();
         this.currentPlayer = currentPlayer;
+        currentPlayer.setEntityTileSize(tileWidth, tileHeight);
+        currentPlayer.setTexture(new Texture(Gdx.files.internal("./sprites/electric/left/move/1.png")));
+        currentPlayer.setSprite(new Sprite(currentPlayer.getTexture()));
+        currentPlayer.getSprite().setPosition(tileWidth*currentPlayer.getPosition().x,tileHeight*currentPlayer.getPosition().y);
 
         int row_height = Gdx.graphics.getWidth() / 12;
         stage = new Stage(new ScreenViewport());
@@ -212,7 +211,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         playerKeyboardInput = new KeyboardInput();
         playerKeyboardInput.start();
 
-        mainGameLogic = new GameLogic();
+        mainGameLogic = new GameLogic(currentPlayer, renderer);
     }
 
     @Override
@@ -229,14 +228,14 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         camera.setToOrtho(false,1500,1150);
         camera.update();
 
-        testposx = 30;
-        testposy = 30;
-        testtexture = new Texture(Gdx.files.internal("./sprites/electric/left/move/1.png"));
-        testsprite = new Sprite(testtexture);
-        testsprite.setPosition(tileWidth*testposx,tileHeight*testposy);
+        // testposx = 30;
+        // testposy = 30;
+        // testtexture = new Texture(Gdx.files.internal("./sprites/electric/left/move/1.png"));
+        // testsprite = new Sprite(testtexture);
+        // testsprite.setPosition(tileWidth*testposx,tileHeight*testposy);
 
         renderer = new OrthogonalTiledMapRendererWithSprites(map, spBatch);
-        renderer.addSprite(testsprite);
+        renderer.addSprite(currentPlayer.getSprite());
 
 //        Gdx.input.setInputProcessor(this);
         Gdx.input.setInputProcessor(stage);
@@ -262,21 +261,10 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
 
         String keydata = playerKeyboardInput.getKeypress();
         if (keydata != null) {
-            switch (keydata) {
-                case "Up":
-                    testposy++;
-                    break;
-                case "Down":
-                    testposy--;
-                    break;
-                case "Left":
-                    testposx--;
-                    break;
-                case "Right":
-                    testposx++;
-                    break;
-            }
-            testsprite.setPosition(tileWidth*testposx,tileHeight*testposy);
+            mainGameLogic.playerInput(keydata);
+            System.out.println(currentPlayer.getPosition().x);
+            System.out.println(currentPlayer.getPosition().y);
+            // testsprite.setPosition(tileWidth*testposx,tileHeight*testposy);
         }
        // isometricRenderer.setView(camera);
        // isometricRenderer.render();
