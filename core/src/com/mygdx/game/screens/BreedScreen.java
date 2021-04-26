@@ -49,7 +49,7 @@ public class BreedScreen implements Screen {
     private MainGameScreen parentMain;
 
 
-    
+
 
     private TextButton.TextButtonStyle menuButtonStyle;
     private Label.LabelStyle selectedButtonStyle;
@@ -224,6 +224,7 @@ public class BreedScreen implements Screen {
                     breed = new Breed(currentParentOne, currentParentTwo);
                     resultChild = breed.startBreeding(new SpeciesDatabase());
                     resultLabel.setText(resultChild.engimonName());
+                    currentPlayer.addItem(resultChild);
                 }
             }
         });
