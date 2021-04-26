@@ -428,8 +428,16 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         stage.draw();
 
         ArrayList<Entity> currentState = mainGameLogic.getEntities();
-        for (Entity ent : currentState)
+        for (Entity ent : currentState) {
+            if (ent instanceof Engimon) {
+                float targetSize = 10*((Engimon) ent).level();
+                if (targetSize > 40)
+                    ent.getSprite().setSize(targetSize, targetSize);
+                else
+                    ent.getSprite().setSize(40, 40);
+            }
             ent.getSprite().setPosition(tileWidth*ent.getPosition().x, tileHeight*ent.getPosition().y);
+        }
 
         renderer.addSprite(currentPlayer.getSprite());
         renderer.setView(camera);
