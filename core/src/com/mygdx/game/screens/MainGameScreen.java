@@ -194,7 +194,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         tableMap.add(waterTable);
         tableMap.row();
 
-        Texture fireElectricTexture = new Texture(Gdx.files.internal("sprites/fire electric/fire-electric.png"));
+        Texture fireElectricTexture = new Texture(Gdx.files.internal("sprites/fire electric/left/move/1.png"));
         Table fireElectricTable = new Table();
         Image fireElectricImage = new Image(fireElectricTexture);
         fireElectricTable.add(fireElectricImage).width(50).height(50).padRight(2);
@@ -203,7 +203,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         tableMap.add(fireElectricTable);
         tableMap.row();
 
-        Texture groundWaterTexture = new Texture(Gdx.files.internal("sprites/ground water/ground water1.png"));
+        Texture groundWaterTexture = new Texture(Gdx.files.internal("sprites/ground water/left/move/1.png"));
         Table groundWaterTable = new Table();
         Image groundWaterImage = new Image(groundWaterTexture);
         waterTable.add(groundWaterImage).width(50).height(50).padRight(2);
@@ -212,7 +212,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         tableMap.add(groundWaterTable);
         tableMap.row();
 
-        Texture iceWaterTexture = new Texture(Gdx.files.internal("sprites/ice water/ice water.png"));
+        Texture iceWaterTexture = new Texture(Gdx.files.internal("sprites/ice water/32bit-cuttlefish1.png"));
         Table iceWaterTable = new Table();
         Image iceWaterImage = new Image(iceWaterTexture);
         iceWaterTable.add(iceWaterImage).width(50).height(50).padRight(2);
