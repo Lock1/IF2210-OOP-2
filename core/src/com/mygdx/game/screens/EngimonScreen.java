@@ -42,6 +42,7 @@ public class EngimonScreen implements Screen {
     private Engimon selectedEngimon = null;
     private Label nameLabel;
     private Label elementLabel;
+    private Label secondElementLabel;
     private Label levelLabel;
     private Label expLabel;
     private Label lifeLabel;
@@ -140,7 +141,7 @@ public class EngimonScreen implements Screen {
         Table tableEngimon = new Table();
         tableEngimon.setBackground(background);
         tableEngimon.top().padTop(20);
-        for(final Engimon engimon : engimonList) {
+        for (final Engimon engimon : engimonList) {
             final TextButton itemButton;
             if(currentPlayer.getCurrentEngimon().equals(engimon)) {
                 itemButton = new TextButton(engimon.engimonName(), selectedButtonStyle);
@@ -184,6 +185,14 @@ public class EngimonScreen implements Screen {
         elementLabel.setSize(Gdx.graphics.getWidth(),row_height);
         elementLabel.setAlignment(Align.center);
         tableStats.add(elementLabel).width(240).padTop(10).padBottom(10);
+        tableStats.row();
+
+        secondElementLabel = new Label("", titleLabelStyle);
+        secondElementLabel.setWrap(true);
+        secondElementLabel.setWidth(240);
+        secondElementLabel.setSize(Gdx.graphics.getWidth(),row_height);
+        secondElementLabel.setAlignment(Align.center);
+        tableStats.add(secondElementLabel).width(240).padTop(10).padBottom(10);
         tableStats.row();
 
         levelLabel = new Label("", titleLabelStyle);
@@ -264,6 +273,10 @@ public class EngimonScreen implements Screen {
         if(selectedEngimon != null) {
             nameLabel.setText("Name\n" + selectedEngimon.engimonName());
             elementLabel.setText("Element\n" + selectedEngimon.getSpecies().getElementSet().toArray()[0].toString());
+            if (selectedEngimon.getSpecies().getElementSet().size() == 2)
+                secondElementLabel.setText(selectedEngimon.getSpecies().getElementSet().toArray()[1].toString());
+            else
+                secondElementLabel.setText("");
             levelLabel.setText("Level\n" + String.valueOf(selectedEngimon.level()));
             expLabel.setText("Experience\n" + String.valueOf(selectedEngimon.getExperience()));
             lifeLabel.setText("Life Count\n" + String.valueOf(selectedEngimon.lifeCount()));

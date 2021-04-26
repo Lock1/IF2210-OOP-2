@@ -74,6 +74,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         // Setup Stage
         game = aGame;
         stage = new Stage(new ScreenViewport());
+        System.out.println("pong");
 
 //        getDatabaseData();
         this.currentPlayer = currentPlayer;
