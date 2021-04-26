@@ -152,76 +152,76 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         Texture electricTexture = new Texture(Gdx.files.internal("sprites/electric/left/move/1.png"));
         Table electricTable = new Table();
         Image electricImage = new Image(electricTexture);
-        electricTable.add(electricImage).width(50).height(50).padRight(2);
+        electricTable.add(electricImage).width(45).height(45).padRight(2);
         Label electricLabel = new Label("Electric", titleLabelStyle);
-        electricTable.add(electricLabel).width(50).height(50);
+        electricTable.add(electricLabel).width(40).height(40);
         tableMap.add(electricTable);
         tableMap.row();
 
         Texture fireTexture = new Texture(Gdx.files.internal("sprites/fire/left/move/1.png"));
         Table fireTable = new Table();
         Image fireImage = new Image(fireTexture);
-        fireTable.add(fireImage).width(50).height(50).padRight(2);
+        fireTable.add(fireImage).width(45).height(45).padRight(2);
         Label fireLabel = new Label("Fire", titleLabelStyle);
-        fireTable.add(fireLabel).width(50).height(50);
+        fireTable.add(fireLabel).width(40).height(40);
         tableMap.add(fireTable);
         tableMap.row();
 
         Texture groundTexture = new Texture(Gdx.files.internal("sprites/ground/left/move/1.png"));
         Table groundTable = new Table();
         Image groundImage = new Image(groundTexture);
-        groundTable.add(groundImage).width(50).height(50).padRight(2);
+        groundTable.add(groundImage).width(55).height(55).padRight(-3);
         Label groundLabel = new Label("Ground", titleLabelStyle);
-        groundTable.add(groundLabel).width(50).height(50);
+        groundTable.add(groundLabel).width(40).height(40);
         tableMap.add(groundTable);
         tableMap.row();
 
         Texture iceTexture = new Texture(Gdx.files.internal("sprites/ice/32bit-cuttlefish1.png"));
         Table iceTable = new Table();
         Image iceImage = new Image(iceTexture);
-        iceTable.add(iceImage).width(50).height(50).padRight(2);
+        iceTable.add(iceImage).width(30).height(30).padRight(20);
         Label iceLabel = new Label("Ice", titleLabelStyle);
-        iceTable.add(iceLabel).width(50).height(50);
+        iceTable.add(iceLabel).width(40).height(40);
         tableMap.add(iceTable);
         tableMap.row();
 
         Texture waterTexture = new Texture(Gdx.files.internal("sprites/water/left/move/1.png"));
         Table waterTable = new Table();
         Image waterImage = new Image(waterTexture);
-        waterTable.add(waterImage).width(50).height(50).padRight(2);
+        waterTable.add(waterImage).width(65).height(65).padRight(-5);
         Label waterLabel = new Label("Water", titleLabelStyle);
-        waterTable.add(waterLabel).width(50).height(50);
+        waterTable.add(waterLabel).width(40).height(40);
         tableMap.add(waterTable);
         tableMap.row();
 
         Texture fireElectricTexture = new Texture(Gdx.files.internal("sprites/fire electric/fire-electric.png"));
         Table fireElectricTable = new Table();
         Image fireElectricImage = new Image(fireElectricTexture);
-        fireElectricTable.add(fireElectricImage).width(50).height(50).padRight(2);
+        fireElectricTable.add(fireElectricImage).width(20).height(30).padRight(10);
         Label fireElectricLabel = new Label("Fire Electric", titleLabelStyle);
-        fireElectricTable.add(fireElectricLabel).width(50).height(50);
+        fireElectricTable.add(fireElectricLabel).width(40).height(40);
         tableMap.add(fireElectricTable);
         tableMap.row();
 
         Texture groundWaterTexture = new Texture(Gdx.files.internal("sprites/ground water/ground water1.png"));
         Table groundWaterTable = new Table();
         Image groundWaterImage = new Image(groundWaterTexture);
-        waterTable.add(groundWaterImage).width(50).height(50).padRight(2);
+        groundWaterTable.add(groundWaterImage).width(30).height(30).padRight(20);
         Label groundWaterLabel = new Label("Ground Water", titleLabelStyle);
-        groundWaterTable.add(groundWaterLabel).width(50).height(50);
+        groundWaterTable.add(groundWaterLabel).width(40).height(40);
         tableMap.add(groundWaterTable);
         tableMap.row();
 
         Texture iceWaterTexture = new Texture(Gdx.files.internal("sprites/ice water/ice water.png"));
         Table iceWaterTable = new Table();
         Image iceWaterImage = new Image(iceWaterTexture);
-        iceWaterTable.add(iceWaterImage).width(50).height(50).padRight(2);
+        iceWaterTable.add(iceWaterImage).width(30).height(30).padRight(20);
         Label iceWaterLabel = new Label("Ice Water", titleLabelStyle);
-        iceWaterTable.add(iceWaterLabel).width(50).height(50);
+        iceWaterTable.add(iceWaterLabel).width(40).height(40);
         tableMap.add(iceWaterTable);
         tableMap.row();
 
-        table.add(tableMap).width(300).height(400).right().center();
+        table.add(tableMap).width(300).height(450).right().center();
 
         Table tableButtons = new Table();
 
