@@ -53,6 +53,7 @@ public class MainMenuScreen implements Screen {
         newPlayer.addItem(new Engimon(new Pinsir(), false));
         newPlayer.addItem(new Engimon(new Spheal(), false));
         newPlayer.addItem(new Skill(new Blizzard()));
+        newPlayer.addItem(new Skill(new Blizzard()));
         newPlayer.addItem(new Skill(new Ember()));
         newPlayer.addItem(new Skill(new IceBeam()));
         newPlayer.addItem(new Skill(new HydroPump()));

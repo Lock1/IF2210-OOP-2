@@ -46,19 +46,31 @@ public class InventoryScreen implements Screen {
     private ArrayList<Skill> skillList;
     private Player currentPlayer;
 
+    TextButton.TextButtonStyle menuButtonStyle;
+    TextButton.TextButtonStyle selectedButtonStyle;
+
     private Label nameLabel;
     private Label elementLabel;
     private Label powerLabel;
     private Label masteryLabel;
     private Label countLabel;
 
+    private TextButton selectButton;
+    private TextButton focusButton;
+
+    private Table tableInventory;
+    private Table tableLearnedInventory;
+
     public void getSkillList() {
         skillList = new ArrayList<Skill>();
-        skillList.addAll(currentPlayer.getCurrentEngimon().getSkillArray());
+
         for(Element element : currentPlayer.getCurrentEngimon().getSpecies().getElementSet()) {
-            System.out.println(element);
             skillList.addAll(currentPlayer.getSkillByElement(element));
         }
+    }
+
+    public ArrayList<Skill> getLearntSkillList() {
+        return currentPlayer.getCurrentEngimon().getSkillArray();
     }
 
     public void addSkill(Skill e) {
@@ -69,12 +81,28 @@ public class InventoryScreen implements Screen {
         currentPlayer.deleteItem(e);
     }
 
+    public void learnSkill(Skill e) {
+        currentPlayer.getCurrentEngimon().addSkill(selectedSkill);
+        currentPlayer.deleteItem(selectedSkill);
+    }
+
+    public void forgetSkill(Skill e) {
+        currentPlayer.getCurrentEngimon().deleteSkill(e.skillName());
+    }
+
+    public boolean isSkillLearnt(Skill e) {
+        return getLearntSkillList().contains(e);
+    }
+
     public InventoryScreen(Game aGame, final Player currentPlayer) {
         // Setup Stage
         game = aGame;
         stage = new Stage(new ScreenViewport());
         this.currentPlayer = currentPlayer;
         getSkillList();
+
+        // Default
+        selectedSkill = currentPlayer.getCurrentEngimon().getSkillArray().get(0);
 
         int row_height = Gdx.graphics.getWidth() / 12;
         stage = new Stage(new ScreenViewport());
@@ -93,18 +121,19 @@ public class InventoryScreen implements Screen {
         stage.addActor(titleLabel);
 
         // Style untuk TextButtons
-        TextButton.TextButtonStyle menuButtonStyle = new TextButton.TextButtonStyle();
+        menuButtonStyle = new TextButton.TextButtonStyle();
         menuButtonStyle.font = new BitmapFont();
         menuButtonStyle.fontColor = Color.BLACK;
 
-        TextButton.TextButtonStyle selectedButtonStyle = new TextButton.TextButtonStyle();
+        selectedButtonStyle = new TextButton.TextButtonStyle();
         selectedButtonStyle.font = new BitmapFont();
         selectedButtonStyle.fontColor = Color.RED;
 
         // Definisi dan Implementasi TextButtons
-        TextButton inventoryButton = new TextButton("Your Skills", menuButtonStyle);
+        TextButton inventoryButton = new TextButton("Unlearnt Skills", menuButtonStyle);
+        TextButton learnedInventoryButton = new TextButton("Learnt Skills", menuButtonStyle);
         TextButton statButton = new TextButton("Description", menuButtonStyle);
-        TextButton selectButton = new TextButton("Learn", menuButtonStyle);
+        selectButton = new TextButton("Learn", menuButtonStyle);
         TextButton backButton = new TextButton("<< Back", menuButtonStyle);
         backButton.addListener(new InputListener(){
             @Override
@@ -133,37 +162,33 @@ public class InventoryScreen implements Screen {
         // Tables untuk menyusun TextButtons
         table = new Table();
 
-        table.add(inventoryButton).width(400).spaceRight(40).padTop(80);
-        table.add(statButton).width(200).padTop(80);
+        table.add().width(300).spaceRight(0).padTop(80);
+        table.add().width(200).padTop(80);
         table.row();
 
-        Table tableInventory = new Table();
+        Table tableLeft = new Table();
+        tableLeft.padRight(30);
+
+        tableInventory = new Table();
         tableInventory.setBackground(background);
-        tableInventory.top().padTop(20);
-        for(final Skill skill : skillList) {
-            TextButton itemButton;
-            if(currentPlayer.getCurrentEngimon().getSkillArray().contains(skill)) {
-                itemButton = new TextButton(skill.skillName(), selectedButtonStyle);
-            }
-            else {
-                itemButton = new TextButton(skill.skillName(), menuButtonStyle);
-            }
-            tableInventory.add(itemButton).padTop(10).padBottom(10);
-            itemButton.addListener(new InputListener(){
-                @Override
-                public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                    selectedSkill = skill;
-                }
-                @Override
-                public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                    return true;
-                }
-            });
-            tableInventory.row();
-        }
-        table.add(tableInventory).width(400).height(500).spaceRight(40);
+
+        tableLeft.add(inventoryButton);
+        tableLeft.row();
+        tableLeft.add(tableInventory).width(300).height(240);
+        tableLeft.row();
+        tableLeft.add(learnedInventoryButton).spaceTop(20);
+        tableLeft.row();
+
+        tableLearnedInventory = new Table();
+        tableLearnedInventory.setBackground(background);
+
+        tableLeft.add(tableLearnedInventory).width(300).height(240);
+        table.add(tableLeft);
 
         Table tableRight = new Table();
+        tableRight.top();
+        tableRight.add(statButton).top();
+        tableRight.row();
 
         Table tableStats = new Table();
         tableStats.top().padTop(20).setBackground(background);
@@ -218,14 +243,20 @@ public class InventoryScreen implements Screen {
         tableSelect.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(selectedSkill != null) {
-                    currentPlayer.getCurrentEngimon().addSkill(selectedSkill);
+                if(!isSkillLearnt(selectedSkill)) {
+                    learnSkill(selectedSkill);
+                    focusButton.setStyle(selectedButtonStyle);
+                    getSkillList();
+                }
+                else {
+                    forgetSkill(selectedSkill);
+                    focusButton.setStyle(menuButtonStyle);
                 }
             }
         });
         tableRight.add(tableSelect).width(100).height(70).spaceTop(10).spaceBottom(10);
 
-        table.add(tableRight).width(300).height(500);
+        table.add(tableRight).width(300).height(500).top();
 
         table.setFillParent(true);
 
@@ -248,6 +279,60 @@ public class InventoryScreen implements Screen {
         batch.begin();
         stage.act();
 
+        tableInventory.clear();
+        tableInventory.clearChildren();
+        tableInventory.top().padTop(20);
+        for(final Skill skill : skillList) {
+            final TextButton itemButton;
+            if(skill.itemCount() > 0) {
+                if(skill.equals(selectedSkill)) {
+                    itemButton = new TextButton(skill.skillName(), selectedButtonStyle);
+                }
+                else {
+                    itemButton = new TextButton(skill.skillName(), menuButtonStyle);
+                }
+                itemButton.addListener(new InputListener() {
+                    @Override
+                    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                        focusButton = itemButton;
+                        selectedSkill = skill;
+                    }
+
+                    @Override
+                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        return true;
+                    }
+                });
+                tableInventory.add(itemButton).padTop(10).padBottom(10);
+                tableInventory.row();
+            }
+        }
+
+        tableLearnedInventory.clear();
+        tableLearnedInventory.clearChildren();
+        for(final Skill skill : getLearntSkillList()) {
+            final TextButton itemButton;
+            if(skill.equals(selectedSkill)) {
+                itemButton = new TextButton(skill.skillName(), selectedButtonStyle);
+            }
+            else {
+                itemButton = new TextButton(skill.skillName(), menuButtonStyle);
+            }
+            itemButton.addListener(new InputListener(){
+                @Override
+                public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                    focusButton = itemButton;
+                    selectedSkill = skill;
+                }
+                @Override
+                public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                    return true;
+                }
+            });
+            tableLearnedInventory.add(itemButton).padTop(10).padBottom(10);
+            tableLearnedInventory.row();
+        }
+
         // Rerender Labels
         if(selectedSkill != null) {
             nameLabel.setText("Name\n" + selectedSkill.skillName());
@@ -255,6 +340,13 @@ public class InventoryScreen implements Screen {
             powerLabel.setText("Base Power\n" + String.valueOf(selectedSkill.basePower()));
             masteryLabel.setText("Mastery\n" + String.valueOf(selectedSkill.masteryLevel()));
             countLabel.setText("Available\n" + String.valueOf(selectedSkill.itemCount()));
+        }
+
+        if(isSkillLearnt(selectedSkill)) {
+            selectButton.setText("Forget");
+        }
+        else {
+            selectButton.setText("Learn");
         }
 
         stage.draw();
