@@ -56,6 +56,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
     private SpriteBatch spBatch = new SpriteBatch();
     private MainGameScreen mainScreenReference;
     private long lastPoll;
+    private boolean isBattlePrompt;
 
     // Inventories
     private EngimonInventory engimonInventory;
@@ -79,6 +80,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         game = aGame;
         stage = new Stage(new ScreenViewport());
         lastPoll = System.currentTimeMillis();
+        isBattlePrompt = false;
 
         mainScreenReference = this;
 //        getDatabaseData();
@@ -238,7 +240,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
 
         renderer = new OrthogonalTiledMapRendererWithSprites(map, spBatch);
         renderer.addSprite(currentPlayer.getSprite());
-        mainGameLogic = new GameLogic(currentPlayer, renderer);
+        mainGameLogic = new GameLogic(currentPlayer, renderer, map);
 //        Gdx.input.setInputProcessor(this);
         Gdx.input.setInputProcessor(stage);
     }
@@ -265,17 +267,20 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
 //        sprite.draw(batch);
         batch.end();
 
-        String keydata = playerKeyboardInput.getKeypress();
-        if (keydata != null) {
-            mainGameLogic.playerInput(keydata);
-            System.out.println(currentPlayer.getPosition().x);
-            System.out.println(currentPlayer.getPosition().y);
-            lastPoll = System.currentTimeMillis();
-            // testsprite.setPosition(tileWidth*testposx,tileHeight*testposy);
-        }
-        else if (System.currentTimeMillis() - lastPoll > 250) {
-            mainGameLogic.tickUpdate();
-            lastPoll = System.currentTimeMillis();
+        if (!isBattlePrompt) {
+            String keydata = playerKeyboardInput.getKeypress();
+            if (keydata != null) {
+                Entity collidedEntity = mainGameLogic.playerInput(keydata);
+                if (collidedEntity != null) {
+                    // TODO : Do battle
+                    isBattlePrompt = true;
+                }
+                lastPoll = System.currentTimeMillis();
+            }
+            else if (System.currentTimeMillis() - lastPoll > 250) {
+                mainGameLogic.tickUpdate();
+                lastPoll = System.currentTimeMillis();
+            }
         }
        // isometricRenderer.setView(camera);
        // isometricRenderer.render();

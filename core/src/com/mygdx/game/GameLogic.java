@@ -6,8 +6,9 @@ import com.mygdx.game.entity.attributes.*;
 import com.mygdx.game.entity.Species;
 import com.mygdx.game.*;
 import com.mygdx.game.maps.OrthogonalTiledMapRendererWithSprites;
+import com.badlogic.gdx.maps.tiled.*;
+import com.badlogic.gdx.maps.*;
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import java.util.ArrayList;
@@ -23,8 +24,10 @@ public class GameLogic {
     private Random logicRandom;
     private SpeciesDatabase speciesDB;
     private SkillDatabase skillDB;
+    private TiledMap tiledMapReference;
+    private TiledMapTileLayer tiledMapLayer;
 
-    public GameLogic(Player playerRef, OrthogonalTiledMapRendererWithSprites renderer) {
+    public GameLogic(Player playerRef, OrthogonalTiledMapRendererWithSprites renderer, TiledMap map) {
         speciesDB = new SpeciesDatabase();
         skillDB = new SkillDatabase();
 
@@ -36,6 +39,8 @@ public class GameLogic {
 
         logicRandom = new Random();
         currentPlayer = playerRef;
+        tiledMapReference = map;
+        tiledMapLayer = (TiledMapTileLayer) map.getLayers().get(0);
         entityContainer = new ArrayList<Entity>();
         entityContainer.add(playerRef);
         int currentX = currentPlayer.getPosition().x;
@@ -48,48 +53,63 @@ public class GameLogic {
         return entityContainer;
     }
 
-    public void playerInput(String inputString) {
-        this.entityMove(currentPlayer, inputString);
+    public Entity playerInput(String inputString) {
+        Entity collidedEntity = entityMove(currentPlayer, inputString);
         tickUpdate();
+        return collidedEntity;
     }
 
     private boolean isWithinMap(int x, int y) {
         return 0 <= x && x < 48 && 0 <= y && y < 48;
     }
 
-    private void entityMove(Entity target, String moveString) {
+    private Entity entityMove(Entity target, String moveString) {
+        TiledMapTileLayer.Cell targetCell = tiledMapLayer.getCell(1, 1);
+        System.out.println(targetCell);
         for (int i = 0; i < 48; i++) {
             for (int j = 0; j < 48; j++) {
                 if (entityMap[i][j] == target) {
                     entityMap[i][j] = null;
                     switch (moveString) {
                         case "Up": // TODO : Add
-                            if (target.isTileMoveable() && isWithinMap(i, j+1)
-                                && entityMap[i][j+1] == null)
-                                target.setPosition(new Position(i, j + 1));
-                                // Else do battle or smth
+                            if (target.isTileMoveable() && isWithinMap(i, j+1)) {
+                                if (entityMap[i][j+1] == null)
+                                    target.setPosition(new Position(i, j + 1));
+                                else
+                                    return entityMap[i][j+1];
+                            }
                             break;
                         case "Down":
-                            if (target.isTileMoveable() && isWithinMap(i, j-1)
-                                && entityMap[i][j-1] == null)
-                                target.setPosition(new Position(i, j - 1));
+                            if (target.isTileMoveable() && isWithinMap(i, j-1)) {
+                                if (entityMap[i][j-1] == null)
+                                    target.setPosition(new Position(i, j - 1));
+                                else
+                                    return entityMap[i][j-1];
+                            }
                             break;
                         case "Left":
-                            if (target.isTileMoveable() && isWithinMap(i-1, j)
-                                && entityMap[i-1][j] == null)
-                                target.setPosition(new Position(i - 1, j));
+                            if (target.isTileMoveable() && isWithinMap(i-1, j)) {
+                                if (entityMap[i-1][j] == null)
+                                    target.setPosition(new Position(i - 1, j));
+                                else
+                                    return entityMap[i-1][j];
+                            }
                             break;
                         case "Right":
-                            if (target.isTileMoveable() && isWithinMap(i+1, j)
-                                && entityMap[i+1][j] == null)
-                                target.setPosition(new Position(i + 1, j));
+                            if (target.isTileMoveable() && isWithinMap(i+1, j)) {
+                                if (entityMap[i+1][j] == null)
+                                    target.setPosition(new Position(i + 1, j));
+                                else
+                                    return entityMap[i+1][j];
+                            }
                             break;
                     }
                     entityMap[target.getPosition().x][target.getPosition().y] = target;
-                    return;
+                    return null;
                 }
             }
         }
+        return null;
     }
 
     public void tickUpdate() {
