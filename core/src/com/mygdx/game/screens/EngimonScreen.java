@@ -56,6 +56,7 @@ public class EngimonScreen implements Screen {
     private TextButton.TextButtonStyle menuButtonStyle;
     private TextButton.TextButtonStyle selectedButtonStyle;
     private MainGameScreen parentMain;
+    private TextInput renameListener = new TextInput();
 
     Table tableEngimon;
 
@@ -248,11 +249,7 @@ public class EngimonScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(selectedEngimon != null) {
-                    TextInput listener = new TextInput();
-                    Gdx.app.getInput().getTextInput(listener, "Rename Engimon", selectedEngimon.engimonName(), "");
-                    if(!TextInput.rename.equals("")) {
-                        selectedEngimon.renameEngimon(TextInput.rename);
-                    }
+                    Gdx.app.getInput().getTextInput(renameListener, "Rename Engimon", selectedEngimon.engimonName(), "");
                 }
             }
         });
@@ -308,6 +305,12 @@ public class EngimonScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         stage.act();
+
+        if (!renameListener.rename.equals("")) {
+            selectedEngimon.renameEngimon(renameListener.rename);
+            System.out.println(renameListener.rename);
+            renameListener.rename = "";
+        }
 
         // Rerender List
         tableEngimon.clear();
