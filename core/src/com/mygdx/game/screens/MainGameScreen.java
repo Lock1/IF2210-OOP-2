@@ -50,7 +50,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
     private OrthogonalTiledMapRendererWithSprites renderer;
     private OrthographicCamera camera;
     private KeyboardInput playerKeyboardInput;
-    private GameLogic mainGameLogic;
+    public GameLogic mainGameLogic;
     private int tileWidth;
     private int tileHeight;
     private int minTile = 0;
@@ -620,5 +620,22 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
     }
     public boolean scrolled(float x, float y) {
         return false;
+    }
+
+    public static MainGameScreen loadState(Game game, Player defPlayer) {
+        ArrayList<Entity> loadResult = Savegame.loadGame();
+
+        if (loadResult != null) {
+            Player loadedPlayer = null;
+            for (Entity e : loadResult)
+                if (e instanceof Player)
+                    loadedPlayer = (Player) e;
+            MainGameScreen loadedState = new MainGameScreen(game, loadedPlayer);
+            loadedState.mainGameLogic.loadEntity(loadResult, loadedPlayer);
+            return loadedState;
+        }
+        else {
+            return new MainGameScreen(game, defPlayer);
+        }
     }
 }

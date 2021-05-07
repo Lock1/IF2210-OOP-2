@@ -82,6 +82,15 @@ public class GameLogic {
         return entityContainer;
     }
 
+    public void loadEntity(ArrayList<Entity> targetContainer, Player targetPlayer) {
+        this.entityContainer = targetContainer;
+        this.currentPlayer = targetPlayer;
+
+        for (Entity e : targetContainer) {
+            entityMap[e.getPosition().x][e.getPosition().y] = e;
+        }
+    }
+
     public Entity playerInput(String inputString) {
         Entity collidedEntity = entityMove(currentPlayer, inputString);
         tickUpdate();
@@ -229,6 +238,7 @@ public class GameLogic {
                 engimonTexture = new Texture(Gdx.files.internal("./sprites/ground/left/move/1.png"));
                 break;
         }
+        // TODO : Actually never set to multiple element
         engimonSprite = new Sprite(engimonTexture);
         spawnedEngimon.setSprite(engimonSprite);
         return spawnedEngimon;

@@ -3,9 +3,18 @@ package com.mygdx.game;
 import com.mygdx.game.CSVReader;
 import com.mygdx.game.entity.Entity;
 import com.mygdx.game.entity.Engimon;
+import com.mygdx.game.entity.Species;
 import com.mygdx.game.entity.Player;
 import com.mygdx.game.entity.attributes.Skill;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.maps.tiled.*;
+import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.Texture;
 import java.util.ArrayList;
+import java.util.List;
+import java.io.IOException;
 
 public class Savegame {
     public static void saveGame(ArrayList<Entity> eCtr) {
@@ -74,10 +83,100 @@ public class Savegame {
     }
 
     public static ArrayList<Entity> loadGame() {
-        CSVReader csvRead = new CSVReader();
+        CSVReader csvRead = new CSVReader("wildengimon.csv" , ",");
         ArrayList<Entity> entityData = new ArrayList<Entity>();
+        SpeciesDatabase speciesDB = new SpeciesDatabase();
+        SkillDatabase skillDB = new SkillDatabase();
 
 
-        return entityData;
+        List<String[]> wildEngimonStrings = null;
+        List<String[]> playerEngimonStrings = null;
+        List<String[]> playerLocationStrings = null;
+        List<String[]> playerItemStrings = null;
+        try {
+            wildEngimonStrings = csvRead.read();
+
+            csvRead.setNewTargetRead("playerengimon.csv");
+            playerEngimonStrings = csvRead.read();
+
+            csvRead.setNewTargetRead("playerdata.csv");
+            playerLocationStrings = csvRead.read();
+
+            csvRead.setNewTargetRead("playerskill.csv");
+            playerItemStrings = csvRead.read();
+
+
+
+            TmxMapLoader loader = new TmxMapLoader();
+            TiledMap map = loader.load("Map.tmx");
+            int tileWidth = map.getProperties().get("tilewidth", Integer.class);
+            int tileHeight = map.getProperties().get("tileheight", Integer.class);
+
+            Player newPlayer = new Player(30, Integer.parseInt(playerLocationStrings.get(0)[0]), Integer.parseInt(playerLocationStrings.get(0)[1]));
+            newPlayer.setEntityTileSize(tileWidth, tileHeight);
+            newPlayer.setTexture(new Texture(Gdx.files.internal("./sprites/player/idle_right.png")));
+            newPlayer.setSprite(new Sprite(newPlayer.getTexture()));
+
+
+
+
+            for (String[] strs : wildEngimonStrings) {
+                Species targetSpecies = null;
+                try {
+                    targetSpecies = speciesDB.getItem(strs[0]);
+                }
+                catch (ItemNotFound e) {
+
+                }
+                Engimon loadedWild = new Engimon(targetSpecies, true, Integer.parseInt(strs[2]),
+                        Integer.parseInt(strs[4]), Integer.parseInt(strs[5]));
+
+                loadedWild.autoSetSprite();
+                entityData.add(loadedWild);
+            }
+
+            for (String[] strs : playerItemStrings) {
+                Skill targetSkill = null;
+                try {
+                    targetSkill = skillDB.getItem(strs[0]);
+                }
+                catch (ItemNotFound e) {
+
+                }
+
+                while (targetSkill.itemCount() < Integer.parseInt(strs[1]))
+                    targetSkill.addItemCount();
+
+                newPlayer.addItem(targetSkill);
+            }
+
+            for (String[] strs : playerEngimonStrings) {
+                Species targetSpecies = null;
+                try {
+                    targetSpecies = speciesDB.getItem(strs[0]);
+                }
+                catch (ItemNotFound e) {
+
+                }
+                Engimon loadedEngimon = new Engimon(targetSpecies, false, Integer.parseInt(strs[2]),
+                        Integer.parseInt(strs[4]), Integer.parseInt(strs[5]));
+
+                loadedEngimon.autoSetSprite();
+                newPlayer.addItem(loadedEngimon);
+            }
+            newPlayer.changeEngimon(newPlayer.getEngimonItem().get(0));
+
+
+
+            entityData.add(newPlayer);
+
+            return entityData;
+        }
+        catch (IOException e) {
+            // Failed load
+            return null;
+        }
+
+
     }
 }

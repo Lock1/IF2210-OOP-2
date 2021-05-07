@@ -123,6 +123,13 @@ public class MainMenuScreen implements Screen {
         tableLoadGame.add(loadButton);
         tableLoadGame.setBackground(background);
         table.add(tableLoadGame).width(100).height(200);
+        tableLoadGame.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Player newPlayer = createNewPlayer();
+                game.setScreen(MainGameScreen.loadState(game, newPlayer));
+            }
+        });
 
         Table tableHelp = new Table();
         tableHelp.add(helpButton);
