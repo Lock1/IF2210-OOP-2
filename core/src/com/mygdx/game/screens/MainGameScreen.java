@@ -444,6 +444,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
 
         table.setFillParent(true);
 
+        mainGameLogic = new GameLogic(currentPlayer);
         // Menambahkan table ke dalam stage
         stage.addActor(table);
 
@@ -468,7 +469,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         camera.setToOrtho(false,1500,1150);
         camera.update();
 
-        mainGameLogic = new GameLogic(currentPlayer, map);
+        mainGameLogic.setMap(map);
 
 
         // testposx = 30;

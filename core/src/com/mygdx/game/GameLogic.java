@@ -50,7 +50,7 @@ public class GameLogic {
         rendererReference = renderer;
     }
 
-    public GameLogic(Player playerRef, TiledMap map) {
+    public GameLogic(Player playerRef) {
         speciesDB = new SpeciesDatabase();
         skillDB = new SkillDatabase();
 
@@ -62,13 +62,16 @@ public class GameLogic {
 
         logicRandom = new Random();
         currentPlayer = playerRef;
-        tiledMapReference = map;
-        tiledMapLayer = (TiledMapTileLayer) map.getLayers().get(0);
         entityContainer = new ArrayList<Entity>();
         entityContainer.add(playerRef);
         int currentX = currentPlayer.getPosition().x;
         int currentY = currentPlayer.getPosition().y;
         entityMap[currentX][currentY] = currentPlayer;
+    }
+
+    public void setMap(TiledMap map) {
+        tiledMapReference = map;
+        tiledMapLayer = (TiledMapTileLayer) map.getLayers().get(0);
     }
 
     public void setRenderer(OrthogonalTiledMapRendererWithSprites renderer) {
@@ -85,10 +88,10 @@ public class GameLogic {
         TiledMapTileLayer.Cell targetData = tiledMapLayer.getCell(currentPlayer.getPosition().x, currentPlayer.getPosition().y);
         if (targetData != null) {
             int targetCell = targetData.getTile().getId();
-            System.out.println(targetCell);
+            // System.out.println(targetCell);
         }
         else {
-            System.out.println("in");
+            // System.out.println("in");
         }
         return collidedEntity;
     }
