@@ -1,9 +1,12 @@
 package com.mygdx.game.entity;
 
+import com.badlogic.gdx.*;
 import com.mygdx.game.entity.Species;
 import com.mygdx.game.entity.Entity;
 import com.mygdx.game.entity.attributes.*;
 import java.util.ArrayList;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.Texture;
 
 public class Engimon extends Entity {
     private Species speciesType;
@@ -212,6 +215,32 @@ public class Engimon extends Entity {
 
     public boolean isOverLeveled() {
         return Engimon.maximumCumulativeXP < cumulativeExperience;
+    }
+
+    public void autoSetSprite() {
+        Texture engimonTexture = null;
+        Sprite engimonSprite;
+        Element engimonFirstElement = this.getSpecies().getElementSet().iterator().next();
+        switch (engimonFirstElement) {
+            case ELECTRIC:
+                engimonTexture = new Texture(Gdx.files.internal("./sprites/electric/left/move/1.png"));
+                break;
+            case WATER:
+                engimonTexture = new Texture(Gdx.files.internal("./sprites/water/left/move/1.png"));
+                break;
+            case ICE:
+                engimonTexture = new Texture(Gdx.files.internal("./sprites/ice/32bit-cuttlefish1.png"));
+                break;
+            case FIRE:
+                engimonTexture = new Texture(Gdx.files.internal("./sprites/fire/left/move/1.png"));
+                break;
+            case GROUND:
+                engimonTexture = new Texture(Gdx.files.internal("./sprites/ground/left/move/1.png"));
+                break;
+        }
+        // TODO : Actually never set to multiple element
+        engimonSprite = new Sprite(engimonTexture);
+        this.setSprite(engimonSprite);
     }
 
     // @over valid move Tile Check TODO

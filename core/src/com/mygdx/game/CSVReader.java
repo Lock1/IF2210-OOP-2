@@ -58,6 +58,10 @@ public class CSVReader {
         this.skipFirstLine = isSkippingHeader;
     }
 
+    public void setNewTargetRead(String filename) {
+        this.csvFile = new File(filename);
+    }
+
     /**
      * Reads the csv file into list of string array.
      * @throws IOException exception when reading csv file.

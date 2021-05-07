@@ -50,7 +50,7 @@ public class GameLogic {
         rendererReference = renderer;
     }
 
-    public GameLogic(Player playerRef, TiledMap map) {
+    public GameLogic(Player playerRef) {
         speciesDB = new SpeciesDatabase();
         skillDB = new SkillDatabase();
 
@@ -62,13 +62,16 @@ public class GameLogic {
 
         logicRandom = new Random();
         currentPlayer = playerRef;
-        tiledMapReference = map;
-        tiledMapLayer = (TiledMapTileLayer) map.getLayers().get(0);
         entityContainer = new ArrayList<Entity>();
         entityContainer.add(playerRef);
         int currentX = currentPlayer.getPosition().x;
         int currentY = currentPlayer.getPosition().y;
         entityMap[currentX][currentY] = currentPlayer;
+    }
+
+    public void setMap(TiledMap map) {
+        tiledMapReference = map;
+        tiledMapLayer = (TiledMapTileLayer) map.getLayers().get(0);
     }
 
     public void setRenderer(OrthogonalTiledMapRendererWithSprites renderer) {
@@ -79,16 +82,25 @@ public class GameLogic {
         return entityContainer;
     }
 
+    public void loadEntity(ArrayList<Entity> targetContainer, Player targetPlayer) {
+        this.entityContainer = targetContainer;
+        this.currentPlayer = targetPlayer;
+
+        for (Entity e : targetContainer) {
+            entityMap[e.getPosition().x][e.getPosition().y] = e;
+        }
+    }
+
     public Entity playerInput(String inputString) {
         Entity collidedEntity = entityMove(currentPlayer, inputString);
         tickUpdate();
         TiledMapTileLayer.Cell targetData = tiledMapLayer.getCell(currentPlayer.getPosition().x, currentPlayer.getPosition().y);
         if (targetData != null) {
             int targetCell = targetData.getTile().getId();
-            System.out.println(targetCell);
+            // System.out.println(targetCell);
         }
         else {
-            System.out.println("in");
+            // System.out.println("in");
         }
         return collidedEntity;
     }
@@ -226,6 +238,7 @@ public class GameLogic {
                 engimonTexture = new Texture(Gdx.files.internal("./sprites/ground/left/move/1.png"));
                 break;
         }
+        // TODO : Actually never set to multiple element
         engimonSprite = new Sprite(engimonTexture);
         spawnedEngimon.setSprite(engimonSprite);
         return spawnedEngimon;
