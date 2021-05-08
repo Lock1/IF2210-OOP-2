@@ -81,6 +81,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
     // Battle
     private Table tableMap;
     private Label battleTitle;
+    private boolean outFromScreen;
     private Label EnemyDescription;
     private Label EngimonStatus;
     private TextButton yesButton;
@@ -200,6 +201,8 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
                     currentPlayer.addItem(enemy.getSkillArray().get(0));
                     nameLabel.setText("Battle Won");
                     tableMap.add(nameLabel).width(240).padTop(10).padBottom(10);
+                    mainGameLogic.removeEntity(enemy);
+                    show();
 
                     currentPlayer.addItem(enemy);
                 }
@@ -241,6 +244,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
 
     public MainGameScreen(Game aGame, final Player currentPlayer) {
         // Setup Stage
+        outFromScreen = true;
         game = aGame;
         stage = new Stage(new ScreenViewport());
         lastPoll = System.currentTimeMillis();
@@ -464,9 +468,13 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         tileWidth = map.getProperties().get("tilewidth", Integer.class);
         tileHeight = map.getProperties().get("tileheight", Integer.class);
 
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false,1500,1150);
-        camera.update();
+        if (outFromScreen) {
+            camera = new OrthographicCamera();
+            camera.setToOrtho(false,1500,1150);
+            camera.update();
+            outFromScreen = false;
+        }
+
 
         mainGameLogic.setMap(map);
 
@@ -560,7 +568,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
 
     @Override
     public void hide() {
-
+        outFromScreen = true;
     }
 
     @Override

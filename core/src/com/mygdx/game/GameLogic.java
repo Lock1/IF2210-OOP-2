@@ -208,6 +208,19 @@ public class GameLogic {
         }
     }
 
+    public void removeEntity(Entity e) {
+        for (int i = 0; i < 48; i++)
+            for (int j = 0; j < 48; j++)
+                if (entityMap[i][j] == e) {
+                    entityMap[i][j] = null;
+                    for (int k = 0; k < entityContainer.size(); k++)
+                        if (e == entityContainer.get(k)) {
+                            entityContainer.remove(k);
+                            break;
+                        }
+                }
+    }
+
     public Engimon generateEngimon() {
         int posX = Math.abs(logicRandom.nextInt() % 40);
         int posY = Math.abs(logicRandom.nextInt() % 40);
