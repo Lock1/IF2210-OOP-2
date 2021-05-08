@@ -131,6 +131,22 @@ public class Savegame {
                 Engimon loadedWild = new Engimon(targetSpecies, true, Integer.parseInt(strs[2]),
                         Integer.parseInt(strs[4]), Integer.parseInt(strs[5]));
 
+                loadedWild.deleteSkill(targetSpecies.baseSkill().skillName());
+                for (int i = 0; i < 4; i++) {
+                    if (!strs[10+2*i].equals("null")) {
+                        try {
+                            Skill newSkill = skillDB.getItem(strs[10+2*i]);
+                            while (newSkill.masteryLevel() < Integer.parseInt(strs[11+2*i]))
+                            newSkill.levelUpMastery();
+                            loadedWild.addSkill(newSkill);
+                        }
+                        catch (ItemNotFound e) {
+
+                        }
+                    }
+                }
+
+
                 loadedWild.autoSetSprite();
                 entityData.add(loadedWild);
             }
@@ -160,6 +176,22 @@ public class Savegame {
                 }
                 Engimon loadedEngimon = new Engimon(targetSpecies, false, Integer.parseInt(strs[2]),
                         Integer.parseInt(strs[4]), Integer.parseInt(strs[5]));
+
+                loadedEngimon.deleteSkill(targetSpecies.baseSkill().skillName());
+                for (int i = 0; i < 4; i++) {
+                    if (!strs[10+2*i].equals("null")) {
+                        try {
+                            Skill newSkill = skillDB.getItem(strs[10+2*i]);
+                            while (newSkill.masteryLevel() < Integer.parseInt(strs[11+2*i]))
+                            newSkill.levelUpMastery();
+                            loadedEngimon.addSkill(newSkill);
+                        }
+                        catch (ItemNotFound e) {
+
+                        }
+                    }
+                }
+
 
                 loadedEngimon.autoSetSprite();
                 newPlayer.addItem(loadedEngimon);
