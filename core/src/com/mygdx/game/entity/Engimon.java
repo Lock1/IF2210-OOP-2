@@ -84,7 +84,6 @@ public class Engimon extends Entity {
 
 
 
-
     // ------- Getter -------
     public Species getSpecies() {
         return speciesType;

@@ -189,20 +189,19 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
                 Engimon currentEngimon = currentPlayer.getCurrentEngimon();
                 if(battle.getWinner() == 1) {
                     // Add Exp
-                    int exp = 1/currentPlayer.getCurrentEngimon().level() * 200;
+                    int exp = enemy.level()*50;
                     currentPlayer.getCurrentEngimon().xpGain(exp);
 
                     if (currentPlayer.getEngimonItem().size() >= 2 && currentEngimon.isOverLeveled()) {
                         currentPlayer.changeEngimon(currentPlayer.getEngimonItem().get(1));
                         currentPlayer.deleteItem(currentEngimon);
                     }
-                    else {
-                        game.setScreen(new GameOverScreen(game));
-                    }
                     // Drop Skill
                     currentPlayer.addItem(enemy.getSkillArray().get(0));
                     nameLabel.setText("Battle Won");
                     tableMap.add(nameLabel).width(240).padTop(10).padBottom(10);
+
+                    currentPlayer.addItem(enemy);
                 }
                 else {
 
@@ -320,85 +319,85 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
         tableMap = new Table();
         tableMap.setBackground(background);
 
-        Label legendTitle = new Label("Legend", titleLabelStyle);
-        legendTitle.setSize(Gdx.graphics.getWidth(),row_height);
-        legendTitle.setPosition(0,Gdx.graphics.getHeight()-row_height*1);
-        legendTitle.setAlignment(Align.center);
-        tableMap.add(legendTitle).spaceBottom(20);
-        tableMap.row();
-
-        Texture electricTexture = new Texture(Gdx.files.internal("sprites/electric/left/move/1.png"));
-        Table electricTable = new Table();
-        Image electricImage = new Image(electricTexture);
-        electricTable.add(electricImage).width(45).height(45).padRight(2);
-        Label electricLabel = new Label("Electric", titleLabelStyle);
-        electricTable.add(electricLabel).width(40).height(40);
-        tableMap.add(electricTable);
-        tableMap.row();
-
-        Texture fireTexture = new Texture(Gdx.files.internal("sprites/fire/left/move/1.png"));
-        Table fireTable = new Table();
-        Image fireImage = new Image(fireTexture);
-        fireTable.add(fireImage).width(45).height(45).padRight(2);
-        Label fireLabel = new Label("Fire", titleLabelStyle);
-        fireTable.add(fireLabel).width(40).height(40);
-        tableMap.add(fireTable);
-        tableMap.row();
-
-        Texture groundTexture = new Texture(Gdx.files.internal("sprites/ground/left/move/1.png"));
-        Table groundTable = new Table();
-        Image groundImage = new Image(groundTexture);
-        groundTable.add(groundImage).width(55).height(55).padRight(-3);
-        Label groundLabel = new Label("Ground", titleLabelStyle);
-        groundTable.add(groundLabel).width(40).height(40);
-        tableMap.add(groundTable);
-        tableMap.row();
-
-        Texture iceTexture = new Texture(Gdx.files.internal("sprites/ice/32bit-cuttlefish1.png"));
-        Table iceTable = new Table();
-        Image iceImage = new Image(iceTexture);
-        iceTable.add(iceImage).width(30).height(30).padRight(20);
-        Label iceLabel = new Label("Ice", titleLabelStyle);
-        iceTable.add(iceLabel).width(40).height(40);
-        tableMap.add(iceTable);
-        tableMap.row();
-
-        Texture waterTexture = new Texture(Gdx.files.internal("sprites/water/left/move/1.png"));
-        Table waterTable = new Table();
-        Image waterImage = new Image(waterTexture);
-        waterTable.add(waterImage).width(65).height(65).padRight(-5);
-        Label waterLabel = new Label("Water", titleLabelStyle);
-        waterTable.add(waterLabel).width(40).height(40);
-        tableMap.add(waterTable);
-        tableMap.row();
-
-        Texture fireElectricTexture = new Texture(Gdx.files.internal("sprites/fire electric/fire-electric.png"));
-        Table fireElectricTable = new Table();
-        Image fireElectricImage = new Image(fireElectricTexture);
-        fireElectricTable.add(fireElectricImage).width(20).height(30).padRight(10);
-        Label fireElectricLabel = new Label("Fire Electric", titleLabelStyle);
-        fireElectricTable.add(fireElectricLabel).width(40).height(40);
-        tableMap.add(fireElectricTable);
-        tableMap.row();
-
-        Texture groundWaterTexture = new Texture(Gdx.files.internal("sprites/ground water/groundwater1.png"));
-        Table groundWaterTable = new Table();
-        Image groundWaterImage = new Image(groundWaterTexture);
-        groundWaterTable.add(groundWaterImage).width(30).height(30).padRight(20);
-        Label groundWaterLabel = new Label("Ground Water", titleLabelStyle);
-        groundWaterTable.add(groundWaterLabel).width(40).height(40);
-        tableMap.add(groundWaterTable);
-        tableMap.row();
-
-        Texture iceWaterTexture = new Texture(Gdx.files.internal("sprites/ice water/ice water.png"));
-        Table iceWaterTable = new Table();
-        Image iceWaterImage = new Image(iceWaterTexture);
-        iceWaterTable.add(iceWaterImage).width(30).height(30).padRight(20);
-        Label iceWaterLabel = new Label("Ice Water", titleLabelStyle);
-        iceWaterTable.add(iceWaterLabel).width(40).height(40);
-        tableMap.add(iceWaterTable);
-        tableMap.row();
-
+//        Label legendTitle = new Label("Legend", titleLabelStyle);
+//        legendTitle.setSize(Gdx.graphics.getWidth(),row_height);
+//        legendTitle.setPosition(0,Gdx.graphics.getHeight()-row_height*1);
+//        legendTitle.setAlignment(Align.center);
+//        tableMap.add(legendTitle).spaceBottom(20);
+//        tableMap.row();
+//
+//        Texture electricTexture = new Texture(Gdx.files.internal("sprites/electric/left/move/1.png"));
+//        Table electricTable = new Table();
+//        Image electricImage = new Image(electricTexture);
+//        electricTable.add(electricImage).width(45).height(45).padRight(2);
+//        Label electricLabel = new Label("Electric", titleLabelStyle);
+//        electricTable.add(electricLabel).width(40).height(40);
+//        tableMap.add(electricTable);
+//        tableMap.row();
+//
+//        Texture fireTexture = new Texture(Gdx.files.internal("sprites/fire/left/move/1.png"));
+//        Table fireTable = new Table();
+//        Image fireImage = new Image(fireTexture);
+//        fireTable.add(fireImage).width(45).height(45).padRight(2);
+//        Label fireLabel = new Label("Fire", titleLabelStyle);
+//        fireTable.add(fireLabel).width(40).height(40);
+//        tableMap.add(fireTable);
+//        tableMap.row();
+//
+//        Texture groundTexture = new Texture(Gdx.files.internal("sprites/ground/left/move/1.png"));
+//        Table groundTable = new Table();
+//        Image groundImage = new Image(groundTexture);
+//        groundTable.add(groundImage).width(55).height(55).padRight(-3);
+//        Label groundLabel = new Label("Ground", titleLabelStyle);
+//        groundTable.add(groundLabel).width(40).height(40);
+//        tableMap.add(groundTable);
+//        tableMap.row();
+//
+//        Texture iceTexture = new Texture(Gdx.files.internal("sprites/ice/32bit-cuttlefish1.png"));
+//        Table iceTable = new Table();
+//        Image iceImage = new Image(iceTexture);
+//        iceTable.add(iceImage).width(30).height(30).padRight(20);
+//        Label iceLabel = new Label("Ice", titleLabelStyle);
+//        iceTable.add(iceLabel).width(40).height(40);
+//        tableMap.add(iceTable);
+//        tableMap.row();
+//
+//        Texture waterTexture = new Texture(Gdx.files.internal("sprites/water/left/move/1.png"));
+//        Table waterTable = new Table();
+//        Image waterImage = new Image(waterTexture);
+//        waterTable.add(waterImage).width(65).height(65).padRight(-5);
+//        Label waterLabel = new Label("Water", titleLabelStyle);
+//        waterTable.add(waterLabel).width(40).height(40);
+//        tableMap.add(waterTable);
+//        tableMap.row();
+//
+//        Texture fireElectricTexture = new Texture(Gdx.files.internal("sprites/fire electric/fire-electric.png"));
+//        Table fireElectricTable = new Table();
+//        Image fireElectricImage = new Image(fireElectricTexture);
+//        fireElectricTable.add(fireElectricImage).width(20).height(30).padRight(10);
+//        Label fireElectricLabel = new Label("Fire Electric", titleLabelStyle);
+//        fireElectricTable.add(fireElectricLabel).width(40).height(40);
+//        tableMap.add(fireElectricTable);
+//        tableMap.row();
+//
+//        Texture groundWaterTexture = new Texture(Gdx.files.internal("sprites/ground water/groundwater1.png"));
+//        Table groundWaterTable = new Table();
+//        Image groundWaterImage = new Image(groundWaterTexture);
+//        groundWaterTable.add(groundWaterImage).width(30).height(30).padRight(20);
+//        Label groundWaterLabel = new Label("Ground Water", titleLabelStyle);
+//        groundWaterTable.add(groundWaterLabel).width(40).height(40);
+//        tableMap.add(groundWaterTable);
+//        tableMap.row();
+//
+//        Texture iceWaterTexture = new Texture(Gdx.files.internal("sprites/ice water/ice water.png"));
+//        Table iceWaterTable = new Table();
+//        Image iceWaterImage = new Image(iceWaterTexture);
+//        iceWaterTable.add(iceWaterImage).width(30).height(30).padRight(20);
+//        Label iceWaterLabel = new Label("Ice Water", titleLabelStyle);
+//        iceWaterTable.add(iceWaterLabel).width(40).height(40);
+//        tableMap.add(iceWaterTable);
+//        tableMap.row();
+//
         table.add(tableMap).width(300).height(450).right().center();
 
         Table tableButtons = new Table();

@@ -98,7 +98,7 @@ public class PauseScreen implements Screen {
         tableLoadGame.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(parentMain);
+                game.setScreen(new MainMenuScreen(game));
             }
         });
         table.add(tableLoadGame).width(100).height(200);
