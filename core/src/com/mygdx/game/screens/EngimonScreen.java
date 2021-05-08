@@ -237,6 +237,9 @@ public class EngimonScreen implements Screen {
                     setCurrentEngimon(selectedEngimon);
                     focusButton.setStyle(selectedButtonStyle);
                 }
+                else {
+                    nameLabel.setText("No Engimon Selected!");
+                }
             }
         });
         tableButtons.add(tableSelect).width(95).height(70).spaceTop(10).spaceBottom(10);
@@ -250,6 +253,9 @@ public class EngimonScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 if(selectedEngimon != null) {
                     Gdx.app.getInput().getTextInput(renameListener, "Rename Engimon", selectedEngimon.engimonName(), "");
+                }
+                else {
+                    nameLabel.setText("No Engimon Selected!");
                 }
             }
         });
@@ -277,6 +283,9 @@ public class EngimonScreen implements Screen {
                         parentSpeciesLabel.setText("");
                         selectedEngimon = null;
                     }
+                }
+                else {
+                    nameLabel.setText("No Engimon Selected!");
                 }
             }
         });
@@ -319,6 +328,7 @@ public class EngimonScreen implements Screen {
             final TextButton itemButton;
             if(currentPlayer.getCurrentEngimon().equals(engimon)) {
                 itemButton = new TextButton(engimon.engimonName(), selectedButtonStyle);
+                focusButton = itemButton;
                 previousButton = itemButton;
             }
             else {
