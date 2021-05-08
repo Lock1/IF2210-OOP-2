@@ -526,6 +526,7 @@ public class MainGameScreen extends ApplicationAdapter implements Screen, InputP
                 Entity collidedEntity = mainGameLogic.playerInput(keydata);
                 if (collidedEntity != null) {
                     isBattlePrompt = true;
+                    enemy = (Engimon) collidedEntity;
                     battleDialog();
                 }
                 lastPoll = System.currentTimeMillis();
